@@ -1,0 +1,161 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Poppins:wght@200;300&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: #4b5c66;
+}
+
+.container {
+  --light-color: #fff;
+  height: 100vh; /* Set height to 50% of the viewport height */
+  width: 50vw; /* Set width to 50% of the viewport width */
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), url("../images/chatbox_background.jpg"); /* Add an overlay */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent the background image from repeating */
+  background-size: cover; /* Resize the background image to cover the entire container */
+  box-shadow: 0px 0px 15px 0px black;
+}
+
+
+
+.chat-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0px 20px;
+  background-color: #0652c0;
+  color: var(--light-color);
+  font-size: 1.2rem;
+  background-image: url("../images/test.jpg"); /* Add your image URL here */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent the background image from repeating */
+  background-size: cover; /* Resize the background image to cover the entire header */
+}
+
+
+.chat-header .logo {
+  height: 40px;
+  width: 40px;
+  box-shadow: 0px 0px 10px 0px black;
+}
+
+.chat-header img {
+  height: 100%;
+  width: 100%;
+}
+
+.chat-header .title {
+  padding-left: 10px;
+  color:rgb(255, 0, 0);
+}
+
+.chat-body {
+  height: calc(100% - 100px); /* Adjust height to move the input tab down */
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  align-items: flex-end;
+  font-size: 15px;
+  overflow-y: auto;
+}
+
+
+.chat-input {
+  height: 50px; /* Decrease height */
+  display: inline;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #ccc;
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+}
+
+.input-sec {
+  flex: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5px;
+  margin-right: 83px;
+}
+
+#txtInput {
+  line-height: 10px;
+  padding: 8px 10px;
+  border: none;
+  outline: none;
+  caret-color: black;
+  font-size: 0.8rem;
+  width: 100%;
+  border-radius: 15px;
+}
+
+
+.send {
+  flex: 1;
+  padding-right: 4px;
+  position: relative; /* Add position: relative to the send class */
+}
+
+.send img {
+  position: absolute;
+  top: -28px;
+  right: 80px;
+  width: 30px;
+  transform: translateX(-30%);
+}
+
+
+.chatbot-message,
+.user-message {
+  padding: 8px;
+  background: radial-gradient(black, transparent);
+  color: rgb(2, 255, 2);
+  margin: 5px;
+  width: auto;
+  max-width: 366px;
+  font-size: 10px;
+  border-radius: 10px 3px 10px 10px;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+
+.chatbot-message {
+  background: radial-gradient(black, transparent);
+  color: rgb(2, 255, 2);
+  align-self: flex-start;
+  border-radius: 10px 10px 3px 10px;
+  white-space: pre-wrap;
+}
+/* For Webkit-based browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px; /* Adjust the width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #4b5c66; /* Adjust the track color */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00ff00; /* Adjust the thumb color to green */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00cc00; /* Adjust the thumb color when hovering */
+}
+
+/* For Firefox */
+* {
+  scrollbar-color: #00ff00 #f1f1f1;
+}
