@@ -7,6 +7,7 @@ class InternalSocketClient(object):
         self._port = port
         self._client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._client.connect((self._host, self._port))
+        print('Connected to internal Server')
 
     def _read_msg(self):
         header = int.from_bytes(self._client.recv(4), byteorder='big')

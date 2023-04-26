@@ -1,4 +1,4 @@
-import socket
+import socket, threading
 
 class IntrnalSocketServer(object):
 
@@ -24,7 +24,12 @@ class IntrnalSocketServer(object):
             ) + msg
         )
 
-    def start(self):
+    def __start__(self):
         self._server.bind((self._host, self._port))
+        print('Internal Started')
         self._server.listen(1)
         self._conn,_ = self._server.accept()
+        print('Connection Recived!')
+
+    def start(self):
+        threading.Thread(target=self.__start__).start()

@@ -63,9 +63,10 @@ class Server(object):
     
     
     def onConnect(self,conn,addr):
-        self.__insertConnection__(addr)
+        self.connections.append(addr[0])
         while True:
             if self.connected == addr[0]:
+                conn.send(bytes(([106, 125, 139, 23, 156, 162, 56, 40, 221, 20, 145, 82, 168, 87, 194, 241])))
                 self.connected = None
                 self.connection.addr = addr
                 self.connection.conn = conn
@@ -121,6 +122,8 @@ class Server(object):
                         self.connection = Connection()
                         break
                     self.outResult()
+                    time.sleep(0.5)
+            time.sleep(2)
         
     
         
@@ -132,9 +135,14 @@ class Server(object):
         while True:
             conn, addr = self.server.accept()
             print("Accept Connection.")
+            self.connections.append(addr[0])
+            print(self.connections)
             threading.Thread(
                 target=self.onConnect,
                 args=(conn,addr)
             ).start()
+            time.sleep(1)
             
+    def start(self):
+        threading.Thread(target=self.__listener__).start()
         
