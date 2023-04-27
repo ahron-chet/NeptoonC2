@@ -21,8 +21,8 @@ class Server(object):
         self.PrivateKey = PrivateKey
         self.rsaBlock = (PrivateKey['n'].bit_length()+7)//8
         self.connection = Connection()
-        self.connected = None
-        self.connections = []
+        self.connectTo = None
+        self.connections = {}
         self.istest = False
         self.testMsg = bytes([100])
         self.sleepPerPing = 60 
@@ -63,14 +63,14 @@ class Server(object):
     
     
     def onConnect(self,conn,addr):
-        self.connections.append(addr[0])
         while True:
-            if self.connected == addr[0]:
+            if self.connectTo == addr[0]:
                 conn.send(bytes(([106, 125, 139, 23, 156, 162, 56, 40, 221, 20, 145, 82, 168, 87, 194, 241])))
-                self.connected = None
+                self.connectTo = None
                 self.connection.addr = addr
                 self.connection.conn = conn
-                self.__handleWhileConnected__()
+                self.connections[addr[0]]['connected']=True
+                self.__handleWhileConnected__(addr[0])
             elif not self.ping(conn):
                 print(True)
                 conn.close(), self.__rmConnections(addr[0])
@@ -78,9 +78,10 @@ class Server(object):
             time.sleep(self.sleepPeriter)
 
 
-    def __handleWhileConnected__(self):
+    def __handleWhileConnected__(self,ip):
         while self.connection.conn:
             time.sleep(self.sleepPerPing)
+        self.connected.remove(ip)
             
                    
              
@@ -135,7 +136,7 @@ class Server(object):
         while True:
             conn, addr = self.server.accept()
             print("Accept Connection.")
-            self.connections.append(addr[0])
+            self.connections[addr[0]] = {'hostname':'aharon','connected':False}
             print(self.connections)
             threading.Thread(
                 target=self.onConnect,
