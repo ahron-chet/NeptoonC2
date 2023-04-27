@@ -24,6 +24,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
+            z-index: 1;
         }
         .navbar-nav .nav-item .nav-link {
             border: 2px solid rgba(0, 255, 98, 0.389);
@@ -46,17 +47,17 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home</a>
+            <li class="nav-item active" style="z-index: 2;">
+              <a class="nav-link"  href="#">Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Features</a>
+            <li class="nav-item" style="z-index: 2;">
+              <a class="nav-link"  href="#">Features</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Pricing</a>
+            <li class="nav-item" style="z-index: 2;">
+              <a class="nav-link"  href="#">Pricing</a>
             </li>
-            <li class="nav-item">
-              <button id="sessionBtn" class="btn nav-link" style="color: inherit;">Session</button>
+            <li class="nav-item" style="z-index: 2;">
+              <button id="sessionBtn" class="btn nav-link" style="color: inherit; ">Session</button>
             </li>
           </ul>
         </div>

@@ -11,21 +11,35 @@ body {
   background: #4b5c66;
 }
 
-.container {
-  --light-color: #fff;
-  height: 100vh; /* Set height to 50% of the viewport height */
-  width: 50vw; /* Set width to 50% of the viewport width */
+
+.chat-icon {
   position: fixed;
-  top: 0;
-  left: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), url("../images/chatbox_background.jpg"); /* Add an overlay */
-  background-position: center; /* Center the background image */
-  background-repeat: no-repeat; /* Prevent the background image from repeating */
-  background-size: cover; /* Resize the background image to cover the entire container */
-  box-shadow: 0px 0px 15px 0px black;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.chat-icon img {
+  width: 50px;
+  height: 50px;
 }
 
 
+.container {
+  --light-color: #fff;
+  height: 95vh;
+  width: 50vw;
+  position: fixed;
+  top: 2.5%;
+  left: 1.0%;
+  background-image: url("../images/chatbox_background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: 0px 0px 15px 0px black;
+  border-radius: 15px;
+}
 
 .chat-header {
   height: 60px;
@@ -35,10 +49,11 @@ body {
   background-color: #0652c0;
   color: var(--light-color);
   font-size: 1.2rem;
-  background-image: url("../images/test.jpg"); /* Add your image URL here */
-  background-position: center; /* Center the background image */
-  background-repeat: no-repeat; /* Prevent the background image from repeating */
-  background-size: cover; /* Resize the background image to cover the entire header */
+  background-image: url("../images/test.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 15px 15px 0px 0px;
 }
 
 

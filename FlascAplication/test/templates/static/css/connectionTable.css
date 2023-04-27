@@ -13,6 +13,7 @@ table {
 .connectBtn {
     font-size: 11px;
     border-radius: 10px;
+    z-index: 2;
 }
 
 .table {

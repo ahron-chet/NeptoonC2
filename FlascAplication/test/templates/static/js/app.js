@@ -1,3 +1,18 @@
+document.addEventListener("DOMContentLoaded", function () {
+  const chatIcon = document.querySelector(".chat-icon");
+  const chatContainer = document.querySelector(".container");
+
+  chatContainer.style.display = "none";
+
+  chatIcon.addEventListener("click", function () {
+    if (chatContainer.style.display === "none") {
+      chatContainer.style.display = "block";
+    } else {
+      chatContainer.style.display = "none";
+    }
+  });
+});
+
 const chatBody = document.querySelector(".chat-body");
 const txtInput = document.querySelector("#txtInput");
 const send = document.querySelector(".send");
@@ -56,3 +71,5 @@ const setScrollPosition = () => {
     chatBody.scrollTop = chatBody.scrollHeight;
   }
 };
+
+

@@ -5,12 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chatbot</title>
-    <!-- Updated the href attribute -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-    <!-- Updated the src attribute -->
+
     <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
   </head>
   <body>
+    <div class="chat-icon">
+      <img src="{{ url_for('static', filename='images/chat_icon.png') }}" alt="chat icon" />
+    </div>
     <div class="container">
       <div class="chat-header">
         <div class="logo">
@@ -26,10 +28,11 @@
           <input type="text" id="txtInput" placeholder="Typ here" autofocus />
         </div>
         <div class="send">
-          <!-- Updated the src attribute -->
           <img src="{{ url_for('static', filename='images/send.svg') }}" alt="send" />
         </div>
       </div>
     </div>
   </body>
 </html>
+<!DOCTYPE html>
+
