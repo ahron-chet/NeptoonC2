@@ -74,6 +74,7 @@ class Server(object):
         self.connection.addr = addr
         self.connection.conn = conn
         self.connections[addr[0]]['connected']=True
+        self.__handleWhileConnected__(addr[0])
     
     
     def onConnect(self,conn,addr):
@@ -82,7 +83,6 @@ class Server(object):
             print(self.connectTo)
             if self.connectTo == addr[0]:
                 self.__sendConnect__(conn,addr)
-                self.__handleWhileConnected__(addr[0])
             elif not self.ping(conn):
                 print('NotPing')
                 conn.close(), self.__rmConnections(addr[0])
