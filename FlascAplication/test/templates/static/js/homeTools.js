@@ -1,5 +1,3 @@
-// /homeTools.js
-
 const connectionsTableBody = document.getElementById("connectionsTableBody");
 
 function updateConnections() {
@@ -72,5 +70,3 @@ function updateConnections() {
     })
     .catch(error => console.error('Error fetching data:', error));
 }
-
-updateConnections(); // Call the function initially to populate the table
