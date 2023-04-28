@@ -98,17 +98,12 @@ body {
 }
 
 .chatbot-message {
-  padding: 8px;
   background: radial-gradient(black, transparent);
   color: rgb(2, 255, 2);
-  margin: 5px;
-  width: auto;
-  max-width: 100%;
-  font-size: 10px;
+  align-self: flex-start;
   border-radius: 10px 10px 3px 10px;
   white-space: pre-wrap !important;
 }
-
 
 .chat-input {
   height: 50px; /* Decrease height */
