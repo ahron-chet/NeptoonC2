@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const chatIcon = document.querySelector(".chat-icon");
   const chatContainer = document.querySelector(".container");
+  
 
   chatContainer.style.display = "none";
 
