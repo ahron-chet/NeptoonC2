@@ -89,8 +89,8 @@ class Server(object):
         self.sendMsg(connection,command.encode())
     
 
-    def outResult(self):
-        self._internalclient._send_msg(self.recvMsg())
+    def outResult(self,connection):
+        self._internalclient._send_msg(self.recvMsg(connection))
 
 
     def _setShellMode(self,conn):

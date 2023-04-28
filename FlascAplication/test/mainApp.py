@@ -2,7 +2,7 @@ from flask import *
 import os
 from .IntrnalSocketServer import IntrnalSocketServer
 from Socket.Server import Server
-import threading
+
 
 class FlskSevrev(object):
     

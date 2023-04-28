@@ -1,6 +1,5 @@
 from os import urandom
 from .Connection import Connection
-import time
 
 
 class ConnectionManager(object):
@@ -15,7 +14,7 @@ class ConnectionManager(object):
     def insertNewConnction(self,conn):
         ip = conn.getpeername()[0]
         if ip not in self.connections.keys(): 
-            self.connections = [ip] = {
+            self.connections[ip] = {
                 'hostName': "test",
                 'connected': False,
             }
@@ -28,8 +27,9 @@ class ConnectionManager(object):
     
 
     def addAesToconnection(self,conn, aesObj):
+        aesObj.set_iv(aesObj.key)
         self.connectedObjects[conn.getpeername()[0]].aes = aesObj
-        self.connectedObjects[conn.getpeername()[0]].aes.set_iv()
+
         
 
     def removeConnection(self,conn):
