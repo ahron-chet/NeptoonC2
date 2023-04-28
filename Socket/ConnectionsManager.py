@@ -1,0 +1,39 @@
+from os import urandom
+from .Connection import Connection
+import time
+
+
+class ConnectionManager(object):
+
+
+    def __init__(self):
+        self.connections = {}
+        self.connectedObjects = {}
+        self.connctTo = None
+
+
+    def insertNewConnction(self,conn):
+        ip = conn.getpeername()[0]
+        if ip not in self.connections.keys(): 
+            self.connections = [ip] = {
+                'hostName': "test",
+                'connected': False,
+            }
+
+    def connectToTarget(self,conn):
+        conn.send(urandom(16))
+        ip = conn.getpeername()[0]
+        self.connections[ip]['connected'] = True
+        self.connectedObjects[ip] = Connection(conn=conn,host='test')
+    
+
+    def addAesToconnection(self,conn, aesObj):
+        self.connectedObjects[conn.getpeername()[0]].aes = aesObj
+        self.connectedObjects[conn.getpeername()[0]].aes.set_iv()
+        
+
+    def removeConnection(self,conn):
+        del self.connections[conn.getpeername()]
+        
+    def getFixedConnection(self,conn):
+        return self.connectedObjects[conn.getpeername()[0]]

