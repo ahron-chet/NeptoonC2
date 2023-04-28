@@ -29,6 +29,11 @@ function updateConnections() {
         hostCell.textContent = connection.hostname;
         tableRow.appendChild(hostCell);
 
+        // Date cell
+        const startTime = document.createElement("td");
+        startTime.textContent = connection.SatartTime;
+        tableRow.appendChild(startTime);
+
         // Status cell
         const Hoststatus = document.createElement("td");
         Hoststatus.style.display = "flex";

