@@ -29,15 +29,17 @@ class FlskSevrev(object):
     def listConnections(self):
         return self.c2Server.connections.connections
     
+    
     def homePage(self):
         return render_template('mainIndex.html')
+    
 
     def send_message(self):
         data = request.get_json()
-        message = data['message']
-        self._internalSock._send_msg(message.encode())
-        msg = self._internalSock._read_msg().decode(errors='replace')
+        connObj = self.c2Server.connections.getConnObj(data['ip'])
+        msg = self.c2Server.retriveCommand(connObj,data['message'])
         return {'message': msg}
+    
     
     def closeShell(self):
         self._internalSock._send_msg('exit')

@@ -37,13 +37,17 @@ const renderUserMessage = () => {
 
 const renderChatbotResponse = async (userInput) => {
   try {
+    const hostnameEle = document.querySelector("#hostname");
+    const hostname = hostnameEle.textContent;
+
     const response = await fetch("/send_message", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ message: userInput })
+      body: JSON.stringify({ message: userInput, ip: hostname })
     });
+
     const data = await response.json();
     const chatbotResponse = data.message;
     renderMessageEle(chatbotResponse);
@@ -51,6 +55,7 @@ const renderChatbotResponse = async (userInput) => {
     console.error("Error:", error);
   }
 };
+
 
 const renderMessageEle = (txt, type) => {
   let className = "user-message";

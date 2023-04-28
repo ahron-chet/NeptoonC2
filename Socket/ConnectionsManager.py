@@ -37,3 +37,9 @@ class ConnectionManager(object):
         
     def getFixedConnection(self,conn):
         return self.connectedObjects[conn.getpeername()[0]]
+    
+    def isconnected(self,ip):
+        return self.connections['connected']
+    
+    def getConnObj(self,ip):
+        return self.connectedObjects[ip]

