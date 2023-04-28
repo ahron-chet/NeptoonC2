@@ -1,6 +1,5 @@
 from flask import *
 import os
-from .IntrnalSocketServer import IntrnalSocketServer
 from Socket.Server import Server
 
 
@@ -36,7 +35,6 @@ class FlskSevrev(object):
 
     def send_message(self):
         data = request.get_json()
-        print(data['ip'])
         connObj = self.c2Server.connections.getConnObj(data['ip'])
         msg = self.c2Server.retriveCommand(connObj,data['message'])
         return {'message': msg}
