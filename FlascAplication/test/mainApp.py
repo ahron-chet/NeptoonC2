@@ -6,8 +6,6 @@ from Socket.Server import Server
 class FlskSevrev(object):
     
     def __init__(self,C2Private,C2Port=555):
-        self._internalSock = IntrnalSocketServer()
-        self._internalSock.start()
         self.app = Flask(
             __name__, 
             static_folder=os.path.join(os.getcwd(),'FlascAplication','test','templates','static')
