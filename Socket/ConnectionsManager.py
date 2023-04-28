@@ -22,6 +22,7 @@ class ConnectionManager(object):
         ip = conn.getpeername()[0]
         self.connections[ip]['connected'] = True
         self.connectedObjects[ip] = Connection(conn=conn,host='test')
+        self.connctTo = None
 
     def _parseClientInfo(self,clientInfo):
         return {**{'connected': False},**json.loads(clientInfo)}
@@ -38,6 +39,8 @@ class ConnectionManager(object):
         return self.connectedObjects[conn.getpeername()[0]]
     
     def isconnected(self,ip):
+        if ip not in self.connections.keys():
+            return False
         return self.connections[ip]['connected']
     
     def getConnObj(self,ip):
@@ -47,5 +50,6 @@ class ConnectionManager(object):
         return ip in self.connections.keys()
     
     def disconnect(self,ip):
-        del self.connectedObjects[ip]
+        if ip in self.connectedObjects.keys():
+            del self.connectedObjects[ip]
         self.connections[ip]['connected'] = False

