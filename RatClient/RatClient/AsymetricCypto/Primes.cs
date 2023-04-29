@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
-
+using System.Linq;
+using System;
 
 public class Primes
 {

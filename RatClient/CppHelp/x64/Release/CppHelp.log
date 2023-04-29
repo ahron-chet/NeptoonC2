@@ -1,8 +1,13 @@
-﻿  Tools.cpp
-     Creating library C:\Users\aronc\Desktop\MalwareTesting\MyProjects\RatClient\RatClient\bin\Release\CppHelp.lib and object C:\Users\aronc\Desktop\MalwareTesting\MyProjects\RatClient\RatClient\bin\Release\CppHelp.exp
+﻿  pch.cpp
+  dllmain.cpp
+  GetSystem.cpp
+  RunAsUser.cpp
+  injectShellCode.cpp
+  Tools.cpp
+     Creating library C:\Users\aronc\Desktop\MalwareTesting\RatClient1\RatClient1\bin\Release\CppHelp.lib and object C:\Users\aronc\Desktop\MalwareTesting\RatClient1\RatClient1\bin\Release\CppHelp.exp
   Generating code
-  0 of 81 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB not found, fall back to full compilation.
+C:\Users\aronc\Desktop\MalwareTesting\RatClient1\CppHelp\RunAsUser.cpp(71): warning C4715: 'RunAsLoggedInUser': not all control paths return a value
+  All 81 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
-  CppHelp.vcxproj -> C:\Users\aronc\Desktop\MalwareTesting\MyProjects\RatClient\RatClient\bin\Release\CppHelp.dll
+  CppHelp.vcxproj -> C:\Users\aronc\Desktop\MalwareTesting\RatClient1\RatClient1\bin\Release\CppHelp.dll

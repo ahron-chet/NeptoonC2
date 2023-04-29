@@ -1,7 +1,20 @@
-﻿using System.IO.Compression;
+﻿using System;
+using System.IO;
+using System.Collections.Generic;
+using System.IO.Compression;
+using System.Runtime.Serialization;
 
 class Info
 {
+    [DataContract]
+    public class ClientInfo
+    {
+        [DataMember]
+        public string Hostname { get; set; } = System.Net.Dns.GetHostName();
+        [DataMember]
+        public string StartTime { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+    }
+
     private static int[] screenres = Tools.GetResolution();
 
     public class Resoulution

