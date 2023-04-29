@@ -1,2 +1,3 @@
 pycryptodome
 Flask
+Flask-Login

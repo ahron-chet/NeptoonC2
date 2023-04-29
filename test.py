@@ -12,4 +12,3 @@ PRIVATEKEY = {
 if __name__ == '__main__':
     flsk = FlskSevrev(C2Private=PRIVATEKEY)
     flsk.app.run('0.0.0.0',5000)
-    
