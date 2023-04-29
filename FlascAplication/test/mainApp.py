@@ -29,8 +29,6 @@ class FlskSevrev(object):
         return None
 
     def loginPage(self):
-        if current_user.is_authenticated:
-            return redirect(url_for('homePage'), 301)
         return render_template("Login.html")
     
     def logout(self):

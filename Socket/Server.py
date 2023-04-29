@@ -108,10 +108,14 @@ class Server(object):
             time.sleep(5)
 
     def retriveClientInfo(self,conn):
-        header = int.from_bytes(conn.recv(2))
+        print('Retrive info')
+        # header = int.from_bytes(conn.recv(4))
+        # print(header)
         data = self.rsa.decrypt(self.PrivateKey,conn.recv(self.rsaBlock))
-        while len(data) < header:
-            data += self.rsa.decrypt(self.PrivateKey,conn.recv(self.rsaBlock))
+        # while len(data) < header:
+        #     print(True)
+        #     data += self.rsa.decrypt(self.PrivateKey,conn.recv(self.rsaBlock))
+        print(data)
         return data
             
         
