@@ -56,12 +56,17 @@ th, td {
     font-family: "Courier New", monospace;
 }
 
+.navitem{
+    background-color: #000 !important;
+}
+
 .navbar-brand, .nav-link {
     color: #0f0 !important;
 }
 
 .nav-item.active .nav-link {
     color: #00ff00 !important;
+    background-color: red;
 }
 
 .nav-item:hover .nav-link {

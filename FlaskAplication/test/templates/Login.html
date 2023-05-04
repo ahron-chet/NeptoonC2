@@ -11,6 +11,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/Login.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loading-style.css') }}">
     <style>
         body, html {
             margin: 0;
@@ -19,9 +22,11 @@
             height: 100%;
             background-image: url('../static/images/test.png');
             background-size: cover;
+            overflow: hidden;
         }
 
         .wrapper {
+            position: absolute;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -31,7 +36,9 @@
             background-size: cover;
             background-position: center;
             z-index: 3;
+            top: -15%;
         }
+
 
         #particles-js {
             position: absolute;
@@ -65,6 +72,7 @@
             border: 1px solid #00FF00;
             border-radius: 5px;
             cursor: pointer;
+
         }
 
         button:hover {
@@ -76,10 +84,18 @@
             width: 200px;
             height: auto;
             z-index: 2;
-            margin-bottom: 20px;
+            margin-bottom: -26px;
+            margin-top: 65px;
         }
 
-        .loading {
+
+        #matrix-animation {
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .LogoLetter {
             height: auto;
             z-index: 2;
             width: 250px;
@@ -97,109 +113,21 @@
             border-radius: 5px;
         }
     </style>
+    </head>
     <body>
         <canvas id="matrix-animation" style="position: fixed;"></canvas>
         <div id="particles-js"></div>
         <div class="wrapper">
         <div class="logo-container">
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
-        </div>  
-        <img src="{{ url_for('static', filename='images/loading.gif') }}" alt="Loading" class="loading">  
-        <form onsubmit="event.preventDefault(); login();">
+        </div>
+        <div id="loading" style="display: none;"> Welcome!</div>
+        <img src="{{ url_for('static', filename='images/LogoLetter.gif') }}" alt="LogoLetter" id="LogoLetter" class="LogoLetter">  
+        <form onsubmit="event.preventDefault(); login(); ">
             <input type="text" id="username" placeholder="Username" />
             <input type="password" id="password" placeholder="Password" />
             <button type="submit">Login</button>
         </form>        
         </div>
-        <script>
-              async function login() {
-                const username = document.getElementById("username").value;
-                const password = document.getElementById("password").value;
-
-                const response = await fetch('/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username,
-                    password
-                }),
-                });
-
-                if (response.ok) {
-                    startMatrixAnimation(); // Call this function after a successful login
-                    setTimeout(() => {
-                        window.location.href = '/home';
-                    }, 10000); // Redirect to /home after 10 seconds
-                } else {
-                    const errorMessage = await response.text();
-                    alert(errorMessage);
-                }
-            }
-  
-  function startMatrixAnimation() {
-    // Hide the login form
-    document.querySelector('form').style.display = 'none';
-    
-  
-    // Create canvas element
-    const canvas = document.createElement('canvas');
-    canvas.setAttribute('id', 'matrix-animation');
-    document.body.appendChild(canvas);
-  
-    // Create loading animation container
-    const loadingContainer = document.createElement('div');
-    loadingContainer.setAttribute('id', 'loading-container');
-    loadingContainer.innerHTML = '<h1 style="color: #0f0; text-align: center; z-index: 5;margin-top: 50%;">Loading...</h1>';
-    document.body.appendChild(loadingContainer);
-  
-    // Initialize the matrix animation
-    initMatrixAnimation();
-  
-    // Remove the loading container after 10 seconds
-    setTimeout(() => {
-      loadingContainer.remove();
-    }, 10000);
-  }
-  
-  
-  function initMatrixAnimation() {
-    var canvas = document.getElementById('matrix-animation'),
-        ctx = canvas.getContext('2d');
-  
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  
-    var letters = 'ABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZ';
-    letters = letters.split('');
-  
-    var fontSize = 10,
-        columns = canvas.width / fontSize;
-  
-    var drops = [];
-    for (var i = 0; i < columns; i++) {
-      drops[i] = 1;
-    }
-  
-    function draw() {
-      ctx.fillStyle = 'rgba(0, 0, 0, .1)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      for (var i = 0; i < drops.length; i++) {
-        var text = letters[Math.floor(Math.random() * letters.length)];
-        ctx.fillStyle = '#0f0';
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        drops[i]++;
-        if (drops[i] * fontSize > canvas.height && Math.random() > .95) {
-          drops[i] = 0;
-        }
-      }
-    }
-  
-    setInterval(draw, 33);
-  }
-  
-          </script>
     </body>
-</head>
 </html>

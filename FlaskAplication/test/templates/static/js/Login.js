@@ -1,4 +1,43 @@
-const login = async () => {
+function LoadingAction() {
+    alphabet = "NEPTONC2WELCM";
+    letter_count = 0;
+    el = $("#loading");
+    word = el.html().trim();
+    finished = false;
+  
+    el.html("");
+    for (var i = 0; i < word.length; i++) {
+      el.append("<span>" + word.charAt(i) + "</span>");
+    }
+  
+    setTimeout(write, 75);
+    setTimeout(inc, 1000);
+  }
+  
+  function write() {
+    for (var i = letter_count; i < word.length; i++) {
+      var c = Math.floor(Math.random() * 36);
+      $("span").eq(i).html(alphabet[c]);
+    }
+    if (!finished) {
+      setTimeout(write, 75);
+    } else {
+      window.location.href = '/home';
+    }
+  }
+  
+  function inc() {
+    $("span").eq(letter_count).html(word[letter_count]);
+    $("span").eq(letter_count).addClass("glow");
+    letter_count++;
+    if (letter_count >= word.length) {
+      finished = true;
+    } else {
+      setTimeout(inc, 1000);
+    }
+  }
+  
+  const login = async () => {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
   
@@ -15,9 +54,7 @@ const login = async () => {
   
     if (response.ok) {
       startMatrixAnimation();
-      setTimeout(() => {
-        window.location.href = '/home';
-      }, 40000);
+      LoadingAction();
     } else {
       const errorMessage = await response.text();
       alert(errorMessage);
@@ -26,21 +63,15 @@ const login = async () => {
   
   const startMatrixAnimation = () => {
     document.querySelector('form').style.display = 'none';
+    document.getElementById('LogoLetter').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('particles-js').style.display = 'none';
   
     const canvas = document.createElement('canvas');
     canvas.setAttribute('id', 'matrix-animation');
     document.body.appendChild(canvas);
   
-    const loadingContainer = document.createElement('div');
-    loadingContainer.setAttribute('id', 'loading-container');
-    loadingContainer.innerHTML = '<h1 style="color: #0f0; text-align: center; z-index: 5;margin-top: 50%;">Loading...</h1>';
-    document.body.appendChild(loadingContainer);
-  
     initMatrixAnimation();
-  
-    setTimeout(() => {
-      loadingContainer.remove();
-    }, 10000);
   };
   
   const initMatrixAnimation = () => {
@@ -50,7 +81,7 @@ const login = async () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   
-    let letters = 'ABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZABCDEFGHIJKLMNOPQRSTUVXYZ';
+    let letters = 'ABCDEFGHIJKLMNOPQRSTUVXYZ'.repeat(6);
     letters = letters.split('');
   
     const fontSize = 10;

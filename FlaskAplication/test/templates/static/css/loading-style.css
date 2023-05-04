@@ -1,0 +1,27 @@
+/* loading-styles.css */
+body {
+    color: #0f0;
+    font-family: Consolas, Courier, monospace;
+    font-size: 60px;
+    text-shadow: 0 0 15px rgb(255, 0, 76);
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+#loading {
+    text-align: center;
+}
+
+.glow {
+    color: rgb(255, 13, 0);
+    text-shadow: 0px 0px 10px #0f0;
+}
+
+span {
+    display: inline-block;
+    padding: 0 10px;
+}

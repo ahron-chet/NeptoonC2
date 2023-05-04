@@ -115,7 +115,6 @@ class Server(object):
         # while len(data) < header:
         #     print(True)
         #     data += self.rsa.decrypt(self.PrivateKey,conn.recv(self.rsaBlock))
-        print(data)
         return data
             
         
