@@ -1,4 +1,4 @@
-from FlascAplication.test.mainApp import FlskSevrev
+from FlaskAplication.test.mainApp import FlskSevrev
 
 
 PRIVATEKEY = {

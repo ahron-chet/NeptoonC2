@@ -12,11 +12,11 @@ class FlskSevrev(object):
     def __init__(self,C2Private,C2Port=555):
         self.app = Flask(
             __name__, 
-            static_folder=os.path.join(os.getcwd(),'FlascAplication','test','templates','static')
+            static_folder=os.path.join(os.getcwd(),'FlaskAplication','test','templates','static')
         )
         self.app.config['SECRET_KEY'] = token_urlsafe(40)
         self.c2Server = Server(port=C2Port,PrivateKey=C2Private)
-        self.dbaction = LoginDB(os.path.join(os.getcwd(),'FlascAplication','test','SQL','Login.db'))
+        self.dbaction = LoginDB(os.path.join(os.getcwd(),'FlaskAplication','test','SQL','Login.db'))
         self.c2Server.start()
         self._ruleResetor()
         self.login_manager = LoginManager()

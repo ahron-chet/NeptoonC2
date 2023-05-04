@@ -40,13 +40,11 @@ class LoginDB(object):
     def authenticate_user(self, username, password):
         print(username,self.hash_password(password))
         if not self.is_valid_input(username, password):
-            print('NotValidinput')
             return False
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute(AUTHENTICATE, (username, self.hash_password(password)))
             data = cursor.fetchone()
-            print(f'data is: {data}')
             return data is not None
 
     def user_exists(self, username):
