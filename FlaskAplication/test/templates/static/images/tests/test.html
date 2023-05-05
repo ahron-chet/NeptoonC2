@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connected Clients</title>
+    <style>
+        #clients-container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 50%;
+            float: left;
+        }
+        .client {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .client img {
+            width: 50px;
+            height: auto;
+            border-radius: 50%;
+            transition: border 0.3s;
+        }
+        .client img:hover {
+            border: 2px solid green;
+        }
+        .client img.selected {
+            border: 2px solid red;
+        }
+        .client-ip {
+            font-family: monospace;
+            font-size: 14px;
+            color: #000;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="clients-container"></div>
+
+    <script>
+        // Replace this list with your actual list of connected clients and their IPs
+        const clients = [
+            { ip: '192.168.1.1' },
+            { ip: '192.168.1.2' },
+            { ip: '192.168.1.3' }
+        ];
+
+        const clientsContainer = document.getElementById('clients-container');
+
+        clients.forEach(client => {
+            const clientDiv = document.createElement('div');
+            clientDiv.className = 'client';
+
+            const clientIcon = document.createElement('img');
+            clientIcon.src = '/images/os.png';
+            clientIcon.addEventListener('click', () => onClientClick(client, clientIcon));
+            clientDiv.appendChild(clientIcon);
+
+            const clientIp = document.createElement('div');
+            clientIp.className = 'client-ip';
+            clientIp.textContent = client.ip;
+            clientDiv.appendChild(clientIp);
+
+            clientsContainer.appendChild(clientDiv);
+        });
+
+        function onClientClick(client, clientIcon) {
+            const icons = clientsContainer.querySelectorAll('.client img');
+            icons.forEach(icon => {
+                icon.classList.remove('selected');
+            });
+
+            clientIcon.classList.add('selected');
+        }
+    </script>
+</body>
+</html>

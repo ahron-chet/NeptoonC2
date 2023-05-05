@@ -1,81 +1,100 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const chatIcon = document.querySelector(".chat-icon");
-  const chatContainer = document.querySelector(".container");
-  
+function displayClients() {
+  const clients = [
+    { ip: '192.168.1.1' },
+    { ip: '192.168.1.2' },
+    { ip: '192.168.1.3' }
+  ];
 
-  chatContainer.style.display = "none";
+  const clientsContainer = document.getElementById('clients-container');
 
-  chatIcon.addEventListener("click", function () {
-    if (chatContainer.style.display === "none") {
-      chatContainer.style.display = "block";
-    } else {
-      chatContainer.style.display = "none";
-    }
+  clients.forEach(client => {
+    const clientDiv = document.createElement('div');
+    clientDiv.className = 'client';
+
+    const clientIcon = document.createElement('img');
+    clientIcon.src = '../images/logo.png';
+    clientIcon.addEventListener('click', () => onClientClick(client, clientIcon));
+    clientDiv.appendChild(clientIcon);
+
+    const clientIp = document.createElement('div');
+    clientIp.className = 'client-ip';
+    clientIp.textContent = client.ip;
+    clientDiv.appendChild(clientIp);
+
+    clientsContainer.appendChild(clientDiv);
   });
-});
 
-const chatBody = document.querySelector(".chat-body");
-const txtInput = document.querySelector("#txtInput");
-const send = document.querySelector(".send");
-
-send.addEventListener("click", () => renderUserMessage());
-
-txtInput.addEventListener("keyup", (event) => {
-  if (event.keyCode === 13) {
-    renderUserMessage();
-  }
-});
-
-const renderUserMessage = () => {
-  const userInput = txtInput.value;
-  renderMessageEle(userInput, "user");
-  txtInput.value = "";
-  setTimeout(() => {
-    renderChatbotResponse(userInput);
-  }, 600);
-};
-
-const renderChatbotResponse = async (userInput) => {
-  try {
-    const hostnameEle = document.querySelector("#hostname");
-    const hostname = hostnameEle.textContent;
-
-    const response = await fetch("/send_message", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ message: userInput, ip: hostname })
+  function onClientClick(client, clientIcon) {
+    // Clear the 'selected' class from all icons
+    const icons = clientsContainer.querySelectorAll('.client img');
+    icons.forEach(icon => {
+        icon.classList.remove('selected');
     });
 
-    const data = await response.json();
-    const chatbotResponse = data.message;
-    renderMessageEle(chatbotResponse);
-  } catch (error) {
-    console.error("Error:", error);
+    clientIcon.classList.add('selected');
+
+    handleChat(client.ip);
   }
-};
+}
 
+function handleChat(hostname) {
+  const txtInput = document.getElementById('txtInput');
+  const chatBody = document.getElementById('chatBody');
+  chatBody.style.display = 'block'
 
-const renderMessageEle = (txt, type) => {
-  let className = "user-message";
-  if (type !== "user") {
-    className = "chatbot-message";
-  }
-  const messageEle = document.createElement("div");
-  const txtNode = document.createTextNode(txt);
-  messageEle.classList.add(className);
-  messageEle.append(txtNode);
-  chatBody.append(messageEle);
-  setTimeout(() => {
-    setScrollPosition();
-  }, 10);
-};
+  txtInput.addEventListener("keyup", (event) => {
+      if (event.key === "Enter") {
+        renderUserMessage();
+      }
+    });
 
-const setScrollPosition = () => {
-  if (chatBody.scrollHeight > 0) {
-    chatBody.scrollTop = chatBody.scrollHeight;
-  }
-};
+  const renderUserMessage = () => {
+    const userInput = txtInput.value;
+    renderMessageEle(userInput, "user");
+    txtInput.value = "";
+    setTimeout(() => {
+      renderChatbotResponse(userInput);
+    }, 600);
+  };
 
+  const renderChatbotResponse = async (userInput) => {
+    try {
+      const response = await fetch("/send_message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: userInput, ip: hostname })
+      });
 
+      const data = await response.json();
+      const chatbotResponse = data.message;
+      renderMessageEle(chatbotResponse);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const renderMessageEle = (txt, type) => {
+    let className = "user-message";
+    if (type !== "user") {
+      className = "chatbot-message";
+    }
+    const messageEle = document.createElement("div");
+    const txtNode = document.createTextNode(txt);
+    messageEle.classList.add(className);
+    messageEle.append(txtNode);
+    chatBody.append(messageEle);
+    setTimeout(() => {
+      setScrollPosition();
+    }, 10);
+  };
+
+  const setScrollPosition = () => {
+    if (chatBody.scrollHeight > 0) {
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+  };
+}
+
+displayClients();

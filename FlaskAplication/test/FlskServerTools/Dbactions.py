@@ -38,7 +38,6 @@ class LoginDB(object):
             conn.commit()
 
     def authenticate_user(self, username, password):
-        print(username,self.hash_password(password))
         if not self.is_valid_input(username, password):
             return False
         with sqlite3.connect(self.db_path) as conn:

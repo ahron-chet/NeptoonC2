@@ -23,32 +23,58 @@
             height: 100%;
             z-index: 1;
         }
+        #clients-container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 50%;
+            float: right;
+        }
+        .client {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .client img {
+            width: 50px;
+            height: auto;
+            border-radius: 50%;
+            transition: border 0.3s;
+        }
+        .client img:hover {
+            border: 2px solid green;
+        }
+        .client img.selected {
+            border: 2px solid red;
+        }
+        .client-ip {
+            font-family: monospace;
+            font-size: 14px;
+            color: #000;
+            margin-top: 5px;
+        }
+    </style>
     </style>
   </head>
   <body>
     <div id="particles-js"></div>
     <div class="chat-icon"></div>
-    </div>
+    <div id="clients-container"></div>
     <div class="container">
       <div class="chat-header">
-        <div class="logo">
-          <!-- Updated the src attribute -->
-          <img src="{{ url_for('static', filename='images/cwt.jpg') }}" alt="cwt" />
-        </div>
-        <div class="title" id="hostname">{{hostname}}</div>
-        <!-- <script src="{{ url_for('static', filename='js/ChatBotTools.js') }}" defer></script> -->
       </div>
-      <div class="chat-body"></div>
+      <div class="chat-body" style="display: none;"></div>
       <div class="chat-input">
         <div class="input-sec">
-          <input type="text" id="txtInput" placeholder="Typ here" autofocus />
+          <input type="text" id="txtInput" placeholder="Type here" autofocus />
         </div>
-        <div class="send">
+        <div class="send" style="display: none;">
           <img src="{{ url_for('static', filename='images/send.svg') }}" alt="send" />
         </div>
       </div>
     </div>
+    <script>displayClients()</script>
   </body>
 </html>
-<!DOCTYPE html>
-
