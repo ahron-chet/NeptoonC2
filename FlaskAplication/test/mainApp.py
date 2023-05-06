@@ -99,6 +99,7 @@ class FlskSevrev(object):
     
     
     def listShellConnections(self):
+        print(self.c2Server.connections.getShellConntions())
         return self.c2Server.connections.getShellConntions()
 
 

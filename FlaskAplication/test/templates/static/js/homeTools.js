@@ -26,12 +26,12 @@ function updateConnections() {
 
         // Hostname cell
         const hostCell = document.createElement("td");
-        hostCell.textContent = connection.hostname;
+        hostCell.textContent = connection.Hostname;
         tableRow.appendChild(hostCell);
 
         // Date cell
         const startTime = document.createElement("td");
-        startTime.textContent = connection.SatartTime;
+        startTime.textContent = connection.StartTime;
         tableRow.appendChild(startTime);
 
         // Status cell

@@ -5,116 +5,50 @@ let selectedClient = null;
 
 
 
-function displayClients() {
-  const clients = [
-    { ip: '192.168.1.1' },
-    { ip: '192.168.1.2' },
-    { ip: '192.168.1.4' },
-    { ip: '192.168.1.5' },
-    { ip: '192.168.1.6' },
-    { ip: '192.168.1.7' },
-    { ip: '192.168.1.8' },
-    { ip: '192.168.1.9' },
-    { ip: '192.168.1.10' },
-    { ip: '192.168.1.11' },
-    { ip: '192.168.1.12' },
-    { ip: '192.168.1.13' },
-    { ip: '192.168.1.14' },
-    { ip: '192.168.1.15' },
-    { ip: '192.168.1.16' },
-    { ip: '192.168.1.17' },
-    { ip: '192.168.1.18' },
-    { ip: '192.168.1.19' },
-    { ip: '192.168.1.20' },
-    { ip: '192.168.1.21' },
-    { ip: '192.168.1.22' },
-    { ip: '192.168.1.23' },
-    { ip: '192.168.1.24' },
-    { ip: '192.168.1.25' },
-    { ip: '192.168.1.26' },
-    { ip: '192.168.1.27' },
-    { ip: '192.168.1.28' },
-    { ip: '192.168.1.29' },
-    { ip: '192.168.1.30' },
-    { ip: '192.168.1.31' },
-    { ip: '192.168.1.32' },
-    { ip: '192.168.1.34' },
-    { ip: '192.168.1.35' },
-    { ip: '192.168.1.36' },
-    { ip: '192.168.1.37' },
-    { ip: '192.168.1.38' },
-    { ip: '192.168.1.39' },
-    { ip: '192.168.1.40' },
-    { ip: '192.168.1.41' },
-    { ip: '192.168.1.42' },
-    { ip: '192.168.1.43' },
-    { ip: '192.168.1.44' },
-    { ip: '192.168.1.45' },
-    { ip: '192.168.1.46' },
-    { ip: '192.168.1.47' },
-    { ip: '192.168.1.48' },
-    { ip: '192.168.1.49' },
-    { ip: '192.168.1.50' },
-    { ip: '192.168.1.51' },
-    { ip: '192.168.1.52' },
-    { ip: '192.168.1.53' },
-    { ip: '192.168.1.54' },
-    { ip: '192.168.1.55' },
-    { ip: '192.168.1.56' },
-    { ip: '192.168.1.57' },
-    { ip: '192.168.1.58' },
-    { ip: '192.168.1.59' },
-    { ip: '192.168.1.60' },
-    { ip: '192.168.1.61' },
-    { ip: '192.168.1.62' },
-    { ip: '192.168.1.63' },
-    { ip: '192.168.1.64' },
-    { ip: '192.168.1.65' },
-    { ip: '192.168.1.66' },
-    { ip: '192.168.1.67' },
-    { ip: '192.168.1.68' },
-    { ip: '192.168.1.69' },
-    { ip: '192.168.1.70' },
-    { ip: '192.168.1.71' },
-    { ip: '192.168.1.72' }
-  ];
-
+async function displayClients() {
+  const response = await fetch('/listShellConnections', {
+    method: 'GET'
+  });
+  const clients = await response.json();
   const clientsContainer = document.getElementById('clients-container');
 
-  clients.forEach(client => {
+  for (let ip in clients) {
+    console.log(ip);
     const clientDiv = document.createElement('div');
     clientDiv.className = 'client';
 
     const clientIcon = document.createElement('i');
     clientIcon.className = 'fa-brands fa-windows';
     clientIcon.style.color = '#49da3e';
-    clientIcon.addEventListener('click', () => onClientClick(client, clientIcon));
+    clientIcon.addEventListener('click', () => onClientClick(ip, clientIcon));
     clientDiv.appendChild(clientIcon);
 
     const clientIp = document.createElement('div');
     clientIp.className = 'client-ip';
-    clientIp.textContent = client.ip;
+    clientIp.textContent = ip;
     clientDiv.appendChild(clientIp);
 
     clientsContainer.appendChild(clientDiv);
-  });
-  function onClientClick(client, clientIcon) {
+  }
+
+  function onClientClick(ip, clientIcon) {
     const icons = clientsContainer.querySelectorAll('.client img');
     icons.forEach(icon => {
       icon.classList.remove('selected');
     });
-  
-    if (selectedClient !== client) {
+
+    if (selectedClient !== ip) {
       clientIcon.classList.add('selected');
-      handleChat(client.ip);
+      handleChat(ip);
       chatVisible = true;
     } else {
       toggleChatVisibility();
     }
-  
-    selectedClient = chatVisible ? client : null;
+
+    selectedClient = chatVisible ? ip : null;
   }
 }
+
 
 function toggleChatVisibility() {
   const containerChat = document.getElementById('ChatContainer');

@@ -5,12 +5,10 @@ import json
 
 class ConnectionManager(object):
 
-
     def __init__(self):
         self.connections = {}
         self.connectedObjects = {}
         self.connctTo = None
-
 
     def insertNewConnction(self, conn, clientInfo):
         ip = conn.getpeername()[0]
@@ -20,9 +18,9 @@ class ConnectionManager(object):
     def connectToTarget(self,conn):
         conn.send(urandom(16))
         ip = conn.getpeername()[0]
-        host = self.connections[ip]['Hostname']
+        name = self.connections[ip]['Hostname']
         self.connections[ip]['connected'] = True
-        self.connectedObjects[ip] = Connection(conn=conn,host=host)
+        self.connectedObjects[ip] = Connection(conn=conn,hostname=name,ip=ip)
         self.connctTo = None
 
 
@@ -52,10 +50,14 @@ class ConnectionManager(object):
         return ip in self.connections.keys()
     
     def getShellConntions(self):
-        return {
-            self.connectedObjects[i].host: self.connectedObjects[i].conn.getpeername()[0]
-            for i in range(len(self.connectedObjects.keys()))
+        if not len(self.connectedObjects) > 0:
+            return {}
+        test = {
+            self.connectedObjects[i].ip: self.connectedObjects[i].hostname
+            for i in self.connectedObjects.keys()
         }
+        print(test)
+        return test
     
     def disconnect(self,ip):
         if ip in self.connectedObjects.keys():
