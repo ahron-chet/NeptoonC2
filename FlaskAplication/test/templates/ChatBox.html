@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chatbot</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-    <script src="https://kit.fontawesome.com/c4c3594551.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="{{ url_for('static', filename='js/networkGraphStyleConf.js') }}"></script>
     <script src="{{ url_for('static', filename='js/onSession.js') }}" defer></script>
@@ -21,9 +21,9 @@
       <div class="chat-input">
         <div class="input-sec">
           <textarea id="txtInput" placeholder="Enter Command" rows="2" autofocus></textarea>
-        </div>
-        <div class="send">
-          <img src="{{ url_for('static', filename='images/send.svg') }}" alt="send" />
+          <div style="border-radius: 15px 15px 15px 15px; background: linear-gradient(135deg, #007e80, #2c00ff);cursor: pointer;width: 40px;height: 45px;position: fixed;margin-left: 30%;margin-bottom: 7%;">
+            <i class="fa-solid fa-paper-plane facebook-icon" style="margin-right: 8px;"></i>
+          </div>
         </div>
       </div>
     </div>
