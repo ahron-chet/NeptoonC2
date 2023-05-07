@@ -1,6 +1,7 @@
 from os import urandom
 from .Connection import Connection
 import json
+from hashlib import sha1
 
 
 class ConnectionManager(object):
@@ -9,6 +10,7 @@ class ConnectionManager(object):
         self.connections = {}
         self.connectedObjects = {}
         self.connctTo = None
+        self.keys = []
 
     def insertNewConnction(self, conn, clientInfo):
         ip = conn.getpeername()[0]
@@ -31,6 +33,7 @@ class ConnectionManager(object):
     def addAesToconnection(self,conn, aesObj):
         aesObj.set_iv(aesObj.key)
         self.connectedObjects[conn.getpeername()[0]].aes = aesObj
+        self.keys.append(sha1(aesObj.key))
 
     def removeConnection(self,conn):
         del self.connections[conn.getpeername()]
@@ -43,24 +46,22 @@ class ConnectionManager(object):
             return False
         return self.connections[ip]['connected']
     
-    def getConnObj(self,ip):
+    def getConnObj(self,ip) -> Connection:
         return self.connectedObjects[ip]
     
     def alive(self,ip):
         return ip in self.connections.keys()
     
     def getShellConntions(self):
-        if not len(self.connectedObjects) > 0:
-            return {}
-        test = {
+        return {
             self.connectedObjects[i].ip: self.connectedObjects[i].hostname
             for i in self.connectedObjects.keys()
         }
-        print(test)
-        return test
     
     def disconnect(self,ip):
         if ip in self.connectedObjects.keys():
+            self.getConnObj(ip).sendMsg(b'exit')
             del self.connectedObjects[ip]
         self.connections[ip]['connected'] = False
+        
 

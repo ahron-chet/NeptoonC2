@@ -5,3 +5,9 @@ def randombyte():
     while not b:
         b = get_random_bytes(1)
     return b
+
+
+def getJsonKey(dct, key, default=None):
+    if isinstance(dct, dict):
+        return dct.get(key, default)
+    return default

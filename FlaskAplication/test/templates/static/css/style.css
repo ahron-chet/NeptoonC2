@@ -34,6 +34,7 @@ body {
   background-size: cover;
   box-shadow: 0px 0px 15px 0px black;
   border-radius: 15px;
+  padding: 0;
   overflow: hidden;
   z-index: 3;
 }
@@ -66,7 +67,13 @@ body {
 
 .chat-header .title {
   padding-left: 10px;
-  color: rgb(255, 0, 0);
+  text-shadow: 4px 4px 4px rgb(91 10 10);
+  box-shadow: beige;
+  font-weight: 600;
+  background-image: linear-gradient(#ff0000,#ff0000,#00ff00);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #00000000;
 }
 
 .chat-body {
@@ -112,7 +119,6 @@ body {
   outline: none;
   caret-color: black;
   font-size: 0.8rem;
-  width: calc(100% - 40px);
   border-radius: 15px;
   resize: none;
   overflow-y: auto;
@@ -122,6 +128,7 @@ body {
   max-height: 500px !important;
   z-index: 1;
   border-top: 5px solid #00000052;
+  width: calc(100% - 5px);
 }
 
 .facebook-icon {

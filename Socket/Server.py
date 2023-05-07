@@ -75,30 +75,6 @@ class Server(object):
                 return
             time.sleep(self.sleepPeriter)
                                
-             
-    def sendMsg(self, connection, msg):
-        msg = connection.aes.encrypt(msg)
-        connection.conn.send(
-            int.to_bytes(
-                len(msg),
-                length=4,
-                byteorder='big',
-            ) + msg
-        )
-
-
-    def recvMsg(self,connection):
-        header = int.from_bytes(connection.conn.recv(4))
-        res = connection.conn.recv(header)
-        while len(res) < header:
-            res += connection.conn.recv(header-len(res))
-        return connection.aes.decrypt(res)
-    
-
-    def retriveCommand(self,connection, command):
-        command = self.sendMsg(connection,command.encode())
-        return self.recvMsg(connection).decode(errors='replace')
-        
 
     def _setShellMode(self,conn):
         print('Satrting RevrseShell...')

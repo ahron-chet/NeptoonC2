@@ -57,9 +57,10 @@ function toggleChatVisibility() {
 }
 
 function handleChat(hostname) {
+  const buttonSend = document.getElementById('sentButton')
   const containerChat = document.getElementById('ChatContainer');
   containerChat.style.display = 'block'
-  const chatBody = document.querySelector('.chat-body'); // Add this line
+  const chatBody = document.querySelector('.chat-body');
   const txtInput = document.getElementById('txtInput');
   const chatHeader = document.querySelector('.chat-header');
   chatHeader.innerHTML = "";
@@ -82,6 +83,10 @@ function handleChat(hostname) {
       resizeInput();
 
     }
+  });
+
+  buttonSend.addEventListener("click", () => {
+      renderUserMessage();
   });
 
   txtInput.addEventListener("input", () => {
@@ -107,9 +112,7 @@ function handleChat(hostname) {
     const userInput = txtInput.value;
     renderMessageEle(userInput, "user");
     txtInput.value = "";
-    setTimeout(() => {
-      renderChatbotResponse(userInput);
-    }, 600);
+    renderChatbotResponse(userInput);
   };
 
   const renderChatbotResponse = async (userInput) => {
@@ -140,9 +143,7 @@ function handleChat(hostname) {
     messageEle.classList.add(className);
     messageEle.append(txtNode);
     chatBody.append(messageEle);
-    setTimeout(() => {
-      setScrollPosition();
-    }, 10);
+    setScrollPosition();
   };
 
   const setScrollPosition = () => {
