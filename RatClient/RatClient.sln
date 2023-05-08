@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatClient", "RatClient\RatC
 		{50BE4D63-BFAB-4547-9CD9-1414318BEE5E} = {50BE4D63-BFAB-4547-9CD9-1414318BEE5E}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppHelp", "..\..\RatClient\CppHelp\CppHelp.vcxproj", "{50BE4D63-BFAB-4547-9CD9-1414318BEE5E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppHelp", "..\..\..\RatClient\CppHelp\CppHelp.vcxproj", "{50BE4D63-BFAB-4547-9CD9-1414318BEE5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

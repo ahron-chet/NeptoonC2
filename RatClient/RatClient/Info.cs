@@ -15,6 +15,12 @@ class Info
         public string StartTime { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
     }
 
+    public class UserInfo
+    {
+        public static string userSid = Tools.GetUserSid();
+        public static string UserHomePath = Tools.HomePath();
+    }
+
     private static int[] screenres = Tools.GetResolution();
 
     public class Resoulution
