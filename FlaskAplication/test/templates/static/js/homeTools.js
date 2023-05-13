@@ -62,7 +62,7 @@ function updateConnections() {
               headers: {
                 "Content-Type": "application/json"
               },
-              body: JSON.stringify({ ip: ip })
+              body: JSON.stringify({ id: ip })
             })
 
           } else {
@@ -71,7 +71,7 @@ function updateConnections() {
               headers: {
                 "Content-Type": "application/json"
               },
-              body: JSON.stringify({ ip: ip })
+              body: JSON.stringify({ id: ip })
             });
             statusButton.textContent = "Off";
             statusButton.style.backgroundColor = "rgba(255, 0, 0, 0.415)";

