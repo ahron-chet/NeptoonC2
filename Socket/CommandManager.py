@@ -1,26 +1,6 @@
-from Tools.toolsF import getJsonKey
+from Tools.toolsF import *
+import json
 
-class Actions(object):
-    
-    def __init__(self):
-        self.commandsScope = {
-            'SCREENSHOT': "7d6ac94326613ed825f540c02"
-        }
-        self.screenshot = False
-        self.wasFiltered = False
-
-    
-    def _getfilterd(self, command:str) -> str:
-        return self.commandsScope.get(command, command), command
-        
-    def getCommand(self,command:str) -> str:
-        command, key = self._getfilterd(command)
-        self.wasFiltered = command == key
-        self._resetor(key)
-        return command
-
-    def _resetor(self,key):
-        self.screenshot = key == 'SCREENSHOT'
 
 
 class CommandManager(object):
@@ -28,19 +8,31 @@ class CommandManager(object):
     def __init__(self,writer, reader):
         self.writer = writer
         self.reader = reader
-        self.ActionsScope = Actions()
         self.waitingForResult = False
-        self.image = None
-
-    def retriveCommand(self, command:str) -> str:
-        self.waitingForResult = command is not None
-        command = self.filterCommand(command.strip())
-        print(command)
+     
+    def retriveCommand(self, message:dict) -> str:
+        command = message.get("command")
+        self.waitingForResult = command is not None 
+        if not self.waitingForResult: 
+            return
+        if command == "5df297c2f2da83a8b45cfd012fbf9b3c":
+            command = gen_xml("root", command=command, type=message.get("type"),web=message.get("web")) 
+            self.writer(command.encode())
+            return collect(json.loads(self.reader().decode(errors='replace')))
+        command = gen_xml("root", command=command)
         self.writer(command.encode())
         return self.reader().decode(errors='replace')
+       
+    def isValid(self,*args) -> bool:
+        for i in args:
+            if i == None:
+                return False
+        return True
     
-    def filterCommand(self,command:str) -> str:
-        return self.ActionsScope.getCommand(command)
+    
+        
+    
+    
         
 
             

@@ -202,7 +202,16 @@ body {
   margin-left: 2%;
 }
 
+.fa-ellipsis-vertical{
+  position: absolute;
+  color: #00ff00;
+  font-size: 22px;
+  margin-left: 75%;
+  cursor: pointer
+}
+
 .client {
+  position: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -216,7 +225,7 @@ body {
   margin-right: 2%;
 }
 
-.client:hover i {
+.fa-windows:hover, .fa-ellipsis-vertical:hover{
   transform: translateY(-2px) scale(1.1);
   box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
 }
@@ -229,16 +238,17 @@ body {
   text-shadow: 0px 0px 5px rgba(0, 255, 0, 0.6);
 }
 
-.client i {
+.fa-windows {
   font-size: 50px;
   position: relative;
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s;
   mix-blend-mode: screen;
   box-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+  cursor: pointer
 }
 
-.client i:after {
+.fa-windows:after {
   content: "";
   position: absolute;
   top: -50%;
@@ -251,11 +261,11 @@ body {
   z-index: -1;
 }
 
-.client i:hover:after {
+.fa-windows:hover:after {
   border-color: green;
 }
 
-.client i.selected:after {
+.fa-windows.selected:after {
   border-color: red;
 }
 
@@ -276,7 +286,6 @@ body {
 }
 
 
-
 .right-container {
   display: flex;
   flex-direction: column;
@@ -284,4 +293,44 @@ body {
   width: 50%;
   height: 100%;
   margin-right: 3%;
+}
+
+#settings-menu {
+  background: #adb5bd;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0px 10px 15px rgba(0,0,0,0.1);
+  font-size: 10px;
+  display: none;
+  position: absolute;
+  margin-right: 8px;
+  margin-top: 20px;
+  padding: 7px;
+}
+
+#settings-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+#settings-menu ul li {
+  padding: 10px 0; /* vertical padding for each list item */
+  cursor: pointer; /* change cursor to pointer when hovering over a list item */
+  transition: background-color 0.3s ease; /* transition for hover effect */
+  border-bottom: 1px solid lightgray;
+}
+
+#settings-menu ul li:hover {
+  background-color: #E5E5E5; /* light grey hover background */
+}
+
+#settings-menu ul li a {
+  color: #040404;
+  text-decoration: none;
+  font-weight: 800;
+}
+
+#settings-menu ul li a:hover {
+  color: #007BFF; /* blue hover text */
 }

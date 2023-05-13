@@ -123,6 +123,10 @@ class FlskSevrev(object):
     
     def listShellConnections(self):
         return self.c2Server.connections.getShellConntions()
+    
+    
+    def passwordsTableIndex(self):
+        return render_template("passwordTable.html")
 
 
     def _ruleResetor(self):
@@ -136,3 +140,4 @@ class FlskSevrev(object):
         self.app.add_url_rule('/closeShell', 'closeShell', login_required(self.closeShell), methods=['POST'])
         self.app.add_url_rule('/choseTarget', 'choseTarget', login_required(self.choseTarget), methods=['POST'])
         self.app.add_url_rule('/listShellConnections', 'listShellConnections', login_required(self.listShellConnections))
+        self.app.add_url_rule('/passwordsTableIndex', 'passwordsTableIndex', self.passwordsTableIndex)

