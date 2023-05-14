@@ -25,5 +25,8 @@ public class NativeMethods
     [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr getResolution();
 
+    [DllImport("CppHelp.dll", CharSet = CharSet.Unicode)]
+    public static extern void GetUserNameByPid(uint processID, out IntPtr buffer);
+
 }
 

