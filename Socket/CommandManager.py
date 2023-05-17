@@ -20,7 +20,7 @@ class CommandManager(object):
             self.writer(command.encode())
             return collect(json.loads(self.reader().decode(errors='replace')))
         if command == "be425fd08e9ea24230bac47493228ada": #List process Info
-            self.writer(gen_xml("root", command=command))
+            self.writer(gen_xml("root", command=command).encode())
             return json.loads(self.reader().decode(errors='replace'))
         command = gen_xml("root", command=command)
         self.writer(command.encode())

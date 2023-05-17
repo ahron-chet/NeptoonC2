@@ -46,3 +46,4 @@ def gen_xml(tag, **kwargs) -> str:
             child.text = str(val)
         elem.append(child)
     return ET.tostring(elem, encoding='unicode')
+

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <div class="LoadingLoader" id="LoadingLoader" style="display: none;">
+      </div>
+      
+    <title>Document</title>
+    <style>
+    .LoadingLoader {
+        display: block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        height: 110px;
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+    }
+
+    .LoadingLoader:after {
+    content: " ";
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid #00ff00;
+    border-color: #00ff00 transparent #00ff00 transparent;
+    animation: loader 1.2s linear infinite;
+    }
+
+    @keyframes loader {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    }
+    </style>
+</head>
+<body>
+    
+</body>
+</html>

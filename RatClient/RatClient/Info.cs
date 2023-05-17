@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Runtime.Serialization;
+using System.Diagnostics;
 
 class Info
 {
@@ -41,5 +42,21 @@ class Info
         {'m', num => (num * 60) * 1000},
         {'h', num => ((num * 60) * 60) * 1000 }
     };
+
+    public static List<string> InjectedProcess = new List<string> ();
+
+    public static void AddInjectProcess(int pid)
+    {
+        try
+        {
+            Process proc = Process.GetProcessById(pid);
+            string identifier = $"{pid}:{proc.StartTime.ToString()}";
+            InjectedProcess.Add(identifier);
+        }
+        catch
+        {
+
+        }
+    }
 }
 

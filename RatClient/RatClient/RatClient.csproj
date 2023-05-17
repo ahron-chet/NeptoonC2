@@ -99,6 +99,7 @@
     <Compile Include="Methods.cs" />
     <Compile Include="Mtool\AudioRecorder.cs" />
     <Compile Include="Mtool\ScreenRecorder.cs" />
+    <Compile Include="Persistence\TaskAndJob.cs" />
     <Compile Include="ProcManage\ProcInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

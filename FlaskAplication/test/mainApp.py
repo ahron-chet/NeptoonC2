@@ -108,6 +108,9 @@ class FlskSevrev(object):
     
     def passwordsTableIndex(self):
         return render_template("passwordTable.html")
+    
+    def processTableIndex(self):
+        return render_template("ProcessTable.html")
 
 
     def _ruleResetor(self):
@@ -121,4 +124,5 @@ class FlskSevrev(object):
         self.app.add_url_rule('/closeShell', 'closeShell', login_required(self.closeShell), methods=['POST'])
         self.app.add_url_rule('/choseTarget', 'choseTarget', login_required(self.choseTarget), methods=['POST'])
         self.app.add_url_rule('/listShellConnections', 'listShellConnections', login_required(self.listShellConnections))
-        self.app.add_url_rule('/passwordsTableIndex', 'passwordsTableIndex', self.passwordsTableIndex)
+        self.app.add_url_rule('/passwordsTableIndex', 'passwordsTableIndex', login_required(self.passwordsTableIndex))
+        self.app.add_url_rule('/ProcessTableIndex', 'ProcessTableIndex', login_required(self.processTableIndex))

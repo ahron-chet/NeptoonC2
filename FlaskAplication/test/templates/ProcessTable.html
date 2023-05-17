@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<body>
+
+<style id="styleOfProcessTable">
+body {
+    font-family: 'Orbitron', sans-serif;
+    background-color: #000;
+    color: #0f0;
+}
+
+.ProcessTableContainer {
+    border: 3px solid #0f0;
+    border-radius: 15px;
+    background: #00000096;
+    padding: 20px;
+    height: 80vh;
+    overflow-y: auto;
+    margin-top: 5%;
+    animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px #0f0, 0 0 10px #0f0, 0 0 15px #0f0, 0 0 20px #0f0;
+  }
+  50% {
+    box-shadow: 0 0 10px #0f0, 0 0 20px #0f0, 0 0 30px #0f0, 0 0 40px #0f0;
+  }
+  100% {
+    box-shadow: 0 0 5px #0f0, 0 0 10px #0f0, 0 0 15px #0f0, 0 0 20px #0f0;
+  }
+}
+
+table {
+    table-layout: auto;
+    width: 100%;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    max-width: 150px; 
+    overflow: hidden;
+    white-space: nowrap;
+    transition: all 0.5s ease-in-out;
+}
+
+td:hover {
+    white-space: normal;
+    word-break: break-all;
+    position: relative;
+    z-index: 1;
+    background-color: rgba(255, 68, 0, 0.1); 
+}
+
+td {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition: all 0.5s ease;
+    font-size: 10px;
+}
+th {
+    color: #0f0;
+    text-shadow: 2px 1px 6px red;
+}
+
+.PidInjectoption {
+    color: #0f0;
+}
+
+.Memoryusegoption {
+    color: #0f0;
+}
+
+.ProcessNameInjectoption {
+    color: #0dcaf0;
+}
+
+.OwnerInjectoption {
+    font-size: 12px;
+    color: rgb(255, 0, 0);
+    text-shadow: 3px 3px 3px #000000;
+}
+
+.OwnerInjectoption:hover{
+  color: #0f0;
+  text-shadow: 3px 3px 3px rgb(255, 0, 0);
+}
+
+
+#exitProcessindexTable {
+  transition: color 0.3s ease, transform 0.3s ease;
+  color: lightskyblue;
+}
+
+#exitProcessindexTable:hover {
+  color: #ff0000 ;
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+
+::-webkit-scrollbar-track {
+    background: #99a9c2; 
+    border-radius: 10px; 
+}
+
+
+::-webkit-scrollbar-thumb {
+    background: #185adb;  
+    border-radius: 10px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #020e4d;  
+}
+
+.fa-microchip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.fa-microchip:hover{
+    font-size: 25px;
+    color: rgb(99, 17, 17);
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
+
+.UploadFileContainer {
+  position: relative;
+  max-width: 500px;
+  margin: 100px auto;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #212121;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.UploadFileContainer input {
+  position: relative;
+  z-index: 2;
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  height: 200px;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.UploadFileContainer label, .UploadFileContainer.dragover label {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  box-sizing: border-box;
+  background: #1a1a1a;
+  border: 4px dashed #3f8188;
+  color: #3f8188;
+  text-align: center;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.UploadFileContainer:hover label {
+  background: #3f8188;
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+}
+
+.UploadFileContainer.dragover label {
+  border-color: #ff4081;
+  color: #ff4081;
+}
+
+#SelectedFileName{
+    position: absolute;
+    z-index: 1000;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
+    color: red;
+    padding: 20px;
+}
+
+.UploadFileBtn {
+    display: block;
+    margin: -76px auto;
+    padding: 10px 30px;
+    background: #3f8188;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.UploadFileBtn:hover {
+  background: #4a9299;
+}
+</style>
+        {% include 'Loadingloader.html' %}
+        <div id="UploadFileDialogBox" style="display:none; position: absolute;left:35%;">
+            <div class="UploadFileContainer">
+                <input type="file" id="file_uploadOption" multiple />
+                <label for="file_uploadOption">Drag and Drop files here</label>
+                <p id="SelectedFileName"></p>
+            </div>
+            <button class="UploadFileBtn" style="z-index: 100;">Submit</button>  
+        </div>
+        <div class="ProcessTableContainer" id="ProcessTableContainer">  
+            <div class="text-left" style="display: flex;justify-content: space-between;color: red;text-shadow: 2px 1px 6px #00ff00;">
+                <h2>Process List</h2>
+                <i class="fa-sharp fa-solid fa-circle-xmark float-right" id ="exitProcessindexTable" onclick="document.getElementById('UploadFileDialogBox').remove();document.getElementById('ProcessMainTable').remove();document.getElementById('ProcessTableContainer').remove();" style="font-size: 25px;"></i>
+            </div>
+          <table class="table table-dark" id="ProcessesToinject">
+            <thead>
+              <tr>
+                <th>Process</th>
+                <th>Pid</th>
+                <th>Memory useg</th>
+                <th>Owner</th>
+                <th>Was Injected</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+      
+        </div>
+</body>
+</html>

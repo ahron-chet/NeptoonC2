@@ -125,8 +125,9 @@ namespace RatClient
                         client.GetStream().Write(randomBytes, 0, randomBytes.Length);
                     }
                 }
-                catch 
+                catch (Exception ex)
                 {
+                    Console.WriteLine(ex.Message);
                     Resetor();
                 }
                 Thread.Sleep(1000);
