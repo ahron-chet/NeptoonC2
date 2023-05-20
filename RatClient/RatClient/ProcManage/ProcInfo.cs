@@ -50,9 +50,8 @@ namespace RatClient.ProcManage
 
         public static string GenIdentifier(Process process)
         {
-            MD5 md5 = MD5.Create();
             string identifier = $"{process.Id}:{process.StartTime}";
-            return Convert.ToBase64String(md5.ComputeHash(System.Text.Encoding.ASCII.GetBytes(identifier)));
+            return Convert.ToBase64String(MD5.Create().ComputeHash(System.Text.Encoding.ASCII.GetBytes(identifier)));
         }
     }
 }

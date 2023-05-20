@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/FileUploadStyle.css') }}">
+    <style>
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .check {
+            color: #2aa743;
+            font-size: 5em;
+            animation: fadeIn 1s, pulse 2s infinite;
+        }
+
+        .failuer {
+            color: red;
+            font-size: 5em;
+            animation: fadeIn 1s, pulse 2s infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+    {% include 'Loadingloader.html' %}
+        <div id="UploadFileDialogBox" style="display:none; position: absolute;left:35%;">
+            <div class="UploadFileContainer">
+                <input type="file" id="file_uploadOption" multiple />
+                <label for="file_uploadOption">Drag and Drop files here</label>
+                <p id="SelectedFileName"></p>
+            </div>
+            <button class="UploadFileBtn" style="z-index: 100;">Submit</button>  
+        </div>
+    <script> </script>
+</body>
+</html>

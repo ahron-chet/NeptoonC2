@@ -1,7 +1,7 @@
 from Cryptodome.Random import get_random_bytes
 import xml.etree.ElementTree as ET
 from hashlib import md5
-from os import remove
+from typing import Callable, Any
 from .WebGather import WebGather
 import base64
 import tempfile
@@ -46,4 +46,15 @@ def gen_xml(tag, **kwargs) -> str:
             child.text = str(val)
         elem.append(child)
     return ET.tostring(elem, encoding='unicode')
+
+
+
+
+def tryParse(method: Callable[..., Any], value: Any, default: Any = False, **args: Any) -> Any:
+    try:
+        return method(value, **args)
+    except:
+        return default
+
+
 

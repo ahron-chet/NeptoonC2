@@ -69,4 +69,3 @@ class ConnectionManager(object):
             del self.connectedObjects[id]
         self.connections[id]['connected'] = False
         
-

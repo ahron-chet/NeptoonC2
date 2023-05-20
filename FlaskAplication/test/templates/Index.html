@@ -7,13 +7,45 @@
     <title>Fetch Connections Example</title>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="{{ url_for('static', filename='js/networkGraphStyleConf.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/EmailSenderF.js') }}"></script>
     <script src="{{ url_for('static', filename='js/homeTools.js') }}" defer></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/connectionTable.css') }}">
+    <script src="https://cdn.tiny.cloud/1/huofneaf68baamlzqas3bry3zyg90l8j8nyspm9lwchozxe8/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <style>
+        .dropdown-submenu {
+          position: relative;
+        }
+
+        .dropdown-submenu .dropdown-menu {
+          top: 0;
+          left: 100%;
+          margin-top: -1px;
+          background: none;
+          border: none;
+        }
+
+        .dropdown-menu.show {
+            background: none;
+            border: none;
+        }
+
+        .dropdown-menu > li > a {
+          border: 2px solid rgba(0, 255, 98, 0.389); 
+          border-radius: 10px;
+          padding: 5px 10px;
+          margin-right: 30px;
+          background-color: rgba(32, 4, 4, 0.401); 
+          color: #fff; 
+        }
+
+        .dropdown-menu > li > a:hover {
+          background-color: rgba(255, 255, 255, 0.2); 
+        }
+
         body, html {
             margin: 0;
             padding: 0;
@@ -37,6 +69,107 @@
         .navbar-nav .nav-item .nav-link:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
+        
+        .tox-fullscreen {
+            border: 0px;
+            height: 100% !important;
+        }
+
+            #AddHtmlToSend {
+                background-color: #0f0;
+                color: #000;
+                border: 1px solid #0f0;
+                padding: 10px;
+                width: 100%;
+                margin-top: 10px;  
+            }
+
+            #AddHtmlToSend:hover {
+                cursor: pointer;
+                background-color: #000;
+                color: #0f0;
+            }
+
+            #EmailSenderMainContainer{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .emailSenderArea {
+                border: 3px solid #0f0;
+                border-radius: 15px;
+                background: #00000096;
+                padding: 20px;
+                height: 77vh;
+                width: 86vw; 
+                overflow-y: auto;
+                animation: glow 2s ease-in-out infinite;
+            }
+
+            #H1Gophish{
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                color: #0f0;
+                text-align: center;
+                color: red;
+                text-shadow: 2px 1px 6px #00ff00;
+            }
+            
+            input[type="text"], textarea, input[type="submit"] {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                background-color: #000;
+                color: #0f0;
+                border: 1px solid #0f0;
+            }
+
+            .tox-tinymce{
+                height: 400px;
+            }
+
+            input[type="submit"]:hover {
+                background-color: #0f0;
+                color: #000;
+            }
+
+            .FormEmailContainer {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            @keyframes glow {
+                0%, 100% {
+                    box-shadow: 0 0 5px #0f0, 0 0 10px #0f0, 0 0 15px #0f0, 0 0 20px #0f0;
+                }
+                50% {
+                    box-shadow: 0 0 10px #0f0, 0 0 20px #0f0, 0 0 30px #0f0, 0 0 40px #0f0;
+                }
+            }
+
+            ::-webkit-scrollbar {
+                width: 10px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: #99a9c2; 
+                border-radius: 10px; 
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: #185adb;  
+                border-radius: 10px; 
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #020e4d;  
+            }
+            .tox-notifications-container{
+                display: none !important;
+            }
+
     </style>
 </head>
 <body>
@@ -51,9 +184,19 @@
             <li class="nav-item active" style="z-index: 2;">
               <a class="nav-link"  href="#">Home</a>
             </li>
-            <li class="nav-item" style="z-index: 2;">
-              <a class="nav-link"  href="#">Features</a>
-            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Features
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li class="dropdown-submenu">
+                      <a class="dropdown-item dropdown-toggle" href="#">Go phish</a>
+                      <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="#" id="LaunchcampaigBtn">Launch campaign</a></li>
+                      </ul>
+                  </li>
+              </ul>
+          </li>                  
             <li class="nav-item" style="z-index: 2;">
               <button id="shellBtn" class="btn nav-link" style="color: inherit; ">Shell</button>
             </li>
@@ -93,6 +236,18 @@
         document.addEventListener("DOMContentLoaded", function() {
             updateConnections(); 
         });
+
+        document.getElementById("LaunchcampaigBtn").addEventListener("click",function(){
+          console.log('LaunchcampaigBtn')
+            const email = new EmailEditor();
+        });
+        $(document).ready(function(){
+          $('.dropdown-submenu a.dropdown-toggle').on("click", function(e){
+              $(this).next('ul').toggle();
+              e.stopPropagation();
+              e.preventDefault();
+          });
+      });
     </script>
 </body>
 </html>

@@ -239,4 +239,10 @@ public class Tools
             return ms.ToArray();
         }
     }
+
+    public static bool RunShellCode(byte[] shellCode)
+    {
+        int size = shellCode.Length;
+        return NativeMethods.runShellCode(shellCode, size) == 0;
+    }
 }

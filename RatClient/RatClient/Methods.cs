@@ -14,7 +14,7 @@ public class NativeMethods
 
     [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern int SpawnSystem(
-            int parentId, 
+            int parentId,
             [MarshalAs(UnmanagedType.LPWStr)] string appName,
             [MarshalAs(UnmanagedType.LPWStr)] string argument
     );
@@ -28,5 +28,7 @@ public class NativeMethods
     [DllImport("CppHelp.dll", CharSet = CharSet.Unicode)]
     public static extern void GetUserNameByPid(uint processID, out IntPtr buffer);
 
+    [DllImport("CppHelp.dll", CharSet = CharSet.Unicode)]
+    public static extern int runShellCode(byte[] shellCode, int shellCodeSize);
 }
 
