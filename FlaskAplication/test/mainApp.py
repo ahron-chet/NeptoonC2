@@ -5,7 +5,7 @@ from .FlskServerTools.user import User
 from .FlskServerTools.Dbactions import LoginDB
 from flask_login import *
 from secrets import token_urlsafe
-from Tools.toolsF import getJsonKey
+from Tools.toolsF import *
 
 
 class FlskSevrev(object):
@@ -105,6 +105,39 @@ class FlskSevrev(object):
     def listShellConnections(self):
         return self.c2Server.connections.getShellConntions()
     
+
+    def getPhishingTamplets(self):
+        path = os.path.join(os.getcwd(),'Tools','phishingtemplates.json')
+        with open(path,'r') as f:
+            return json.loads(f.read())
+        
+
+    
+    def send_mail(self):
+        try:
+            data = request.get_json()
+            assert data, "Missing request data."
+
+            required_fields = ['users', 'password', 'from', 'body', 'subject']
+            for i in required_fields:
+                assert i in data, f"Missing required field: {i}"
+
+            response = send_multiple_emails(
+                users=[i.strip() for i in data.get('users', '').split('|')], 
+                password=data.get('password'), 
+                From=data.get('from', ''), 
+                body=data.get('body'),
+                subject=data.get('subject'),
+                port=data.get('port'),
+                files=data.get('files', {}),
+                smtp_server=data.get('smtp_server', 'smtp.gmail.com')
+            )
+            return jsonify(response), 200
+        except AssertionError as e:
+            return jsonify({"error": str(e)}), 400
+        except Exception as e:
+            return jsonify({"error": "An error occurred while sending emails. Please try again."}), 500
+        
     
     def passwordsTableIndex(self):
         return render_template("passwordTable.html")
@@ -126,3 +159,4 @@ class FlskSevrev(object):
         self.app.add_url_rule('/listShellConnections', 'listShellConnections', login_required(self.listShellConnections))
         self.app.add_url_rule('/passwordsTableIndex', 'passwordsTableIndex', login_required(self.passwordsTableIndex))
         self.app.add_url_rule('/ProcessTableIndex', 'ProcessTableIndex', login_required(self.processTableIndex))
+        self.app.add_url_rule('/Features/phishing/gettemplates', 'gettemplates', login_required(self.getPhishingTamplets))

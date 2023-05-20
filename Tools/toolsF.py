@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 from hashlib import md5
 from typing import Callable, Any
 from .WebGather import WebGather
+from .MailRender import MailSender
 import base64
 import tempfile
 
@@ -57,4 +58,31 @@ def tryParse(method: Callable[..., Any], value: Any, default: Any = False, **arg
         return default
 
 
+def send_multiple_emails(
+    users: list, 
+    password: str, 
+    From: str, 
+    body: str, 
+    subject: str, 
+    port: int = 465, 
+    files: dict = None, 
+    smtp_server: str = 'smtp.gmail.com'
+) -> dict:
+    sender = MailSender(user=From, password=password, use_ssl=True)
+    files = files or {}
+    results = {}
+    for user in users:
+        for name, base64 in files.items():
+            try:
+                sender.attach_file(name=name, base64=base64)
+            except Exception as e:
+                print(f"Failed to attach file {name} for user {user}: {e}")
+                continue
+        try:
+            success = sender.send_email(to=user, subject=subject, html_content=body, port=port, smtp_server=smtp_server)
+            results[user] = success
+        except Exception as e:
+            print(f"Failed to send email to {user}: {e}")
+            results[user] = False
+    return results
 
