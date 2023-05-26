@@ -4,16 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fetch Connections Example</title>
+    <title>NeptoonC2 Ac Td</title>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="{{ url_for('static', filename='js/networkGraphStyleConf.js') }}"></script>
     <script src="{{ url_for('static', filename='js/EmailSenderF.js') }}"></script>
     <script src="{{ url_for('static', filename='js/homeTools.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/CreatExit.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/MainTools.js') }}" defer></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/connectionTable.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/LoadingBtnStyle.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.tiny.cloud/1/huofneaf68baamlzqas3bry3zyg90l8j8nyspm9lwchozxe8/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <style>
         .dropdown-submenu {
@@ -90,12 +94,12 @@
                 color: #0f0;
             }
 
-            #EmailSenderMainContainer{
+            #PhishingMainContainer{
                 display: flex;
                 flex-direction: column;
                 align-items: center;
             }
-            .emailSenderArea {
+            .SenderArea {
                 border: 3px solid #0f0;
                 border-radius: 15px;
                 background: #00000096;
@@ -110,31 +114,48 @@
                 width: 100%;
                 padding: 10px;
                 margin-bottom: 10px;
-                color: #0f0;
+                color: #30D5C8; 
                 text-align: center;
-                color: red;
-                text-shadow: 2px 1px 6px #00ff00;
+                text-shadow: 1px 1px 2px #008080;
+                letter-spacing: 1px;
+                font-weight: bold;
             }
             
-            input[type="text"], textarea, input[type="submit"] {
+            input[type="text"], textarea, input[type="submit"], input[type="password"] {
                 width: 100%;
                 padding: 10px;
                 margin-bottom: 10px;
-                background-color: #000;
+                background: rgb(3 33 66 / 50%);
                 color: #0f0;
                 border: 1px solid #0f0;
+                border-radius: 10px;
+                box-shadow: 0 0 5px #0f0;
+                transition: all 0.3s ease 0s;
+                outline: none;
+                font-size: 16px;
+                font-family: 'Courier New', monospace;
+            }
+
+            input[type="text"]:focus, textarea:focus {
+                box-shadow: 0 0 20px rgba(46, 229, 157, 0.4);
+            }
+
+            input[type="submit"] {
+                background: rgba(26, 81, 136, 0.577);
+            }
+
+            input[type="submit"]:hover {
+                background: #2e323c85;
+                color: rgba(46, 229, 157, 0.4);
+                box-shadow: 0 0 20px rgba(46, 220, 229, 0.693);
             }
 
             .tox-tinymce{
                 height: 400px;
             }
 
-            input[type="submit"]:hover {
-                background-color: #0f0;
-                color: #000;
-            }
-
-            .FormEmailContainer {
+            
+            .FormPishContainer {
                 max-width: 600px;
                 margin: 0 auto;
                 padding: 20px;
@@ -170,10 +191,63 @@
                 display: none !important;
             }
 
+            #editor-toggle {
+              color: white;
+              background: rgb(148,180,218);
+              background: linear-gradient(90deg, rgba(148,180,218,1) 0%, rgba(82,123,157,1) 100%);
+              border: none;
+              border-radius: 8px;
+              padding: 10px 20px;
+              font-size: 16px;
+              box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+              transition: all 0.3s ease 0s;
+              cursor: pointer;
+              outline: none;
+          }
+
+          #editor-toggle:hover {
+              background: rgb(82,123,157);
+              background: linear-gradient(90deg, rgba(82,123,157,1) 0%, rgba(148,180,218,1) 100%);
+              box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+              color: white;
+              transform: translateY(-7px);
+          }
+
+
+        #ExitIconIdFaSharp {
+            font-size: 25px;
+            transition: color 0.3s ease, transform 0.3s ease;
+            color: lightskyblue;
+        }
+
+        #ExitIconIdFaSharp:hover {
+            color: #ff0000;
+            cursor: pointer;
+            transform: scale(1.2);
+        }
+
+        #checkIconVx{
+            animation: growAndMove 4s;
+        }
+
+        @keyframes growAndMove {
+            0% {
+                transform: scale(1) translate(0, 0);
+            }
+
+            50% {
+                transform: scale(1.5) translate(50px, 50px);
+            }
+
+            100% {
+                transform: scale(1) translate(0, 0);
+            }
+        }
+
     </style>
 </head>
 <body>
-    <div id="particles-js"></div>
+    <div id="particles-js" style="overflow:hidden"></div>
     <nav class="navbar navbar-expand-lg navbar-dark" style="padding-left: 0;">
         <a class="navbar-brand" href="#"><img src="{{ url_for('static', filename='images/LogoLetter.gif') }}" style="width:220px;"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -184,8 +258,8 @@
             <li class="nav-item active" style="z-index: 2;">
               <a class="nav-link"  href="#">Home</a>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <li class="nav-item dropdown" style="z-index: 123;">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="ToggelAll();">
                   Features
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -222,6 +296,7 @@
     </div>
     <script>
         document.getElementById("sessionBtn").addEventListener("click", function () {
+        ToggelAll();
           const connectionsContainer = document.getElementById("connectionsContainer");
           if (connectionsContainer.style.display === "none") {
             connectionsContainer.style.display = "block";
@@ -238,8 +313,9 @@
         });
 
         document.getElementById("LaunchcampaigBtn").addEventListener("click",function(){
-          console.log('LaunchcampaigBtn')
-            const email = new EmailEditor();
+            const maincontainer = "PhishingMainContainer";
+            const container = new MainContainer(maincontainer);
+            container.mailOption();
         });
         $(document).ready(function(){
           $('.dropdown-submenu a.dropdown-toggle').on("click", function(e){
@@ -248,6 +324,13 @@
               e.preventDefault();
           });
       });
+
+      function ToggelAll(){
+        ids = ['connectionsContainer'];
+        for(let i of ids){
+            document.getElementById(i).style.display = 'none';
+        }
+      }
     </script>
 </body>
 </html>

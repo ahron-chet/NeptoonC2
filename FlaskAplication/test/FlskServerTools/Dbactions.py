@@ -3,9 +3,10 @@ import sqlite3
 from .Query import *
 from os.path import isfile
 from hashlib import md5
+from datetime import datetime, timedelta
 
 
-class LoginDB(object):
+class DBActins(object):
 
     def __init__(self, db_path):
         self.db_path = db_path
@@ -58,3 +59,38 @@ class LoginDB(object):
         if not isfile(self.db_path):
             open(self.db_path, 'w').close()
         self.create_login_table()
+        self.create_mail_camp_table()
+
+
+    def create_mail_camp_table(self):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(CREATEMAILCAMPDB)
+            conn.commit()
+
+
+    def insert_mail_camp(self, response, subject):
+        if not self.is_valid_input(subject):
+            return 
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            for email, status in response.items():
+                if not(self.is_valid_input(email, str(status))):
+                    continue
+                cursor.execute(INSERTEMAILCAMP ,(email, status, subject, datetime.now()))
+                
+
+    def get_campaigns(self, lastDays=None, lastHours=None):
+        last = datetime.now()
+        if isinstance(lastDays, int):
+            last -= timedelta(days=lastDays)
+        if isinstance(lastHours, int):
+            last -= timedelta(hours=lastHours)
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(GETCAMP, (last,))
+            return cursor.fetchall()
+
+
+
+        

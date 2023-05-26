@@ -13,7 +13,7 @@ class CommandManager(object):
      
     def retriveCommand(self, message:dict) -> str:
         command = message.get("command")
-        self.waitingForResult = command is not None 
+        self.waitingForResult = command is not None and len(command) > 0
         if not self.waitingForResult: 
             return
         if command == "5df297c2f2da83a8b45cfd012fbf9b3c": #Web passwords

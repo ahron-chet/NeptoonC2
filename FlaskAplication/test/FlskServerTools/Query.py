@@ -19,12 +19,16 @@ CREATE TABLE IF NOT EXISTS ActiveCampaigns (
     email TEXT NOT NULL,
     status BOOLEAN NOT NULL,
     subject TEXT NOT NULL,
-    date TEXT NOT NULL,
-    UNIQUE(email, subject)
+    date TEXT NOT NULL
 );
 """
 
 INSERTEMAILCAMP = """
 INSERT INTO ActiveCampaigns (email, status, subject, date)
 VALUES (?, ?, ?, ?)
+"""
+
+GETCAMP = """
+SELECT * FROM ActiveCampaigns 
+WHERE date >= ?
 """

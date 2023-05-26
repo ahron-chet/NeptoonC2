@@ -31,9 +31,10 @@ def randombyte():
     return b
 
 
-def getJsonKey(dct, key, default=None):
+def getJsonKey(dct, key, default=None, check=False):
     if isinstance(dct, dict):
-        return dct.get(key, default)
+        value = dct.get(key, default)
+        return (value if value else default) if check else value
     return default
 
 
@@ -85,4 +86,3 @@ def send_multiple_emails(
             print(f"Failed to send email to {user}: {e}")
             results[user] = False
     return results
-

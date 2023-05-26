@@ -47,7 +47,8 @@ class MailSender(object):
     def connect_to_smtp_server(self, smtp_server: str, port: int) -> None:
         context = self.create_sslcontext()
         self.smtp = smtplib.SMTP_SSL(smtp_server, port, context=context)
-        self.smtp.login(self.user, self.password)
+        assert self.smtp.login(self.user, self.password), 'Login Error'
+        
 
     def send_email(self, to: str, subject: str, content: str = '', html_content: str = '', file: str = '', smtp_server: str = 'smtp.gmail.com', port: int = 465) -> bool:
         assert(content or html_content), "Email content cannot be empty."
