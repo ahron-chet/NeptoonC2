@@ -245,4 +245,20 @@ public class Tools
         int size = shellCode.Length;
         return NativeMethods.runShellCode(shellCode, size) == 0;
     }
+
+    public static bool CreatProcWinAPI(string process, string argument)
+    {
+        return NativeMethods.CreateNewProcess(process, argument) == 0;
+    }
+
+    public static string ArgsParse(string key, string[] args)
+    {
+        var keyIndex = Array.IndexOf(args, key);
+        if (keyIndex >= 0 && keyIndex + 1 < args.Length)
+        {
+            return args[keyIndex + 1];
+        }
+        return null;
+    }
+
 }

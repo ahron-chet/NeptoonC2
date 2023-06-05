@@ -25,10 +25,13 @@ public class NativeMethods
     [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr getResolution();
 
-    [DllImport("CppHelp.dll", CharSet = CharSet.Unicode)]
+    [DllImport("CppHelp.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern void GetUserNameByPid(uint processID, out IntPtr buffer);
 
-    [DllImport("CppHelp.dll", CharSet = CharSet.Unicode)]
+    [DllImport("CppHelp.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern int runShellCode(byte[] shellCode, int shellCodeSize);
+
+    [DllImport("CppHelp.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
+    public static extern int CreateNewProcess(string appname, string cmdline);
 }
 

