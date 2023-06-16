@@ -11,7 +11,7 @@ class CommandManager(object):
         self.waitingForResult = False
         self.tag = "root"
      
-    def retriveCommand(self, message:dict) -> str:
+    def retriveCommand(self, message:dict):
         command = message.get("command")
         self.waitingForResult = command is not None and len(command) > 0
         if not self.waitingForResult: 

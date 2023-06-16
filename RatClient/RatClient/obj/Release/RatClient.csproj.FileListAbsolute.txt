@@ -27,6 +27,7 @@ C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\RatClient.exe
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\RatClient.pdb
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\Microsoft.Win32.Registry.dll
+C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\Microsoft.Win32.TaskScheduler.dll
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\NAudio.Asio.dll
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\NAudio.Core.dll
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\NAudio.dll
@@ -38,18 +39,11 @@ C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\System.Security.AccessControl.dll
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\System.Security.Principal.Windows.dll
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\Microsoft.Win32.Registry.xml
+C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\Microsoft.Win32.TaskScheduler.xml
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\NAudio.xml
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\SharpAvi.xml
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\System.Security.AccessControl.xml
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\System.Security.Principal.Windows.xml
-C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\obj\Release\RatClient.csproj.AssemblyReference.cache
-C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\obj\Release\RatClient.csproj.SuggestedBindingRedirects.cache
-C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\obj\Release\RatClient.csproj.CoreCompileInputs.cache
-C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\obj\Release\RatClient.csproj.CopyComplete
-C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\obj\Release\RatClient.exe
-C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\obj\Release\RatClient.pdb
-C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\Microsoft.Win32.TaskScheduler.dll
-C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\Microsoft.Win32.TaskScheduler.xml
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\de\Microsoft.Win32.TaskScheduler.resources.dll
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\es\Microsoft.Win32.TaskScheduler.resources.dll
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\fr\Microsoft.Win32.TaskScheduler.resources.dll
@@ -58,3 +52,9 @@ C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\ru\Microsoft.Win32.TaskScheduler.resources.dll
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\zh-CN\Microsoft.Win32.TaskScheduler.resources.dll
 C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\bin\Release\zh-Hant\Microsoft.Win32.TaskScheduler.resources.dll
+C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\obj\Release\RatClient.csproj.AssemblyReference.cache
+C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\obj\Release\RatClient.csproj.SuggestedBindingRedirects.cache
+C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\obj\Release\RatClient.csproj.CoreCompileInputs.cache
+C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\obj\Release\RatClient.csproj.CopyComplete
+C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\obj\Release\RatClient.exe
+C:\Users\aronc\Desktop\MalwareTesting\NewRatProject\Neptoon\RatClient\RatClient\obj\Release\RatClient.pdb

