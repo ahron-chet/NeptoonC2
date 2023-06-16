@@ -12,6 +12,8 @@ html, body {
   height: 100%;
 }
 
+
+
 .Chetcontainer {
   display: none;
   background-image: url(../images/chatbox_background.jpg);
@@ -58,6 +60,7 @@ html, body {
   border-radius: 10px 10px 3px 10px;
   white-space: pre-wrap !important;
   font-size: 10px;
+  overflow: visible;
 }
 
 .user-message{

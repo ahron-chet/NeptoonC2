@@ -87,18 +87,18 @@ function handleChat(id) {
   chatHeader.appendChild(ipElement);
 
 
-  txtInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      renderUserMessage();
-    } else if (event.key === "Enter" && event.shiftKey) {
-      event.preventDefault();
-      const cursorPosition = txtInput.selectionStart;
-      txtInput.value = txtInput.value.slice(0, cursorPosition) + "\n" + txtInput.value.slice(cursorPosition);
-      txtInput.selectionEnd = cursorPosition + 1;
+  // txtInput.addEventListener("keydown", (event) => {
+  //   if (event.key === "Enter" && !event.shiftKey) {
+  //     event.preventDefault();
+  //     renderUserMessage();
+  //   } else if (event.key === "Enter" && event.shiftKey) {
+  //     event.preventDefault();
+  //     const cursorPosition = txtInput.selectionStart;
+  //     txtInput.value = txtInput.value.slice(0, cursorPosition) + "\n" + txtInput.value.slice(cursorPosition);
+  //     txtInput.selectionEnd = cursorPosition + 1;
 
-    }
-  });
+  //   }
+  // });
 
   buttonSend.addEventListener("click", () => {
       renderUserMessage();
@@ -141,7 +141,7 @@ function handleChat(id) {
     if (type !== "user") {
       className = "chatbot-message";
     }
-    const messageEle = document.createElement("div");
+    const messageEle = document.createElement("pre");
     const txtNode = document.createTextNode(txt);
     messageEle.classList.add(className);
     messageEle.append(txtNode);
