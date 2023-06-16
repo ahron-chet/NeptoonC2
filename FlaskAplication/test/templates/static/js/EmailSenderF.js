@@ -14,8 +14,7 @@ class MainContainer {
         old.remove();
       }
       const mainContainer = this.createHTMLElement('div', id, '');
-      mainContainer.style.position = 'relative';
-      mainContainer.style.zIndex = '1000';
+      mainContainer.style = "position: absolute;left: 2.5%;width: 95%;top: 15%;z-index: 1112;";
       document.body.appendChild(mainContainer);
       return mainContainer;
     }

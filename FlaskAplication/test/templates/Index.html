@@ -243,11 +243,14 @@
                 transform: scale(1) translate(0, 0);
             }
         }
+        .nav-item.dropdown {
+            position: relative;
+        }
 
     </style>
 </head>
 <body>
-    <div id="particles-js" style="overflow:hidden"></div>
+    <!-- <div id="particles-js" style="overflow:hidden"></div> -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="padding-left: 0;">
         <a class="navbar-brand" href="#"><img src="{{ url_for('static', filename='images/LogoLetter.gif') }}" style="width:220px;"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -258,7 +261,7 @@
             <li class="nav-item active" style="z-index: 2;">
               <a class="nav-link"  href="#">Home</a>
             </li>
-            <li class="nav-item dropdown" style="z-index: 123;">
+            <li class="nav-item dropdown" style="z-index: 9999;">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="ToggelAll();">
                   Features
               </a>

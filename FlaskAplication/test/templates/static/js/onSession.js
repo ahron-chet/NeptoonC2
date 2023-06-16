@@ -72,7 +72,8 @@ function toggleChatVisibility() {
 }
 
 function handleChat(id) {
-  const buttonSend = document.getElementById('sentButton')
+  const buttonSend = document.getElementById('sentButton');
+  console.log(buttonSend);
   const containerChat = document.getElementById('ChatContainer');
   containerChat.style.display = 'block'
   const chatBody = document.querySelector('.chat-body');
@@ -81,6 +82,7 @@ function handleChat(id) {
   chatHeader.innerHTML = "";
   const ipElement = document.createElement('div');
   ipElement.className = 'title';
+  ipElement.style = "position: relative;color: cyan;top: 30%;left: 2%;";
   ipElement.textContent = `Client Id: ${id}`;
   chatHeader.appendChild(ipElement);
 
@@ -95,8 +97,6 @@ function handleChat(id) {
       txtInput.value = txtInput.value.slice(0, cursorPosition) + "\n" + txtInput.value.slice(cursorPosition);
       txtInput.selectionEnd = cursorPosition + 1;
 
-      resizeInput();
-
     }
   });
 
@@ -104,26 +104,15 @@ function handleChat(id) {
       renderUserMessage();
   });
 
-  txtInput.addEventListener("input", () => {
-    resizeInput();
-  });
 
-  function resizeInput() {
-    const previousHeight = txtInput.style.height ? parseInt(txtInput.style.height.slice(0, -2)) : 0;
-  
-    const rowsLen = Math.max(txtInput.value.split('\n').length, 1);
-    if (rowsLen > 2) {
-      txtInput.rows = rowsLen;
-    }
-    const newHeight = parseInt(txtInput.style.height.slice(0, -2));
-    const bottomAdjustment = newHeight - previousHeight;
-    txtInput.style.bottom = (parseInt(txtInput.style.bottom.slice(0, -2)) - bottomAdjustment) + "px";
-    txtInput.scrollTop = txtInput.scrollHeight;
-  }
-  
 
   const renderUserMessage = () => {  
+    console.log("message processing....");
     const userInput = txtInput.value
+    if(!userInput){
+      console.log("Input is null....");
+      return;
+    }
     renderMessageEle(userInput, "user");
     txtInput.value = "";
     renderChatbotResponse(userInput);
@@ -157,13 +146,6 @@ function handleChat(id) {
     messageEle.classList.add(className);
     messageEle.append(txtNode);
     chatBody.append(messageEle);
-    setScrollPosition();
-  };
-
-  const setScrollPosition = () => {
-    if (chatBody.scrollHeight > 0) {
-      chatBody.scrollTop = chatBody.scrollHeight;
-    }
   };
 }
 
