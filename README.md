@@ -30,31 +30,28 @@ These additional features all contribute to making NeptoonC2 a versatile and com
 
 <h2 style="color:#ff0000">Tactics</h2>
 
-<h3 style= "color: #00ff00">Password Stealer</h3>
-NeptoonC2 includes a robust password stealing module. It can dump LSASS memory and SAM databases to extract credentials. Additionally, it can steal DPAPI data, retrieve browser-stored passwords in clear text, and hijack cookies.
+<ul>
 
-<h3>Persistence</h3>
-NeptoonC2 employs various high-persistence techniques to maintain a foothold on the compromised system.
+<li><b>Password Stealer:</b> NeptoonC2 includes a robust password stealing module. It can dump LSASS memory and SAM databases to extract credentials. Additionally, it can steal DPAPI data, retrieve browser-stored passwords in clear text, and hijack cookies.</li>
 
-<h3>Defense Evasion</h3>
-NeptoonC2 is capable of bypassing AMSI, using assembly syscalls, and manipulating legitimate processes to evade detection.
+<li><b>Persistence:</b> NeptoonC2 employs various high-persistence techniques to maintain a foothold on the compromised system.</li>
 
-<h3>Privilege Escalation</h3>
-NeptoonC2 contains various techniques for privilege escalation, including UAC bypass, exploiting file vulnerabilities, and obtaining system-level privileges.
+<li><b>Defense Evasion:</b> NeptoonC2 is capable of bypassing AMSI, using assembly syscalls, and manipulating legitimate processes to evade detection.</li>
 
-<h3>Injection</h3>
-NeptoonC2's injection methods include process hollowing, remote thread injection, reflective DLL injection, and parent process spoofing.
+<li><b>Privilege Escalation:</b> NeptoonC2 contains various techniques for privilege escalation, including UAC bypass, exploiting file vulnerabilities, and obtaining system-level privileges.</li>
 
-<h3>Surveillance</h3>
-NeptoonC2 can record keystrokes, audio, and screen activity, providing a comprehensive surveillance capability.
+<li><b>Injection:</b> NeptoonC2's injection methods include process hollowing, remote thread injection, reflective DLL injection, and parent process spoofing.</li>
 
-<h3>Ransomware</h3>
-NeptoonC2 includes a ransomware module that uses AES and a custom encryption algorithm to lock files.
+<li><b>Surveillance:</b> NeptoonC2 can record keystrokes, audio, and screen activity, providing a comprehensive surveillance capability.</li>
 
-<h3>GPT Shell</h3>
-NeptoonC2 is integrated with OpenAI's GPT for natural language processing. This feature allows for the conversion of natural language into commands that can be run on the client side, making the tool more accessible and easier to use.
+<li><b>Ransomware:</b> NeptoonC2 includes a ransomware module that uses AES and a custom encryption algorithm to lock files.</li>
+
+<li><b>GPT Shell:</b> NeptoonC2 is integrated with OpenAI's GPT for natural language processing. This feature allows for the conversion of natural language into commands that can be run on the client side, making the tool more accessible and easier to use.</li>
+
+</ul>
 
 </div>
+
 
 <div style="margin: 20px; padding: 20px; background-color: #222222; color: #00ff00; font-family: 'Courier New', monospace; border-radius: 15px;">
 
