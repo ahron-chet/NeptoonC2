@@ -56,3 +56,16 @@ NeptoonC2 is integrated with OpenAI's GPT for natural language processing. This 
 
 </div>
 
+<div style="margin: 20px; padding: 20px; background-color: #222222; color: #00ff00; font-family: 'Courier New', monospace; border-radius: 15px;">
+
+<h2 style="color:#ff0000">Features</h2>
+
+<h3>Phishing Zone</h3>
+NeptoonC2 includes a comprehensive phishing module with both email and SMS capabilities. This module also supports spoofing techniques to increase the effectiveness of phishing campaigns.
+
+<h3>Dashboard</h3>
+NeptoonC2 features an interactive dashboard that provides a real-time display of campaign statistics and client data. This feature offers valuable insights for campaign optimization and strategy adjustment.
+
+</div>
+
+
