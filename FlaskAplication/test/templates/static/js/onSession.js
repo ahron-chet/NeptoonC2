@@ -73,36 +73,64 @@ function toggleChatVisibility() {
 
 function handleChat(id) {
   const buttonSend = document.getElementById('sentButton');
-  console.log(buttonSend);
   const containerChat = document.getElementById('ChatContainer');
   containerChat.style.display = 'block'
   const chatBody = document.querySelector('.chat-body');
   const txtInput = document.getElementById('txtInput');
   const chatHeader = document.querySelector('.chat-header');
   chatHeader.innerHTML = "";
-  const ipElement = document.createElement('div');
-  ipElement.className = 'title';
-  ipElement.style = "position: relative;color: cyan;top: 30%;left: 2%;";
-  ipElement.textContent = `Client Id: ${id}`;
-  chatHeader.appendChild(ipElement);
+  var navItems = [
+    {id: 'FeaturesnavOption', action: null, text:"Features"},
+    {id: 'RecordnavOption', action: null, icon:"fas fa-record-vinyl"},
+  ];
+  
+  const parentNavDiv = document.createElement('div');
+  parentNavDiv.id = "parentNavDivonheader";
+  var navbar = document.createElement('nav');
+  navbar.className = 'navbar navbar-expand-lg navbar-light bg-light'; 
+  navbar.id = "NavBarOnHeaderChat";
+  
+  var collapseDiv = document.createElement('div');
+  collapseDiv.className = 'collapse navbar-collapse';  
+  
+  var list = document.createElement('ul');
+  list.className = 'navbar-nav mr-auto'; 
+  for (var i = 0; i < navItems.length; i++) {
+    var listItem = document.createElement('li');
+    listItem.className = 'nav-item';
+    
 
+    var link = document.createElement('a');
+    link.className = 'nav-link';
+    link.id = navItems[i].id; 
+    
+    
+    if (navItems[i].icon){
+      var icon = document.createElement('i');
+      icon.className = navItems[i].icon;
+      link.appendChild(icon);
+    }
+    if(navItems[i].text){ 
+      link.appendChild(document.createTextNode(" " + navItems[i].text));
+    }
 
-  // txtInput.addEventListener("keydown", (event) => {
-  //   if (event.key === "Enter" && !event.shiftKey) {
-  //     event.preventDefault();
-  //     renderUserMessage();
-  //   } else if (event.key === "Enter" && event.shiftKey) {
-  //     event.preventDefault();
-  //     const cursorPosition = txtInput.selectionStart;
-  //     txtInput.value = txtInput.value.slice(0, cursorPosition) + "\n" + txtInput.value.slice(cursorPosition);
-  //     txtInput.selectionEnd = cursorPosition + 1;
+    listItem.appendChild(link); 
 
-  //   }
-  // });
+    if(navItems[i].action){
+      listItem.addEventListener("click",navItems[i].action);
+    }
+    
+    list.appendChild(listItem);
+  }  
+  collapseDiv.appendChild(list);
+  navbar.appendChild(collapseDiv);
+  parentNavDiv.appendChild(navbar);
+  chatHeader.appendChild(parentNavDiv); 
 
   buttonSend.addEventListener("click", () => {
-      renderUserMessage();
+      renderUserMessage(); 
   });
+
 
 
 
