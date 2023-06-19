@@ -57,11 +57,13 @@ These additional features all contribute to making NeptoonC2 a versatile and com
 
 <h2 style="color:#ff0000">Features</h2>
 
-<h3>Phishing Zone</h3>
-NeptoonC2 includes a comprehensive phishing module with both email and SMS capabilities. This module also supports spoofing techniques to increase the effectiveness of phishing campaigns.
+<ul>
 
-<h3>Dashboard</h3>
-NeptoonC2 features an interactive dashboard that provides a real-time display of campaign statistics and client data. This feature offers valuable insights for campaign optimization and strategy adjustment.
+<li><b>Phishing Zone:</b> NeptoonC2 includes a comprehensive phishing module with both email and SMS capabilities. This module also supports spoofing techniques to increase the effectiveness of phishing campaigns.</li>
+
+<li><b>Dashboard:</b> NeptoonC2 features an interactive dashboard that provides a real-time display of campaign statistics and client data. This feature offers valuable insights for campaign optimization and strategy adjustment.</li>
+
+</ul>
 
 </div>
 
