@@ -97,7 +97,7 @@ These additional features all contribute to making NeptoonC2 a versatile and com
 
 <h2 style="color:#ff0000">Features</h2>
 
-<img src="https://github.com/ahron-chet/Neptoon/blob/main/img/shell.png" alt="Features" style="max-width:100%;height:auto;">
+<img src="https://github.com/ahron-chet/Neptoon/blob/main/img/settings.png" alt="Features" style="max-width:100%;height:auto;">
 
 </div>
 
