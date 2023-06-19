@@ -30,7 +30,7 @@ These additional features all contribute to making NeptoonC2 a versatile and com
 
 <h2 style="color:#ff0000">Tactics</h2>
 
-<h3>Password Stealer style= "color: #00ff00"</h3>
+<h3 style= "color: #00ff00">Password Stealer</h3>
 NeptoonC2 includes a robust password stealing module. It can dump LSASS memory and SAM databases to extract credentials. Additionally, it can steal DPAPI data, retrieve browser-stored passwords in clear text, and hijack cookies.
 
 <h3>Persistence</h3>
