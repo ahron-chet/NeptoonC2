@@ -6,6 +6,8 @@
 
 <hr style="width:50%;border:1px solid #d3d3d3">
 
+</div>
+
 <div style="margin: 20px; padding: 20px; background-color: #f0f0f0; border-radius: 15px;">
 
 NeptoonC2 is a state-of-the-art Command and Control (C2) tool, engineered to provide an optimized and secure platform for cybersecurity operations. Utilizing socket-based communication, NeptoonC2 ensures fully encrypted data transmission, using a bespoke implementation of the RSA key exchange algorithm and RSA-based encrypted communication.
@@ -21,7 +23,5 @@ One of the key features of NeptoonC2 is its interactive dashboard, which provide
 NeptoonC2 is also equipped with a variety of injection processes and methods, allowing for flexible and customizable cyber operations. An important differentiation of NeptoonC2 is its integration with AI capabilities, specifically leveraging OpenAI's GPT for natural language processing. This feature allows for the conversion of natural language into commands that can be run on the client side, making the tool more accessible and easier to use.
 
 These additional features all contribute to making NeptoonC2 a versatile and comprehensive tool for cybersecurity operations.
-
-</div>
 
 </div>
