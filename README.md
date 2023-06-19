@@ -1,6 +1,6 @@
 <div align="center">
 
-# <span style="color:blue">NeptoonC2</span>
+# <span style="color:lime; background-color:black; padding:10px; border-radius:5px; font-family: 'Courier New', monospace;">NeptoonC2</span>
 
 ### <span style="color:gray">Your State-of-the-Art Command and Control (C2) Tool</span>
 
