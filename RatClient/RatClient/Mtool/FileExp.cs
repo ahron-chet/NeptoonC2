@@ -63,11 +63,13 @@ namespace RatClient.Mtool.FileExp
 	{
 		public FileObj[] Files { get; set; }
 		public Directories Folders { get; set; }
+		public string MainPath { get; set; }
 
-		public ExplorerObj(FileObj[] files, Directories folders)
+		public ExplorerObj(FileObj[] files, Directories folders, string MainPath)
 		{
 			this.Files = files;
 			this.Folders = folders;
+			this.MainPath = MainPath;
 		}
 	}
 
@@ -86,7 +88,7 @@ namespace RatClient.Mtool.FileExp
 			}
 
 			string result = System.Text.Json.JsonSerializer.Serialize(
-				new ExplorerObj(files.ToArray(), directories));
+				new ExplorerObj(files.ToArray(), directories, path));
 			return result;
 		}
 	}

