@@ -53,8 +53,15 @@
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
       <script>
         $(document).ready(function() {
+          var chatBody = document.getElementById('ChatBody');
+          var observer = new MutationObserver(function() {
+            chatBody.scrollTop = chatBody.scrollHeight;
+          });
+
+          observer.observe(chatBody, { childList: true });
+
           $("#sentButton").on('click', function() {
-              $(this).blur();
+            $(this).blur();
           });
         });
       </script>

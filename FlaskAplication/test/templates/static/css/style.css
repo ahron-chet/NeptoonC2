@@ -52,13 +52,12 @@ html, body {
 
 .chat-body {
   overflow-y: auto;
-  height: calc(100vh - 270px);
+  height: calc(93vh - 171px);
   padding: 8px 10px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  margin-bottom: 30px;
-  z-index: 3;
+  padding-bottom: 0;
 }
 
 .user-message,
@@ -83,6 +82,8 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: 0px !important;
+  top: -17px !important;
 }
 
 #txtInput {
