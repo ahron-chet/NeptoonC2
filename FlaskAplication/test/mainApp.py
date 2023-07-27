@@ -139,13 +139,16 @@ class FlskSevrev(object):
         except AssertionError as e:
             return jsonify({"error": str(e)}), 400
 
-        
+
     
     def passwordsTableIndex(self):
         return render_template("passwordTable.html")
     
     def processTableIndex(self):
         return render_template("ProcessTable.html")
+    
+    def processHollowingTable(self):
+        return render_template('HollowingTable.html')
 
 
     def _ruleResetor(self):
@@ -163,4 +166,5 @@ class FlskSevrev(object):
         self.app.add_url_rule('/ProcessTableIndex', 'ProcessTableIndex', login_required(self.processTableIndex))
         self.app.add_url_rule('/Features/phishing/gettemplates', 'gettemplates', login_required(self.getPhishingTamplets))
         self.app.add_url_rule('/features/phishing/send_mail', 'send_mail', login_required(self.send_mail), methods=['POST'])
+        self.app.add_url_rule('/processhollowing', 'processhollowing', login_required(self.processHollowingTable))
 

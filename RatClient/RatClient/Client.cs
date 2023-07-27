@@ -37,7 +37,7 @@ namespace RatClient
             {
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
                 serializer.WriteObject(ms, obj);
-                return ms.ToArray();
+                return ms.ToArray(); 
             }
         }
 

