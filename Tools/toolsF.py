@@ -6,6 +6,8 @@ from .WebGather import WebGather
 from .MailRender import MailSender
 import base64
 import tempfile
+import subprocess
+
 
 
 
@@ -86,3 +88,7 @@ def send_multiple_emails(
             print(f"Failed to send email to {user}: {e}")
             results[user] = False
     return results
+
+def invokeCommand(command:str) ->str:
+    p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    return p.stdout.read().decode(errors='replace').strip()

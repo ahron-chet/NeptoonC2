@@ -2,6 +2,7 @@ from CryptoAC.Asymmetric.Rsa import RSA
 from CryptoAC.Symmetric.AcAes import AesCrypto
 from .ConnectionsManager import ConnectionManager
 from Tools.toolsF import randombyte
+from Tools.internalServer import InternalServer
 import socket
 import time
 import threading
@@ -11,6 +12,7 @@ import threading
 class Server(object):
     
     def __init__(self,PrivateKey,port):
+        print("server started!")
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.ServInfo = (
             socket.gethostbyname(socket.gethostname())
@@ -21,7 +23,9 @@ class Server(object):
         self.PrivateKey = PrivateKey
         self.rsaBlock = (PrivateKey['n'].bit_length()+7)//8
         self.sleepPerPing = 60
-        self.sleepPeriter = 2        
+        self.sleepPeriter = 2 
+        self.internalSrv = InternalServer(self.connections)  
+        self.internalSrv.start()
        
     def setCipher(self,conn, id):
         msg = conn.recv(self.rsaBlock)
@@ -36,8 +40,6 @@ class Server(object):
 
 
     def ping(self, conn, id, timeout=5):
-        print(id)
-        print(conn)
         try:
             conn.send(randombyte())
             conn.settimeout(timeout)
@@ -54,12 +56,9 @@ class Server(object):
 
     def keepAlive(self, conn, id, timeout=5):
         def __internal__():
-            
             while True:
                 if not self.connections.isconnected(id):
-                    print("Status Completed and async")
                     if not self.ping(conn=conn,id=id,timeout=timeout):
-                        print('NotPing')
                         self.connections.removeConnection(conn)
                 time.sleep(self.sleepPerPing)
         threading.Thread(target=__internal__).start()
@@ -85,7 +84,6 @@ class Server(object):
             time.sleep(5)
 
     def retriveClientInfo(self,conn):
-        print('Retrive info')
         # header = int.from_bytes(conn.recv(4))
         # print(header)
         data = self.rsa.decrypt(self.PrivateKey,conn.recv(self.rsaBlock))
@@ -99,10 +97,8 @@ class Server(object):
     def __listener__(self):
         self.server.bind(self.ServInfo)
         self.server.listen()
-        print("{+}Listening...")
         while True:
             conn, addr = self.server.accept()
-            print("Accept Connection.")
             threading.Thread(
                 target=self.onConnect,
                 args=(conn,addr)

