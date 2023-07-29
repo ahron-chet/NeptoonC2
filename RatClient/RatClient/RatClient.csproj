@@ -106,6 +106,7 @@
     <Compile Include="Methods.cs" />
     <Compile Include="Mtool\Assertions.cs" />
     <Compile Include="Mtool\AudioRecorder.cs" />
+    <Compile Include="Mtool\CLIService.cs" />
     <Compile Include="Mtool\FileExp.cs" />
     <Compile Include="Mtool\ScreenRecorder.cs" />
     <Compile Include="Persistence\Registrys.cs" />
@@ -126,8 +127,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NewFolder1\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

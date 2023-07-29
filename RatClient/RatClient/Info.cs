@@ -73,5 +73,6 @@ class Info
     };
 
     public static string MainShell = "cmd.exe";
+	public static bool IsMainShellRuning = false;
 }
 
