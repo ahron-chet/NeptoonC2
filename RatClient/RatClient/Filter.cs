@@ -106,8 +106,9 @@ namespace RatClient
 			}
             else
             {
-                bool addCd = !string.IsNullOrEmpty(xmlDoc.SelectSingleNode("/root/getcd").InnerText);
-                if (addCd)
+				var node = xmlDoc.SelectSingleNode("/root/getcd");
+				bool addCd = node != null && !string.IsNullOrEmpty(node.InnerText);
+				if (addCd)
                 {
                     Console.WriteLine("Adding cd");
                 }

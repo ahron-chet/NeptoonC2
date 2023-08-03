@@ -122,6 +122,9 @@
     <Compile Include="Tools.cs" />
     <Compile Include="WebGather\Passwords.cs" />
     <Compile Include="WebGather\WebInfo.cs" />
+    <Compile Include="WifiGather\Parser.cs" />
+    <Compile Include="WifiGather\Structures.cs" />
+    <Compile Include="WifiGather\WifiInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

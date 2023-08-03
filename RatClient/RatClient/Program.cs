@@ -5,6 +5,7 @@ using System.ServiceProcess;
 using RatClient.Mtool;
 using System.IO;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace RatClient 
 {
@@ -48,6 +49,9 @@ namespace RatClient
 
 		private static void Start(string[] args)
 		{
+			WifiInfo wifiInfo = new WifiInfo();
+			Console.WriteLine(wifiInfo.GetJsonInfo());
+			return;
 			Assertions setup = new Assertions(args);
 			setup.AssertAll();
 			Console.WriteLine(string.Join(", ", args));
