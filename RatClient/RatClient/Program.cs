@@ -3,9 +3,7 @@ using System.Linq;
 using System.Numerics;
 using System.ServiceProcess;
 using RatClient.Mtool;
-using System.IO;
-using System.Text;
-using System.Runtime.InteropServices;
+
 
 namespace RatClient 
 {

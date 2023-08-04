@@ -1,5 +1,5 @@
-﻿using RatClient.WifiGather;
-using System;
+﻿using System;
+using RatClient.WifiGather;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
