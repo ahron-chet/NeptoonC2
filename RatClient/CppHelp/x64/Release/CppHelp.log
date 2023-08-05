@@ -1,1 +1,18 @@
-﻿
+﻿  pch.cpp
+  dllmain.cpp
+  GetSystem.cpp
+  hollowing.cpp
+C:\Users\aronc\Desktop\GithubProjects\NeptoonC2\RatClient\CppHelp\hollowing.cpp(31,8): warning C4101: 'totalNumberofBytesRead': unreferenced local variable
+  RunAsUser.cpp
+  injectShellCode.cpp
+  Tools.cpp
+C:\Users\aronc\Desktop\GithubProjects\NeptoonC2\RatClient\CppHelp\Tools.cpp(226,10): warning C4101: 'result': unreferenced local variable
+  WifiInfo.cpp
+C:\Users\aronc\Desktop\GithubProjects\NeptoonC2\RatClient\CppHelp\WifiInfo.cpp(115,23): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+     Creating library C:\Users\aronc\Desktop\GithubProjects\NeptoonC2\RatClient\RatClient\bin\Release\CppHelp.lib and object C:\Users\aronc\Desktop\GithubProjects\NeptoonC2\RatClient\RatClient\bin\Release\CppHelp.exp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+C:\Users\aronc\Desktop\GithubProjects\NeptoonC2\RatClient\CppHelp\RunAsUser.cpp(71): warning C4715: 'RunAsLoggedInUser': not all control paths return a value
+  All 473 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  CppHelp.vcxproj -> C:\Users\aronc\Desktop\GithubProjects\NeptoonC2\RatClient\RatClient\bin\Release\CppHelp.dll

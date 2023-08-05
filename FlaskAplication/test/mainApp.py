@@ -149,6 +149,9 @@ class FlskSevrev(object):
     
     def processHollowingTable(self):
         return render_template('HollowingTable.html')
+    
+    def wifiInfoTable(self):
+        return render_template('WifiPasswordTable.html')
 
 
     def _ruleResetor(self):
@@ -167,4 +170,4 @@ class FlskSevrev(object):
         self.app.add_url_rule('/Features/phishing/gettemplates', 'gettemplates', login_required(self.getPhishingTamplets))
         self.app.add_url_rule('/features/phishing/send_mail', 'send_mail', login_required(self.send_mail), methods=['POST'])
         self.app.add_url_rule('/processhollowing', 'processhollowing', login_required(self.processHollowingTable))
-
+        self.app.add_url_rule('//a501877a3d9c3482ae0d38beac54c415.html', 'WifiInfoTamp', login_required(self.wifiInfoTable))

