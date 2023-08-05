@@ -71,7 +71,7 @@ class CommandManager(object):
             internalClientPath = pathJoin(getcwd(), "Tools", "internalClient.py")
             execute = EXECUTE_INTERNAL_CLIENT.format(
                 internalClientPath, 
-                "local", 
+                "local",
                 self.id.strip()
             )
             print(execute)
@@ -86,6 +86,10 @@ class CommandManager(object):
             except Exception as e:
                 print(e)
             return result
+        
+        if command == WIFI_INFO_BASE:
+            self.writer(gen_xml(self.tag, **message).encode())
+            return json.loads(self.reader().decode(errors='replace'))
 
         if command.startswith(CHANGE_CWD):
             matchcd = re.match(CHANGE_CWD_PATTERN, command)
