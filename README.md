@@ -2,7 +2,7 @@
 
 # <span style="color:lime; background-color:green; padding:10px; border-radius:5px; font-family: 'Courier New', monospace;">NeptoonC2</span>
 
-### <span style="color:gray">Your State-of-the-Art Command and Control (C2) Tool</span>
+### <span style="color:gray">Command and Control (C2) Tool</span>
 
 <hr style="width:50%;border:1px solid #d3d3d3">
 
